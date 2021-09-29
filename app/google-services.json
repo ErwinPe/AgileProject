@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "994143202115",
+    "project_id": "agileproject-86e71",
+    "storage_bucket": "agileproject-86e71.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994143202115:android:7c24e8442df7454a1a5df6",
+        "android_client_info": {
+          "package_name": "com.eseo.finaspetit.agileproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "994143202115-r6je6psue6n7vqt4v427nmmcn6lko83i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eseo.finaspetit.agileproject",
+            "certificate_hash": "84096cca9a1d96cd03d36300e47b0d6c0f1198a8"
+          }
+        },
+        {
+          "client_id": "994143202115-eru1uikt4hvg0vrasracq2u24o9nmjjl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJz4tK1444Fx8O3Phj0MQ8IahxotXZNtU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "994143202115-eru1uikt4hvg0vrasracq2u24o9nmjjl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
