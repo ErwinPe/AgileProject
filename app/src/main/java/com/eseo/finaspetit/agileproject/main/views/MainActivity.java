@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }else{
-            //INTENT REDIRECTION
+            Intent intent = new Intent(this,JoinActivity.class);
+            startActivity(intent);
         }
 
     }
