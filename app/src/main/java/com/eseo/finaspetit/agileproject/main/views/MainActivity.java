@@ -1,8 +1,10 @@
-package com.eseo.finaspetit.agileproject;
+package com.eseo.finaspetit.agileproject.main.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.eseo.finaspetit.agileproject.R;
 
 public class MainActivity extends AppCompatActivity {
 
