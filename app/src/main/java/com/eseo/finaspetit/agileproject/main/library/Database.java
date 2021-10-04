@@ -77,11 +77,11 @@ public class Database {
 
     }
 
-    public void getAllSalon(AppCompatActivity act) {//Context context
+    public void getAllSalon(AppCompatActivity act,String email) {//Context context
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        DocumentReference docRef = firestore.collection("salon").document("qu5rbrhQRw10FTvfAIpw").collection("CHAT").document("message1");
 
-        firestore.collection("salon").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+        firestore.collection("salon").whereArrayContains("members",email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {

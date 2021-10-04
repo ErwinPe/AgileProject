@@ -3,7 +3,11 @@ package com.eseo.finaspetit.agileproject.main.views;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.firestore.*;
@@ -34,7 +39,7 @@ public class NotificationView extends AppCompatActivity implements ReadAllMessag
     FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     Database ddb=new Database();
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
+    FirebaseAuth auth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,7 @@ public class NotificationView extends AppCompatActivity implements ReadAllMessag
         View root = binding.getRoot();
         setContentView(root);
         ddb.readAllMessages(this);
-        ddb.getAllSalon(this);
+        ddb.getAllSalon(this,auth.getCurrentUser().getEmail());
     }
 
 
@@ -54,10 +59,38 @@ public class NotificationView extends AppCompatActivity implements ReadAllMessag
 
     public void handleResultAllSalon(List<Salon> content) {
         String a="";
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         for(Salon s : content){
-            a=a+s.getNom()+" ";
+            //if(s.getMembers().contains(auth.getCurrentUser().getEmail())){
+                a=a+s.getNom()+"\n";
+            //}
+
         }
-        binding.textView3.setText(a);
+
+        final Spinner spinnerRegion = binding.spinner;
+        String[] lRegion={"France","USA"};
+        ArrayAdapter<Salon> dataAdapterR = new ArrayAdapter<Salon>(this, android.R.layout.simple_spinner_item,content);
+        dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerRegion.setAdapter(dataAdapterR);
+        //binding.textView3.setText(a);
+
+        spinnerRegion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                String myRegion = String.valueOf(spinnerRegion.getSelectedItem());
+                Toast.makeText(NotificationView.this,
+                        "OnClickListener : " +
+                                "\nSpinner 1 : " + myRegion,
+                        Toast.LENGTH_SHORT).show(); }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+
+        });
+
+
     }
 
 
