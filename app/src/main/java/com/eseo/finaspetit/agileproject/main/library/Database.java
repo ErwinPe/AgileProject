@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.annotations.Nullable;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -59,4 +60,35 @@ public class Database {
         });
         return data;
     }
+
+    public void readAllMessages() {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        DocumentReference docRef = firestore.collection("salon").document("qu5rbrhQRw10FTvfAIpw").collection("CHAT").document("message1");
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        System.out.println(document.getString("message"));
+                    } else {
+                        System.out.println("Aucune donnée");
+                    }
+                } else {
+                    System.out.println("erreur "+task.getException());
+                }
+            }
+        });
+
+    }
+
+
+    public void getAllMessagesFromChat(DocumentReference ref){
+        CollectionReference chatRef=ref.collection(Constants.CHAT_COLLECTION);
+    }
+
+
+
+
 }
