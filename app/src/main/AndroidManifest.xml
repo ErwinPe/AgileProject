@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.eseo.finaspetit.agileproject">
 
     <application
@@ -10,6 +11,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AgileProject">
         <activity
+            android:name=".main.views.NotificationView"
+            android:parentActivityName=".main.views.MainActivity" />
+        <activity
+            android:name=".main.views.createSaloonView"
+            android:parentActivityName=".main.views.MainActivity"
+            tools:ignore="Instantiatable" />
+
+        <activity
             android:name=".main.views.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -18,14 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".main.views.JoinActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".main.views.NotificationView"
-            android:exported="true">
-        </activity>
+
     </application>
 
 </manifest>

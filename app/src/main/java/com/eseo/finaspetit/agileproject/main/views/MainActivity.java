@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityMainBinding;
+import com.eseo.finaspetit.agileproject.main.library.Salon;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -62,10 +63,26 @@ public class MainActivity extends AppCompatActivity {
             }
         }else{
             //Intent intent = new Intent(this,JoinActivity.class);
-            Intent intent = new Intent(this, NotificationView.class);
-            startActivity(intent);
+            //Intent intent = new Intent(this, NotificationView.class);
+            //startActivity(intent);
         }
 
+        binding.buttonCreate.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, createSaloonView.class);
+                startActivity(intent);
+            }
+        });
+
+
+    }
+
+
+    public void onClick(View view) {
+        if (view.getId()==R.id.button_create){
+
+        }
     }
 
     @Override
@@ -75,12 +92,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         if(item.getItemId()==R.id.sign_out_menu){
             auth.signOut();
             finish();
             return true;
+        }else if (item.getItemId()==R.id.notif){
+            Intent intent = new Intent(this, NotificationView.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
