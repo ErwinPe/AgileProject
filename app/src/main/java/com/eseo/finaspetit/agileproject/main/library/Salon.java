@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Salon {
+    private int id;
     private Timestamp creationDate;
     private String description;
     private String nom;
@@ -74,6 +75,12 @@ public class Salon {
 
     public void setMembers(ArrayList<String> members) {
         this.members = members;
+    }
+
+    public int getId() { return id; }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public ArrayList<com.eseo.finaspetit.agileproject.main.library.US> getUS() {
