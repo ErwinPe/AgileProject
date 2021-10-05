@@ -24,35 +24,86 @@ import java.util.Map;
 import java.util.Set;
 
 public class Salon {
-    private String id;
+    private int id;
     private Timestamp creationDate;
     private String description;
     private String nom;
     private ArrayList<Message> chat;
     private ArrayList<String> members;
     private ArrayList<US> US;
+    private String scrumMaster;
 
     public Salon(){
 
     }
 
-    public String getId(){
-        return this.id;
+    public ArrayList<Message> getChat() {
+        return chat;
+    }
+
+    public void setChat(ArrayList<Message> chat) {
+        this.chat = chat;
+    }
+
+    public Timestamp getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Timestamp creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public String getNom(){
         return this.nom;
     }
 
-    /*public Salon(String id){
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        DocumentReference docRef = firestore.collection(Constants.SALON_COLLECTION).document(id);
-        Task<DocumentSnapshot> snap=docRef.get();
+    public ArrayList<String> getMembers() {
+        return members;
+    }
 
-        id=snap.getResult().get("ID").toString();
-        System.out.println(this.id);
-        //chat=
-    }*/
+    public void setMembers(ArrayList<String> members) {
+        this.members = members;
+    }
+
+    public int getId() { return id; }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public ArrayList<com.eseo.finaspetit.agileproject.main.library.US> getUS() {
+        return US;
+    }
+
+    public void setUS(ArrayList<com.eseo.finaspetit.agileproject.main.library.US> US) {
+        this.US = US;
+    }
+
+    public String getScrumMaster() {
+        return scrumMaster;
+    }
+
+    public void setScrumMaster(String scrumMaster) {
+        this.scrumMaster = scrumMaster;
+    }
+
+    public Salon(String nom,String desc){
+        this.nom=nom;
+        System.out.println("Nom: "+nom);
+        this.description=desc;
+    }
 
     public Salon(Timestamp date, String nom, String desc, ArrayList<Message> ch, ArrayList<String> mem, ArrayList<US> us){
         this.description=desc;
@@ -63,30 +114,7 @@ public class Salon {
         this.US = us;
     }
 
-    public void createDocument(){
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        HashMap<String, Object> newSalon=new HashMap<>();
-        newSalon.put("ID",this.id);
-        newSalon.put("description",this.description);
-        newSalon.put("nom",this.nom);
-        newSalon.put("dateCreation",this.creationDate);
 
-        ArrayList<Message> chat=new ArrayList<>();
-        Message mes1=new Message("message1","Erwin");
-       // Message mes2=new Message("message2","Quentin");
-
-        chat.add(mes1);
-        //chat.add(mes2);
-        newSalon.put("CHAT",chat);
-
-        ArrayList<US> US=new ArrayList<>();
-        US us=new US("nom","desc");
-        US.add(us);
-
-        newSalon.put("US",US);
-
-        firestore.collection("salon").add(newSalon);
-    }
 
     public Salon getDocument(String id){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -98,12 +126,10 @@ public class Salon {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
-                        //System.out.println(document.toString());
                         //Salon sal= new Salon(document.getTimestamp("dateCreation"),document.getString("nom"),document.getString("description"),(ArrayList<Message>) document.get("CHAT"),(ArrayList<String>) document.get("members"),(ArrayList<US>) document.get("US"));
-                        Salon sal= new Salon(document.getTimestamp("dateCreation"),document.getString("nom"),document.getString("description"),null,null,null);
+                        //Salon sal= new Salon(document.getTimestamp("dateCreation"),document.getString("nom"),document.getString("description"),null,null,null);
+                        Salon sal=new Salon(document.getString("nom"),document.getString("description"));
                         System.out.println("INSTANCIATION DE : "+sal.getNom());
-                        System.out.println("non");
-                        //System.out.println(sal.toString());
                     } else {
                         System.out.println("Aucune donnée");
                     }
@@ -119,6 +145,6 @@ public class Salon {
     }
 
     public String toString(){
-        return this.id+" "+this.nom+" "+this.description+" "+this.creationDate+" "+this.chat+" "+this.members+" "+this.US;
+        return this.nom+" "+this.description+" "+this.creationDate+" "+this.chat+" "+this.members+" "+this.US;
     }
 }
