@@ -36,31 +36,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(root);
         auth = FirebaseAuth.getInstance();
         if(auth.getCurrentUser() == null) {
-            if(auth.getCurrentUser() == null) {
-                ActivityResultLauncher<Intent> signinLauncher = registerForActivityResult(
-                        new ActivityResultContracts.StartActivityForResult(),
-                        new ActivityResultCallback<ActivityResult>() {
-                            @Override
-                            public void onActivityResult(ActivityResult result) {
-                                if (result.getResultCode() != Activity.RESULT_OK) {
-                                    Toast.makeText(MainActivity.this, "Error signing in",
-                                            Toast.LENGTH_LONG).show();
-                                    finish();
-                                }
+            ActivityResultLauncher<Intent> signinLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            if (result.getResultCode() != Activity.RESULT_OK) {
+                                Toast.makeText(MainActivity.this, "Error signing in",
+                                        Toast.LENGTH_LONG).show();
+                                finish();
                             }
-                        });
-                List<AuthUI.IdpConfig> providers = Arrays.asList(
-                        new AuthUI.IdpConfig[]{
-                                new AuthUI.IdpConfig.EmailBuilder().build(),
-                                new AuthUI.IdpConfig.GoogleBuilder().build()
-                        });
-                Intent signInIntent = AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setLogo(R.mipmap.ic_launcher)
-                        .setAvailableProviders(providers).build();
-                signinLauncher.launch(signInIntent);
+                        }
+                    });
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig[]{
+                            new AuthUI.IdpConfig.EmailBuilder().build(),
+                            new AuthUI.IdpConfig.GoogleBuilder().build()
+                    });
+            Intent signInIntent = AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setLogo(R.mipmap.ic_launcher)
+                    .setAvailableProviders(providers).build();
+            signinLauncher.launch(signInIntent);
 
-            }
+
         }else{
             Database ddb=new Database();
             ddb.addEmailInDatabaseIfUserInexistant(auth.getCurrentUser().getEmail());
@@ -68,6 +67,22 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        binding.buttonCreate.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, createSaloonView.class);
+                startActivity(intent);
+            }
+        });
+
+
+    }
+
+
+    public void onClick(View view) {
+        if (view.getId()==R.id.button_create){
+
+        }
     }
 
     @Override
@@ -77,12 +92,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         if(item.getItemId()==R.id.sign_out_menu){
             auth.signOut();
             finish();
             return true;
+        }else if (item.getItemId()==R.id.notif){
+            Intent intent = new Intent(this, NotificationView.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
