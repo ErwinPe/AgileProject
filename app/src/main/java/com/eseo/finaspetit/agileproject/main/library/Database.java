@@ -105,7 +105,14 @@ public class Database {
     //OFFICIEL
     public void createDocument(Object obj, String collection){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection(collection).add(obj);
+
+        DocumentReference docRef = firestore.collection(collection).document();
+        String idRef = docRef.getId();
+
+        System.out.println("IDREF "+idRef);
+
+        firestore.collection(collection).document(idRef).set(obj);
+;
     }
 
     public void deleteDocument(String id, String collection){

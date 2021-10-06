@@ -58,16 +58,16 @@ public class createSaloonView  extends AppCompatActivity implements CreateSaloon
                 saloon.setScrumMaster(auth.getCurrentUser().getEmail());
 
                 String[] membersStr = binding.SearchMembers.getText().toString().split(", ");
-
-                for (String s : membersStr){
-                    listmembers.add(s);
-                }
-                if (listmembers.get(listmembers.size()-1)==" "){
-                    listmembers.remove(listmembers.size()-1);
-
-                }
-
                 saloon.setMembers(listmembers);
+
+                for (String s : membersStr) {
+                    if (!s.equals(" ")) {
+                        listmembers.add(s);
+                    }
+                }
+
+
+                System.out.println("couocu");
 
                 db.createDocument(saloon,"salon");
             }
