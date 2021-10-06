@@ -10,12 +10,9 @@ import com.eseo.finaspetit.agileproject.main.interfaces.NotificationsViewsInterf
 import com.eseo.finaspetit.agileproject.main.library.Database;
 import com.eseo.finaspetit.agileproject.main.library.Notification;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.HashMap;
 import java.util.List;
 
 public class NotificationView extends AppCompatActivity implements NotificationsViewsInterface {
-
     private ActivityNotificationBinding binding;
     private Database ddb=new Database();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
