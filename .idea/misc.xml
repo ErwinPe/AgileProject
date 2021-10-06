@@ -3,11 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_main.xml" value="0.264" />
-        <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_notification.xml" value="0.17760416666666667" />
         <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/list_item_notif.xml" value="0.2" />
-        <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/main_menu.xml" value="0.12395833333333334" />
-        <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/menu/main_menu.xml" value="0.12395833333333334" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3828125" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/activity_createsaloon.xml" value="0.33" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/activity_join.xml" value="0.33" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/activity_main.xml" value="0.28940217391304346" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/activity_notification.xml" value="0.20520833333333333" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/create_salon.xml" value="0.20520833333333333" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/joinpage.xml" value="0.28940217391304346" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/list_item_notif.xml" value="0.2015625" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/salon.xml" value="0.20520833333333333" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/switch_item.xml" value="0.20520833333333333" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/menu/action_bar.xml" value="0.20520833333333333" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/menu/main_menu.xml" value="0.20520833333333333" />
       </map>
     </option>
   </component>

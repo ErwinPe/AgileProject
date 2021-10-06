@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.eseo.finaspetit.agileproject.main.interfaces.CreateSaloonViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.NotificationsViewsInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.ReadAllMessagesInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -185,6 +186,36 @@ public class Database {
             }
         });
     }
+
+    public void getAllUser (AppCompatActivity act){
+
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+
+        firestore.collection("members").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    ArrayList<String> listmembers =new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+
+                        String email = document.getString("email");
+                        System.out.println("all USER FOR  " +  email);
+
+                        listmembers.add(email);
+
+                    }
+                    ((CreateSaloonViewInterface)act).handleGetAllUser(listmembers);
+                } else {
+                    System.out.println("error : "+task.getException());
+                }
+            }
+        });
+
+    }
+
 
 
 
