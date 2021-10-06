@@ -36,31 +36,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(root);
         auth = FirebaseAuth.getInstance();
         if(auth.getCurrentUser() == null) {
-            if(auth.getCurrentUser() == null) {
-                ActivityResultLauncher<Intent> signinLauncher = registerForActivityResult(
-                        new ActivityResultContracts.StartActivityForResult(),
-                        new ActivityResultCallback<ActivityResult>() {
-                            @Override
-                            public void onActivityResult(ActivityResult result) {
-                                if (result.getResultCode() != Activity.RESULT_OK) {
-                                    Toast.makeText(MainActivity.this, "Error signing in",
-                                            Toast.LENGTH_LONG).show();
-                                    finish();
-                                }
+            ActivityResultLauncher<Intent> signinLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            if (result.getResultCode() != Activity.RESULT_OK) {
+                                Toast.makeText(MainActivity.this, "Error signing in",
+                                        Toast.LENGTH_LONG).show();
+                                finish();
                             }
-                        });
-                List<AuthUI.IdpConfig> providers = Arrays.asList(
-                        new AuthUI.IdpConfig[]{
-                                new AuthUI.IdpConfig.EmailBuilder().build(),
-                                new AuthUI.IdpConfig.GoogleBuilder().build()
-                        });
-                Intent signInIntent = AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setLogo(R.mipmap.ic_launcher)
-                        .setAvailableProviders(providers).build();
-                signinLauncher.launch(signInIntent);
+                        }
+                    });
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig[]{
+                            new AuthUI.IdpConfig.EmailBuilder().build(),
+                            new AuthUI.IdpConfig.GoogleBuilder().build()
+                    });
+            Intent signInIntent = AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setLogo(R.mipmap.ic_launcher)
+                    .setAvailableProviders(providers).build();
+            signinLauncher.launch(signInIntent);
 
-            }
+
         }else{
             //Intent intent = new Intent(this,JoinActivity.class);
             //Intent intent = new Intent(this, NotificationView.class);

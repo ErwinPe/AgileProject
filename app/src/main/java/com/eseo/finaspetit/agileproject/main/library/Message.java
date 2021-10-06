@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,14 +26,15 @@ import java.util.Date;
 public class Message {
     private String text;
     private String user;
-    private long messageTime;
+    private Timestamp messageTime;
 
     public Message(String messageText, String messageUser) {
         this.text = messageText;
         this.user = messageUser;
 
-        // Initialize to current time
-        messageTime = new Date().getTime();
+        java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+        Timestamp currentTime = new Timestamp(date);
+        this.messageTime = currentTime;
     }
 
     public Message(){
@@ -55,11 +57,11 @@ public class Message {
         this.user = messageUser;
     }
 
-    public long getMessageTime() {
+    public Timestamp getMessageTime() {
         return messageTime;
     }
 
-    public void setMessageTime(long messageTime) {
+    public void setMessageTime(Timestamp messageTime) {
         this.messageTime = messageTime;
     }
 }

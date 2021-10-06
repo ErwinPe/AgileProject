@@ -31,7 +31,6 @@ public class NotificationView extends AppCompatActivity implements ReadAllMessag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityNotificationBinding.inflate(getLayoutInflater());
-
         View root = binding.getRoot();
         setContentView(root);
         ddb.readAllMessages(this);

@@ -15,8 +15,7 @@
             android:parentActivityName=".main.views.MainActivity" />
         <activity
             android:name=".main.views.createSaloonView"
-            android:parentActivityName=".main.views.MainActivity"
-            tools:ignore="Instantiatable" />
+            android:parentActivityName=".main.views.MainActivity"/>
 
         <activity
             android:name=".main.views.MainActivity"
