@@ -1,5 +1,7 @@
 package com.eseo.finaspetit.agileproject.main.library;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,9 +9,11 @@ import com.eseo.finaspetit.agileproject.main.interfaces.NotificationsViewsInterf
 import com.eseo.finaspetit.agileproject.main.interfaces.ReadAllMessagesInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.annotations.Nullable;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -102,6 +106,11 @@ public class Database {
         firestore.collection(collection).add(obj);
     }
 
+    public void deleteDocument(String id, String collection){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection(collection).document(id).delete();
+    }
+
     public void addMessageToGeneralChat(String idSalon,Message message){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference washingtonRef = firestore.collection("salon").document(idSalon);
@@ -134,16 +143,17 @@ public class Database {
         //DocumentReference docRef = firestore.collection("notification").document("notif1"); //document("qu5rbrhQRw10FTvfAIpw");
 
 
-        firestore.collection("notification").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firestore.collection("notification").whereEqualTo("receiver",email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     List<Notification> list = new ArrayList<>();
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Notification notif=new Notification(document.getString("message"),document.getTimestamp("dateCreation"),document.getString("receiver"));
+                        Notification notif=new Notification(document.getId(),document.getString("message"),document.getTimestamp("dateCreation"),document.getString("receiver"),document.getString("title"),document.getString("idSalon"));
                         list.add(notif);
                         ((NotificationsViewsInterface)act).handleNotification(list);
                     }
+
                 } else {
                     System.out.println("error : "+task.getException());
                 }
@@ -151,6 +161,11 @@ public class Database {
         });
     }
 
+    public void addMembersToSalon(String idSalon,String userEmail){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        DocumentReference washingtonRef = firestore.collection("salon").document(idSalon);
+        washingtonRef.update("members", FieldValue.arrayUnion(userEmail));
+    }
 
 
 
