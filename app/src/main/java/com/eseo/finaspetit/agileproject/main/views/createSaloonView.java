@@ -66,9 +66,6 @@ public class createSaloonView  extends AppCompatActivity implements CreateSaloon
                     }
                 }
 
-
-                System.out.println("couocu");
-
                 db.createDocument(saloon,"salon");
             }
         });
