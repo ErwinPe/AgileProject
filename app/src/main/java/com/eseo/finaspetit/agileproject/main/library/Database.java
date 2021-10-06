@@ -3,15 +3,13 @@ package com.eseo.finaspetit.agileproject.main.library;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.eseo.finaspetit.agileproject.main.views.MainActivity;
-import com.eseo.finaspetit.agileproject.main.views.ReadAllMessagesInterface;
+import com.eseo.finaspetit.agileproject.main.interfaces.NotificationsViewsInterface;
+import com.eseo.finaspetit.agileproject.main.interfaces.ReadAllMessagesInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.annotations.Nullable;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -22,7 +20,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -128,12 +125,31 @@ public class Database {
                 .getReference()
                 .child("chats")
                 .limitToLast(50);
-
-
-
         return salons;
     }
 
+    public void getNotification(AppCompatActivity act,String email){
+        ArrayList<Notification> notif=new ArrayList<>();
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        //DocumentReference docRef = firestore.collection("notification").document("notif1"); //document("qu5rbrhQRw10FTvfAIpw");
+
+
+        firestore.collection("notification").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<Notification> list = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Notification notif=new Notification(document.getString("message"),document.getTimestamp("dateCreation"),document.getString("receiver"));
+                        list.add(notif);
+                        ((NotificationsViewsInterface)act).handleNotification(list);
+                    }
+                } else {
+                    System.out.println("error : "+task.getException());
+                }
+            }
+        });
+    }
 
 
 
