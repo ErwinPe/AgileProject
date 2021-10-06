@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityMainBinding;
+import com.eseo.finaspetit.agileproject.main.library.Database;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }else{
+            Database ddb=new Database();
+            ddb.addEmailInDatabaseIfUserInexistant(auth.getCurrentUser().getEmail());
             Intent intent = new Intent(this, NotificationView.class);
             startActivity(intent);
         }

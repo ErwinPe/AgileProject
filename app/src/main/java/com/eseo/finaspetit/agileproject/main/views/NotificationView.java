@@ -27,7 +27,6 @@ public class NotificationView extends AppCompatActivity implements Notifications
         View root = binding.getRoot();
         setContentView(root);
         ddb.getNotification(this,auth.getCurrentUser().getEmail());
-
         binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

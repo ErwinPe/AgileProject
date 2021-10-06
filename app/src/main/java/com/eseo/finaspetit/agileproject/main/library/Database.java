@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -165,6 +166,24 @@ public class Database {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference washingtonRef = firestore.collection("salon").document(idSalon);
         washingtonRef.update("members", FieldValue.arrayUnion(userEmail));
+    }
+
+    public void addEmailInDatabaseIfUserInexistant(String email){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("members").whereEqualTo("email",email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    if(task.getResult().isEmpty()){
+                        HashMap<String, String> obj=new HashMap<>();
+                        obj.put("email",email);
+                        createDocument(obj,"members");
+                    }
+                } else {
+                    System.out.println("error : "+task.getException());
+                }
+            }
+        });
     }
 
 
