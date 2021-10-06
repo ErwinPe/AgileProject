@@ -7,19 +7,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.eseo.finaspetit.agileproject.databinding.ActivityNotificationBinding;
+import com.eseo.finaspetit.agileproject.main.components.CustomClassAdaptater;
+import com.eseo.finaspetit.agileproject.main.interfaces.NotificationsViewsInterface;
+import com.eseo.finaspetit.agileproject.main.interfaces.ReadAllMessagesInterface;
 import com.eseo.finaspetit.agileproject.main.library.Database;
+import com.eseo.finaspetit.agileproject.main.library.Notification;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificationView extends AppCompatActivity implements ReadAllMessagesInterface{
+public class NotificationView extends AppCompatActivity implements ReadAllMessagesInterface, NotificationsViewsInterface {
 
     private ActivityNotificationBinding binding;
     Database ddb=new Database();
@@ -34,7 +36,7 @@ public class NotificationView extends AppCompatActivity implements ReadAllMessag
         setContentView(root);
         ddb.readAllMessages(this);
         ddb.getAllSalon(this,auth.getCurrentUser().getEmail());
-
+        ddb.getNotification(this,auth.getCurrentUser().getEmail());
         binding.button2.setOnClickListener( new View.OnClickListener() {
 
             @Override
@@ -80,4 +82,13 @@ public class NotificationView extends AppCompatActivity implements ReadAllMessag
     }
 
 
+    @Override
+    public void handleNotification(List<Notification> list) {
+
+        /*ArrayAdapter<Notification> arrayAdapter
+                = new ArrayAdapter<Notification>(this, android.R.layout.simple_list_item_checked , list);*/
+
+        binding.listView.setAdapter(new CustomClassAdaptater(this,list));
+
+    }
 }
