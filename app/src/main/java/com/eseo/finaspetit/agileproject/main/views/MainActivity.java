@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Database ddb=new Database();
             ddb.addEmailInDatabaseIfUserInexistant(auth.getCurrentUser().getEmail());
-            Intent intent = new Intent(this, NotificationView.class);
+            Intent intent = new Intent(this, ChatActivity.class);
             startActivity(intent);
         }
 

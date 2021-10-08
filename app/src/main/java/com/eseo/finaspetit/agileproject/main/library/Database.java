@@ -5,15 +5,18 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.eseo.finaspetit.agileproject.main.interfaces.ChatViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.CreateSaloonViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.NotificationsViewsInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.ReadAllMessagesInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.annotations.Nullable;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -25,8 +28,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class Database {
@@ -38,7 +44,7 @@ public class Database {
     public String getupdate(){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         String data="";
-        final DocumentReference docRef = firestore.collection("notification").document("notif1");
+        final DocumentReference docRef = firestore.collection("notification").document("abRmGEOuOeXl8kj4zWf2");
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -58,23 +64,33 @@ public class Database {
         return data;
     }
 
-    public void readAllMessages(AppCompatActivity act) {//Context context
+    public void getAllMessages(AppCompatActivity act,String idSalon) {//Context context
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        DocumentReference docRef = firestore.collection("salon").document("qu5rbrhQRw10FTvfAIpw").collection("CHAT").document("message1");
+        DocumentReference docRef = firestore.collection("salon").document(idSalon);
+        String TAG="ok";
 
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        docRef.addSnapshotListener( new EventListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document != null && document.exists()) {
-                        ((ReadAllMessagesInterface)act).handleResult(document.getString("message"));
-                    } else {
-                        System.out.println("Aucune donnée");
-                    }
-                } else {
-                    System.out.println("erreur "+task.getException());
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
                 }
+
+                Object group = snapshot.get("chat");
+                List<Message> messages=new ArrayList<>();
+                for(int i=0;i<((ArrayList<?>) group).size();i++){
+                    HashMap<String,Object> test= (HashMap<String, Object>) ((ArrayList<?>) group).get(i);
+                    System.out.println("data: "+test.get("messageText"));
+                    String txt= (String) test.get("messageText");
+                    String user= (String) test.get("messageUser");
+                    Timestamp tm= (Timestamp) test.get("messageTime");
+                    messages.add(new Message(txt,user,tm));
+                }
+                Collections.sort(messages, Comparator.comparing(Message::getMessageTime));
+                ((ChatViewInterface)act).handleMessage(messages);
+
             }
         });
 
