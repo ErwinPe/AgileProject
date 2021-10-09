@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_chat.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_notification.xml" value="0.17760416666666667" />
+        <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/list_item_message.xml" value="0.22780797101449277" />
         <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/list_item_notif.xml" value="0.2" />
         <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3828125" />
         <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />

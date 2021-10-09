@@ -24,37 +24,39 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Date;
 
 public class Message {
-    private String text;
-    private String user;
+    private String messageText;
+    private String messageUser;
     private Timestamp messageTime;
 
     public Message(String messageText, String messageUser) {
-        this.text = messageText;
-        this.user = messageUser;
+        this.messageText = messageText;
+        this.messageUser = messageUser;
 
         java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
         Timestamp currentTime = new Timestamp(date);
         this.messageTime = currentTime;
     }
 
-    public Message(){
-
+    public Message(String messageText,String messageUser,Timestamp tm){
+        this.messageTime=tm;
+        this.messageText=messageText;
+        this.messageUser=messageUser;
     }
 
     public String getMessageText() {
-        return text;
+        return messageText;
     }
 
     public void setMessageText(String messageText) {
-        this.text = messageText;
+        this.messageText = messageText;
     }
 
     public String getMessageUser() {
-        return user;
+        return messageUser;
     }
 
     public void setMessageUser(String messageUser) {
-        this.user = messageUser;
+        this.messageUser = messageUser;
     }
 
     public Timestamp getMessageTime() {
@@ -63,5 +65,9 @@ public class Message {
 
     public void setMessageTime(Timestamp messageTime) {
         this.messageTime = messageTime;
+    }
+
+    public String toString(){
+        return this.messageText+" "+this.messageUser+" "+this.messageTime;
     }
 }

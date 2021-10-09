@@ -15,7 +15,10 @@
             android:parentActivityName=".main.views.MainActivity" />
         <activity
             android:name=".main.views.createSaloonView"
-            android:parentActivityName=".main.views.MainActivity" />
+            android:parentActivityName=".main.views.MainActivity"/>
+        <activity
+            android:name=".main.views.ChatActivity"
+            android:parentActivityName=".main.views.ChatActivity"/>
 
         <activity
             android:name=".main.views.MainActivity"
