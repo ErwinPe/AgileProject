@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Database ddb=new Database();
             ddb.addEmailInDatabaseIfUserInexistant(auth.getCurrentUser().getEmail());
-            Intent intent = new Intent(this, NotificationView.class);
-            startActivity(intent);
+            //Intent intent = new Intent(this, MainActivity.class);
+            //startActivity(intent);
         }
 
         binding.buttonCreate.setOnClickListener( new View.OnClickListener() {
