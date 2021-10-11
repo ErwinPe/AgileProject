@@ -39,7 +39,12 @@ public class ChatActivity extends AppCompatActivity implements ChatViewInterface
             @Override
             public void onClick(View v) {
                 Message msg=new Message(binding.textInput.getText().toString(),auth.getCurrentUser().getEmail());
-                bdd.addMessageToGeneralChat(idSalon,msg);
+                System.out.println("DATA MESSAGE: "+msg.getMessageText());
+                if(!msg.getMessageText().isEmpty()){
+                    bdd.addMessageToGeneralChat(idSalon,msg);
+                    binding.textInput.setText("");
+                }
+
             }
         }
         );
@@ -49,13 +54,16 @@ public class ChatActivity extends AppCompatActivity implements ChatViewInterface
     public void handleMessage(List<Message> list) {
         CustomClassAdaptaterMessage adapt=new CustomClassAdaptaterMessage(this,list);
         binding.listView.setAdapter(adapt);
+
     }
 
     private void scrollListViewToBottom() {
+
         binding.listView.post(new Runnable() {
             @Override
             public void run() {
-                binding.listView.setSelection(binding.listView.getCount() - 1);
+                // Select the last row so it will scroll into view...
+                binding.listView.setSelection(binding.listView.getCount());
             }
         });
     }

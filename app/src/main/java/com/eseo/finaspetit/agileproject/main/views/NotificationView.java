@@ -23,7 +23,7 @@ public class NotificationView extends AppCompatActivity implements Notifications
         binding = ActivityNotificationBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
         setContentView(root);
-        ddb.getNotification(this,auth.getCurrentUser().getEmail());
+        ddb.getAllNotif(this,auth.getCurrentUser().getEmail());
         binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -35,6 +35,13 @@ public class NotificationView extends AppCompatActivity implements Notifications
                 }
                 ddb.deleteDocument(notif.getId(),"notification");
                 //TODO: Faire retour sur la page précédente
+            }
+        });
+
+        binding.button2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Notification notif=new Notification("0","test",null,"erwinpetit7@gmail.com","test",null);
+                ddb.createDocument(notif,"notification");
             }
         });
     }

@@ -18,6 +18,7 @@
             android:parentActivityName=".main.views.MainActivity"/>
         <activity
             android:name=".main.views.ChatActivity"
+            android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".main.views.ChatActivity"/>
 
         <activity

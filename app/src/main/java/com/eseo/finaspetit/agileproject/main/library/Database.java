@@ -1,6 +1,7 @@
 package com.eseo.finaspetit.agileproject.main.library;
 
 import android.util.Log;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.model.Document;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,7 +84,6 @@ public class Database {
                 List<Message> messages=new ArrayList<>();
                 for(int i=0;i<((ArrayList<?>) group).size();i++){
                     HashMap<String,Object> test= (HashMap<String, Object>) ((ArrayList<?>) group).get(i);
-                    System.out.println("data: "+test.get("messageText"));
                     String txt= (String) test.get("messageText");
                     String user= (String) test.get("messageUser");
                     Timestamp tm= (Timestamp) test.get("messageTime");
@@ -136,7 +137,7 @@ public class Database {
         firestore.collection(collection).document(id).delete();
     }
 
-    public void addMessageToGeneralChat(String idSalon,Message message){
+    public void addMessageToGeneralChat(String idSalon, Message message){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference washingtonRef = firestore.collection("salon").document(idSalon);
         washingtonRef.update("chat", FieldValue.arrayUnion(message));
@@ -211,10 +212,7 @@ public class Database {
     }
 
     public void getAllUser (AppCompatActivity act){
-
-
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
 
         firestore.collection("members").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -239,7 +237,33 @@ public class Database {
 
     }
 
+    public void getAllNotif(AppCompatActivity act,String email) {//Context context
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        String TAG="ok";
+        ArrayList<Notification> allNotif=new ArrayList<>();
+        firestore.collection("notification").whereEqualTo("receiver", email).addSnapshotListener(new EventListener<QuerySnapshot>()
+        {
 
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots,
+                                @Nullable FirebaseFirestoreException e) {
+                allNotif.clear();
+                if (e != null) {
+                    Log.w(TAG, "listen:error", e);
+                    return;
+                }
+                //snapshots.getDocuments()
+                for (DocumentSnapshot dc : snapshots.getDocuments()) {
+
+                    Notification notif=new Notification(dc.getId(),dc.getString("message"),dc.getTimestamp("dateCreation"),dc.getString("receiver"),dc.getString("title"),dc.getString("idSalon"));
+                    allNotif.add(notif);
+                }
+                ((NotificationsViewsInterface)act).handleNotification(allNotif);
+                System.out.println("data: "+allNotif.size());
+            }
+        });
+
+    }
 
 
 }
