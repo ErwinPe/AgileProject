@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Salon {
-    private int id;
+    private String id;
     private Timestamp creationDate;
     private String description;
     private String nom;
@@ -77,9 +77,9 @@ public class Salon {
         this.members = members;
     }
 
-    public int getId() { return id; }
+    public String getId() { return id; }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -105,13 +105,21 @@ public class Salon {
         this.description=desc;
     }
 
-    public Salon(Timestamp date, String nom, String desc, ArrayList<Message> ch, ArrayList<String> mem, ArrayList<US> us){
+    public Salon(String id, Timestamp date, String nom, String desc, ArrayList<Message> ch, ArrayList<String> mem, ArrayList<US> us){
+        this.id=id;
         this.description=desc;
         this.creationDate=date;
         this.nom=nom;
         this.chat = ch;
         this.members = mem;
         this.US = us;
+    }
+
+    public Salon(String id, String nom, String desc, String scrumMaster){
+        this.id=id;
+        this.description=desc;
+        this.nom=nom;
+        this.scrumMaster = scrumMaster;
     }
 
 

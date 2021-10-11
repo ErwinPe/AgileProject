@@ -11,7 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.eseo.finaspetit.agileproject.databinding.ActivityCreatesaloonBinding;
 import com.eseo.finaspetit.agileproject.main.interfaces.CreateSaloonViewInterface;
+import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
+import com.eseo.finaspetit.agileproject.main.library.Message;
+import com.eseo.finaspetit.agileproject.main.library.Notification;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +42,6 @@ public class createSaloonView  extends AppCompatActivity implements CreateSaloon
         db.getAllUser(this);
 
 
-
         binding.buttonCreateSaloon.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,13 +62,28 @@ public class createSaloonView  extends AppCompatActivity implements CreateSaloon
                 String[] membersStr = binding.SearchMembers.getText().toString().split(", ");
                 saloon.setMembers(listmembers);
 
+
+                String idSaloon = db.createDocument(saloon, "salon");
+
+                Message msg=new Message("Création du salon "+binding.textSaloonName.getText().toString() ,"System");
+                db.addMessageToGeneralChat(idSaloon,msg);
+
+                String message = " invitation au salon "+binding.textSaloonName.getText().toString();
+
+
+
                 for (String s : membersStr) {
-                    if (!s.equals(" ")) {
-                        listmembers.add(s);
+                    if (!s.equals(" ") & !s.equals(auth.getCurrentUser().getEmail())) {
+                        Notification notifCreateSaloon = new Notification(null,message, currentTime, s, "Invitation Salon",idSaloon);
+                        db.createDocument(notifCreateSaloon, "notification");
                     }
                 }
 
-                db.createDocument(saloon,"salon");
+
+
+                binding.textSaloonName.setText("");
+                binding.textDescSaloon.setText("");
+                binding.SearchMembers.setText("");
             }
         });
     }
