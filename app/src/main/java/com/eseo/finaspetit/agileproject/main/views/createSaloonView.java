@@ -78,9 +78,6 @@ public class createSaloonView  extends AppCompatActivity implements CreateSaloon
                         db.createDocument(notifCreateSaloon, "notification");
                     }
                 }
-
-
-
                 binding.textSaloonName.setText("");
                 binding.textDescSaloon.setText("");
                 binding.SearchMembers.setText("");
