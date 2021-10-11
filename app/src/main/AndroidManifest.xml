@@ -23,7 +23,11 @@
         <activity
             android:name=".main.views.ChatActivity"
             android:windowSoftInputMode="adjustResize"
-            android:parentActivityName=".main.views.ChatActivity"/>
+            />
+        <activity
+            android:name=".main.views.InfoSaloonView"
+            android:parentActivityName=".main.views.ChatActivity"
+            />
 
         <activity
             android:name=".main.views.MainActivity"

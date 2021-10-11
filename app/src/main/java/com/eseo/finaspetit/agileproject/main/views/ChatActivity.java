@@ -1,11 +1,17 @@
 package com.eseo.finaspetit.agileproject.main.views;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityChatBinding;
 import com.eseo.finaspetit.agileproject.databinding.ActivityNotificationBinding;
 import com.eseo.finaspetit.agileproject.main.components.CustomClassAdaptater;
@@ -23,7 +29,6 @@ import java.util.List;
 public class ChatActivity extends AppCompatActivity implements ChatViewInterface {
     ActivityChatBinding binding;
     Database bdd=new Database();
-    //TODO: Récupérer l'id du salon concerné
     String idSalon="";
     FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -51,6 +56,8 @@ public class ChatActivity extends AppCompatActivity implements ChatViewInterface
             }
         }
         );
+
+
     }
 
     @Override
@@ -69,5 +76,33 @@ public class ChatActivity extends AppCompatActivity implements ChatViewInterface
                 binding.listView.setSelection(binding.listView.getCount());
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_main_saloon,menu);
+        if (!((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getScrumMaster().equals(auth.getCurrentUser().getEmail())) {
+
+
+            menu.findItem(R.id.dlt_saloon_btn).setVisible(false);
+        }
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+        if(item.getItemId()==R.id.usBouton){
+
+        }else if (item.getItemId()==R.id.info_btn){
+            Intent intent = new Intent(this, InfoSaloonView.class);
+            startActivity(intent);
+        }else if (item.getItemId()==R.id.dlt_saloon_btn){
+            bdd.deleteDocument(((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getId(),"salon");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }else if (item.getItemId()==R.id.sign_out_saloon){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

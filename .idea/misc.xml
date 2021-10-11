@@ -4,7 +4,6 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_chat.xml" value="0.264" />
-        <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_createsaloon.xml" value="0.25416666666666665" />
         <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_notification.xml" value="0.17760416666666667" />
         <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_us.xml" value="0.25416666666666665" />
@@ -13,6 +12,7 @@
         <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3828125" />
         <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
         <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/activity_createsaloon.xml" value="0.33" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/activity_info_saloon.xml" value="0.36666666666666664" />
         <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/activity_join.xml" value="0.33" />
         <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/activity_main.xml" value="0.28940217391304346" />
         <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/activity_notification.xml" value="0.20520833333333333" />
@@ -23,6 +23,7 @@
         <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/layout/switch_item.xml" value="0.20520833333333333" />
         <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/menu/action_bar.xml" value="0.20520833333333333" />
         <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/menu/main_menu.xml" value="0.20520833333333333" />
+        <entry key="..\:/ESEO/I3/android/projet/app/src/main/res/menu/menu_main_saloon.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>

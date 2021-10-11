@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
             auth.signOut();
             finish();
             return true;
-        }else if (item.getItemId()==R.id.notif){
+        }else if (item.getItemId()==R.id.usBouton){
             Intent intent = new Intent(this, NotificationView.class);
             startActivity(intent);
         }
