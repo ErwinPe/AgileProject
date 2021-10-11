@@ -1,6 +1,6 @@
 package com.eseo.finaspetit.agileproject.main.library;
 
-import java.sql.Timestamp;
+import com.google.firebase.Timestamp;
 import java.util.ArrayList;
 
 public class US {
@@ -11,10 +11,15 @@ public class US {
     ArrayList<Integer> notes = new ArrayList<>();
     ArrayList<Message> messages = new ArrayList<>();
     boolean isVoted;
+    String etat;
 
-    public US(String nom,String desc){
+    public US(String nom, String desc, ArrayList<Integer> notes, ArrayList<Message> messages, boolean isVoted, com.google.firebase.Timestamp dateCreation){
         this.nom=nom;
         this.description=desc;
+        this.notes=notes;
+        this.messages=messages;
+        this.isVoted=isVoted;
+        this.dateCreation=dateCreation;
 
     }
 

@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
             Database ddb=new Database();
             ddb.addEmailInDatabaseIfUserInexistant(auth.getCurrentUser().getEmail());
             ddb.getAllSalon(this,auth.getCurrentUser().getEmail());
-            //Intent intent = new Intent(this, ChatActivity.class);
+            //Intent intent = new Intent(this, USActivity.class);
             //startActivity(intent);
         }
 

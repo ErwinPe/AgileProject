@@ -156,18 +156,6 @@ public class Database {
 
     }
 
-    public ArrayList<Salon> getAllSalons() throws ExecutionException, InterruptedException {
-        ArrayList<Salon> salons=new ArrayList<>();
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        DocumentReference docRef = firestore.collection("salon").document("qu5rbrhQRw10FTvfAIpw").collection("CHAT").document("message1");
-
-        Query query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("chats")
-                .limitToLast(50);
-        return salons;
-    }
-
     public void getNotification(AppCompatActivity act,String email){
         ArrayList<Notification> notif=new ArrayList<>();
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -264,11 +252,61 @@ public class Database {
                     allNotif.add(notif);
                 }
                 ((NotificationsViewsInterface)act).handleNotification(allNotif);
-                System.out.println("data: "+allNotif.size());
+
             }
         });
 
     }
 
+    public void getAllUS(AppCompatActivity act,String idSalon) {//Context context
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        DocumentReference docRef = firestore.collection("salon").document(idSalon);
+        String TAG="ok";
+        ArrayList<US> us= new ArrayList<>();
+        docRef.addSnapshotListener( new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+
+                Object group = snapshot.get("us");
+                List<US> us=new ArrayList<>();
+                for(int i=0;i<((ArrayList<?>) group).size();i++){
+                    //System.out.println("i=" + i);
+                    HashMap<String,Object> test= (HashMap<String, Object>) ((ArrayList<?>) group).get(i);
+                    //System.out.println("test= "+test.toString());
+                    Timestamp dateCreation= (Timestamp) test.get("dateCreation");
+                    boolean isVoted=(boolean) test.get("isVoted");
+                    String desc=(String) test.get("description");
+                    String nom = (String) test.get("nom");
+                    HashMap<String,Object> chat= (HashMap<String, Object>) test.get("messages");
+                    for(int k=0;i<chat.size();i++){
+                        System.out.println("ici "+chat.get(k));
+                    }
+                    //ArrayList<Message> messages= (ArrayList) test.get("messages");
+                    //System.out.println("messages "+chat);
+                }
+
+                /* for(int i=0;i<((ArrayList<?>) group).size();i++){
+                    HashMap<String,Object> test= (HashMap<String, Object>) ((ArrayList<?>) group).get(i);
+
+
+
+
+
+                    ArrayList<Integer> notes=  (ArrayList<Integer>) test.get("notes");
+                    us.add(new US(nom,desc, notes, messages,isVoted,dateCreation));
+
+                }*/
+                System.out.println(us.toArray().toString());
+                //((ChatViewInterface)act).handleMessage(messages);
+
+            }
+        });
+
+    }
 
 }
