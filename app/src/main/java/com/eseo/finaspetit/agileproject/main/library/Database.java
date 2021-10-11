@@ -106,10 +106,15 @@ public class Database {
                 if (task.isSuccessful()) {
                     List<Salon> list = new ArrayList<>();
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Salon sal=new Salon(document.getString("nom"),document.getString("description"));
+
+                        Salon sal=new Salon(document.getId(),
+                                document.getString("nom"),
+                                document.getString("description"),
+                                document.getString("scrumMaster"));
                         list.add(sal);
-                        ((ReadAllMessagesInterface)act).handleResultAllSalon(list);
+
                     }
+                    ((ReadAllMessagesInterface)act).handleResultAllSalon(list);
                 } else {
                     System.out.println("error : "+task.getException());
                 }
@@ -211,7 +216,6 @@ public class Database {
     }
 
     public void getAllUser (AppCompatActivity act){
-
 
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 

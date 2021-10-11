@@ -13,18 +13,25 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityMainBinding;
+import com.eseo.finaspetit.agileproject.main.interfaces.ReadAllMessagesInterface;
+import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
+import com.eseo.finaspetit.agileproject.main.library.Salon;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ReadAllMessagesInterface {
     private ActivityMainBinding binding;
     private FirebaseAuth auth;
 
@@ -63,8 +70,9 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Database ddb=new Database();
             ddb.addEmailInDatabaseIfUserInexistant(auth.getCurrentUser().getEmail());
-            Intent intent = new Intent(this, ChatActivity.class);
-            startActivity(intent);
+            ddb.getAllSalon(this,auth.getCurrentUser().getEmail());
+            //Intent intent = new Intent(this, ChatActivity.class);
+            //startActivity(intent);
         }
 
         binding.buttonCreate.setOnClickListener( new View.OnClickListener() {
@@ -75,14 +83,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        binding.buttonJoin.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                startActivity(intent);
+            }
+        });
 
-    }
 
-
-    public void onClick(View view) {
-        if (view.getId()==R.id.button_create){
-
-        }
     }
 
     @Override
@@ -104,6 +113,40 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void handleResultAllSalon(List<Salon> content) {
+        List<String> salonNames= new ArrayList<>();
+        for(Salon s : content){
+            salonNames.add(s.getNom());
+        }
+
+        final Spinner spinnerRegion = binding.searchSaloon;
+        ArrayAdapter<String> dataAdapterR = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,salonNames);
+        dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerRegion.setAdapter(dataAdapterR);
+
+        spinnerRegion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
+                String myRegion = String.valueOf(spinnerRegion.getSelectedItem());
+                Toast.makeText(MainActivity.this,
+                        "Salon : " +
+                                "\nnom : " + myRegion +
+                                "\nposition : " + position +
+                                "\nid saloon  : " + content.get(position).getId(),
+                        Toast.LENGTH_SHORT).show();
+                ((Constants) MainActivity.this.getApplication()).setCurentSaloon(content.get(position));
+                System.out.println("id saloon  : " + ((Constants) MainActivity.this.getApplication()).getCurentSaloon().getId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
+
+
     }
 
 
