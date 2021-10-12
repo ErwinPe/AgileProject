@@ -1,6 +1,8 @@
 package com.eseo.finaspetit.agileproject.main.views;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -31,15 +33,16 @@ public class USActivity extends AppCompatActivity implements UsViewInterface {
         View root = binding.getRoot();
         setContentView(root);
         idSalon=((Constants) USActivity.this.getApplication()).getCurentSaloon().getId();
-        //idSalon =((Constants) USActivity.this.getApplication()).getCurentSaloon().getId();
         bdd.getAllUS(this,idSalon);
 
         binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Object o = binding.listView.getItemAtPosition(position);
                 US us = (US) o;
+                Intent intent = new Intent(USActivity.this, ChatUS.class);
+                ((Constants) USActivity.this.getApplication()).setCurentUS(us);
+                startActivity(intent);
                 //TODO: ALLER SUR LA PAGE DETAIL US
             }
         });

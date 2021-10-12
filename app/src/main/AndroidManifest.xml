@@ -18,6 +18,9 @@
             android:name=".main.views.USActivity"
             android:parentActivityName=".main.views.USActivity" />
         <activity
+            android:name=".main.views.ChatUS"
+            android:parentActivityName=".main.views.ChatUS" />
+        <activity
             android:name=".main.views.createSaloonView"
             android:parentActivityName=".main.views.MainActivity"/>
         <activity
