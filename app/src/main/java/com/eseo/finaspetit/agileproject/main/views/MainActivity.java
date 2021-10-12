@@ -8,14 +8,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eseo.finaspetit.agileproject.R;
@@ -29,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ReadAllMessagesInterface {
@@ -116,13 +125,20 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
     }
 
     public void handleResultAllSalon(List<Salon> content) {
+
         List<String> salonNames= new ArrayList<>();
         for(Salon s : content){
-            salonNames.add(s.getNom());
+            if(auth.getCurrentUser().getEmail().equals(s.getScrumMaster())){
+
+                salonNames.add("★  "+s.getNom()+"  ★");
+            }else{
+                salonNames.add(s.getNom());
+            }
+
         }
 
         final Spinner spinnerRegion = binding.searchSaloon;
-        ArrayAdapter<String> dataAdapterR = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,salonNames);
+        ArrayAdapter<String> dataAdapterR = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, salonNames);
         dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRegion.setAdapter(dataAdapterR);
 
