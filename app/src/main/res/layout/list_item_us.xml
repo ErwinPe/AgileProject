@@ -7,8 +7,8 @@
 
     <TextView
         android:id="@+id/textViewDesc"
-        android:layout_width="215dp"
-        android:layout_height="104dp"
+        android:layout_width="341dp"
+        android:layout_height="155dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,8 +19,8 @@
 
     <TextView
         android:id="@+id/textViewtitle"
-        android:layout_width="219dp"
-        android:layout_height="75dp"
+        android:layout_width="341dp"
+        android:layout_height="55dp"
         android:text="title"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -31,15 +31,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.241" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textViewtitle"
-        app:layout_constraintHorizontal_bias="0.779"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.497"
-        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>
