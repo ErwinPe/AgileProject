@@ -2,25 +2,26 @@ package com.eseo.finaspetit.agileproject.main.library;
 
 import com.google.firebase.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class US {
     int id;
     Timestamp dateCreation;
     String description;
     String nom;
-    ArrayList<Integer> notes = new ArrayList<>();
+    HashMap<String, Integer> notes;
     ArrayList<Message> messages = new ArrayList<>();
     boolean isVoted;
     String etat;
 
-    public US(String nom, String desc, ArrayList<Integer> notes, ArrayList<Message> messages, boolean isVoted, com.google.firebase.Timestamp dateCreation){
+    public US(String nom, String desc, HashMap<String,Integer> notes, ArrayList<Message> messages, boolean isVoted, com.google.firebase.Timestamp dateCreation, String etat){
         this.nom=nom;
         this.description=desc;
         this.notes=notes;
         this.messages=messages;
         this.isVoted=isVoted;
         this.dateCreation=dateCreation;
-
+        this.etat=etat;
     }
 
     public int getId() {
@@ -55,11 +56,11 @@ public class US {
         this.nom = nom;
     }
 
-    public ArrayList<Integer> getNotes() {
+    public HashMap<String,Integer> getNotes() {
         return notes;
     }
 
-    public void setNotes(ArrayList<Integer> notes) {
+    public void setNotes(HashMap<String,Integer> notes) {
         this.notes = notes;
     }
 
@@ -77,5 +78,10 @@ public class US {
 
     public void setVoted(boolean voted) {
         isVoted = voted;
+    }
+
+    @Override
+    public String toString(){
+        return this.nom+" "+this.dateCreation.toDate().toString()+" "+this.etat+" "+this.description+" "+this.notes;
     }
 }

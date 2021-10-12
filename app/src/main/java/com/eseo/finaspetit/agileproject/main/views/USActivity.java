@@ -7,12 +7,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.eseo.finaspetit.agileproject.databinding.ActivityChatBinding;
 import com.eseo.finaspetit.agileproject.databinding.ActivityUsBinding;
+import com.eseo.finaspetit.agileproject.main.components.CustomClassAdaptaterMessage;
+import com.eseo.finaspetit.agileproject.main.components.CustomClassAdaptaterUS;
+import com.eseo.finaspetit.agileproject.main.interfaces.UsViewInterface;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
 import com.eseo.finaspetit.agileproject.main.library.Message;
+import com.eseo.finaspetit.agileproject.main.library.US;
 
-public class USActivity extends AppCompatActivity {
-    String idSalon="OmhWTI9IhHQ5Xd4Ep5Cw";
+import java.util.ArrayList;
+
+public class USActivity extends AppCompatActivity implements UsViewInterface {
+    String idSalon="KByifjkaJmwIfSZzGOni";
     ActivityUsBinding binding;
     Database bdd=new Database();
 
@@ -25,6 +31,12 @@ public class USActivity extends AppCompatActivity {
 
         //idSalon =((Constants) USActivity.this.getApplication()).getCurentSaloon().getId();
         bdd.getAllUS(this,idSalon);
+    }
 
+    @Override
+    public void handleUS(ArrayList<US> list) {
+        //System.out.println("ici "+list.get(0).getNotes());
+        CustomClassAdaptaterUS adapt=new CustomClassAdaptaterUS(this,list);
+        binding.listView.setAdapter(adapt);
     }
 }

@@ -10,6 +10,7 @@ import com.eseo.finaspetit.agileproject.main.interfaces.ChatViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.CreateSaloonViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.NotificationsViewsInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.ReadAllMessagesInterface;
+import com.eseo.finaspetit.agileproject.main.interfaces.UsViewInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
@@ -263,7 +264,31 @@ public class Database {
         DocumentReference docRef = firestore.collection("salon").document(idSalon);
         String TAG="ok";
         ArrayList<US> us= new ArrayList<>();
-        docRef.addSnapshotListener( new EventListener<DocumentSnapshot>() {
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map<String, Object> address = (Map<String, Object>) document.getData().get("us");
+                        for(int i=0;i<address.size();i++){
+                            Map<String, Object> usEntity = (Map<String, Object>) address.get(""+i);
+                            us.add(new US((String)usEntity.get("nom"),(String)usEntity.get("description"),(HashMap<String,Integer>) usEntity.get("notes"),new ArrayList<Message>(),(boolean) usEntity.get("isVoted"),(Timestamp) usEntity.get("dateCreation"),(String) usEntity.get("etat")));
+                        }
+                        //System.out.println("US :\n"+us.toString());
+                        ((UsViewInterface)act).handleUS(us);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+
+        /*docRef.addSnapshotListener( new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
                                 @Nullable FirebaseFirestoreException e) {
@@ -272,40 +297,22 @@ public class Database {
                     return;
                 }
 
-                Object group = snapshot.get("us");
-                List<US> us=new ArrayList<>();
-                for(int i=0;i<((ArrayList<?>) group).size();i++){
-                    //System.out.println("i=" + i);
-                    HashMap<String,Object> test= (HashMap<String, Object>) ((ArrayList<?>) group).get(i);
-                    //System.out.println("test= "+test.toString());
-                    Timestamp dateCreation= (Timestamp) test.get("dateCreation");
-                    boolean isVoted=(boolean) test.get("isVoted");
-                    String desc=(String) test.get("description");
-                    String nom = (String) test.get("nom");
-                    HashMap<String,Object> chat= (HashMap<String, Object>) test.get("messages");
-                    for(int k=0;i<chat.size();i++){
-                        System.out.println("ici "+chat.get(k));
-                    }
-                    //ArrayList<Message> messages= (ArrayList) test.get("messages");
-                    //System.out.println("messages "+chat);
-                }
-
-                /* for(int i=0;i<((ArrayList<?>) group).size();i++){
-                    HashMap<String,Object> test= (HashMap<String, Object>) ((ArrayList<?>) group).get(i);
-
-
-
-
-
-                    ArrayList<Integer> notes=  (ArrayList<Integer>) test.get("notes");
-                    us.add(new US(nom,desc, notes, messages,isVoted,dateCreation));
-
-                }*/
-                System.out.println(us.toArray().toString());
+                Map group = (Map) snapshot.get("us");
+                System.out.println(group);
+                List<Message> messages=new ArrayList<>();
+                System.out.println("la   "+group.get("nom"));
+                //HashMap<String,Object> test= (HashMap<String, Object>) ((ArrayList<?>) group).get(i);
+                    //System.out.println(test);
+                    //String txt= (String) test.get("messageText");
+                    //String user= (String) test.get("messageUser");
+                    //Timestamp tm= (Timestamp) test.get("messageTime");
+                    //messages.add(new Message(txt,user,tm));
+                //}
+                //Collections.sort(messages, Comparator.comparing(Message::getMessageTime));
                 //((ChatViewInterface)act).handleMessage(messages);
 
             }
-        });
+        });*/
 
     }
 

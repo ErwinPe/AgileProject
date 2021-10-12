@@ -90,8 +90,9 @@ public class ChatActivity extends AppCompatActivity implements ChatViewInterface
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
-        if(item.getItemId()==R.id.usBouton){
-
+        if(item.getItemId()==R.id.us_btn){
+            Intent intent = new Intent(this, USActivity.class);
+            startActivity(intent);
         }else if (item.getItemId()==R.id.info_btn){
             Intent intent = new Intent(this, InfoSaloonView.class);
             startActivity(intent);
