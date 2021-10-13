@@ -2,11 +2,9 @@ package com.eseo.finaspetit.agileproject.main.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -14,18 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityChatBinding;
-import com.eseo.finaspetit.agileproject.databinding.ActivityNotificationBinding;
-import com.eseo.finaspetit.agileproject.main.components.CustomClassAdaptater;
 import com.eseo.finaspetit.agileproject.main.components.CustomClassAdaptaterMessage;
 import com.eseo.finaspetit.agileproject.main.interfaces.ChatViewInterface;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
 import com.eseo.finaspetit.agileproject.main.library.Message;
-import com.eseo.finaspetit.agileproject.main.library.Notification;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ChatActivity extends AppCompatActivity implements ChatViewInterface {
     ActivityChatBinding binding;
@@ -43,6 +38,7 @@ public class ChatActivity extends AppCompatActivity implements ChatViewInterface
         idSalon =((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getId();
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setTitle("Salon : "+((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getNom());
 
         bdd.getAllMessages(this,idSalon);
@@ -60,10 +56,7 @@ public class ChatActivity extends AppCompatActivity implements ChatViewInterface
             }
         }
         );
-
-
     }
-
     @Override
     public void handleMessage(List<Message> list) {
         CustomClassAdaptaterMessage adapt=new CustomClassAdaptaterMessage(this,list);
@@ -85,7 +78,7 @@ public class ChatActivity extends AppCompatActivity implements ChatViewInterface
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_main_saloon,menu);
-        if (!((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getScrumMaster().equals(auth.getCurrentUser().getEmail())) {
+        if (!((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
 
 
             menu.findItem(R.id.dlt_saloon_btn).setVisible(false);
