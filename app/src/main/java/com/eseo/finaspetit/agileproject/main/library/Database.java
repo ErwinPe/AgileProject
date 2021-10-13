@@ -6,6 +6,7 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.eseo.finaspetit.agileproject.main.interfaces.ChatUSViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.ChatViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.CreateSaloonViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.NotificationsViewsInterface;
@@ -67,7 +68,7 @@ public class Database {
         return data;
     }
 
-    public void getAllMessages(AppCompatActivity act,String idSalon) {//Context context
+    public void getAllMessages(AppCompatActivity act,String idSalon) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference docRef = firestore.collection("salon").document(idSalon);
         String TAG="ok";
@@ -259,7 +260,7 @@ public class Database {
 
     }
 
-    public void getAllUS(AppCompatActivity act,String idSalon) {//Context context
+    public void getAllUS(AppCompatActivity act,String idSalon) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference docRef = firestore.collection("salon").document(idSalon);
         String TAG="ok";
@@ -276,9 +277,7 @@ public class Database {
                                 Map<String, Object> usEntity = (Map<String, Object>) address.get(""+i);
                                 us.add(new US((String)usEntity.get("nom"),(String)usEntity.get("description"),(HashMap<String,Integer>) usEntity.get("notes"),new ArrayList<Message>(),(boolean) usEntity.get("isVoted"),(Timestamp) usEntity.get("dateCreation"),(String) usEntity.get("etat")));
                             }
-                            //System.out.println("US :\n"+us.toString());
                         }
-                        //System.out.println("liste US "+us.toString());
                         ((UsViewInterface)act).handleUS(us);
                     } else {
                         Log.d(TAG, "No such document");
@@ -289,9 +288,15 @@ public class Database {
             }
         });
 
+    }
 
 
-        /*docRef.addSnapshotListener( new EventListener<DocumentSnapshot>() {
+    public void getAllMessagesFromUS(AppCompatActivity act,String idSalon, String idUS) {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        DocumentReference docRef = firestore.collection("salon").document(idSalon);
+        String TAG="ok";
+
+        docRef.addSnapshotListener( new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
                                 @Nullable FirebaseFirestoreException e) {
@@ -300,22 +305,33 @@ public class Database {
                     return;
                 }
 
-                Map group = (Map) snapshot.get("us");
-                System.out.println(group);
+                //Object group = snapshot.get("us");
+                Map<String, Object> address = (Map<String, Object>) snapshot.getData().get("us");
                 List<Message> messages=new ArrayList<>();
-                System.out.println("la   "+group.get("nom"));
-                //HashMap<String,Object> test= (HashMap<String, Object>) ((ArrayList<?>) group).get(i);
-                    //System.out.println(test);
-                    //String txt= (String) test.get("messageText");
-                    //String user= (String) test.get("messageUser");
-                    //Timestamp tm= (Timestamp) test.get("messageTime");
-                    //messages.add(new Message(txt,user,tm));
-                //}
-                //Collections.sort(messages, Comparator.comparing(Message::getMessageTime));
-                //((ChatViewInterface)act).handleMessage(messages);
+                //System.out.println("ici la: "+address.toString());
+
+                if( address != null ){
+                    HashMap<String,Object> test= (HashMap<String, Object>) (address).get(idUS);
+                    HashMap<String,Object> messagesUS= (HashMap<String, Object>) (test).get("messages");
+
+                    for(int i=1;i<=messagesUS.size();i++){
+                        HashMap<String,Object> mes= (HashMap<String,Object>)messagesUS.get(i+"");
+                        //System.out.println("Message n°"+i+" ,"+mes);
+                        if(mes !=null){
+                            String txt= (String) mes.get("messageText");
+                            String user= (String) mes.get("messageUser");
+                            Timestamp tm= (Timestamp) mes.get("messageTime");
+                            messages.add(new Message(txt,user,tm));
+                        }
+
+                    }
+                }
+
+                Collections.sort(messages, Comparator.comparing(Message::getMessageTime));
+                ((ChatUSViewInterface)act).handleMessageUS(messages);
 
             }
-        });*/
+        });
 
     }
 
