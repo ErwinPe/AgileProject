@@ -12,6 +12,9 @@ import com.eseo.finaspetit.agileproject.databinding.ActivityMainBinding;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class InfoSaloonView extends AppCompatActivity {
 
     private ActivityInfoSaloonBinding binding;
@@ -31,7 +34,8 @@ public class InfoSaloonView extends AppCompatActivity {
         binding.nameSalon.setText(salon.getNom());
         binding.descSalon.setText(salon.getDescription());
         binding.scrumMSalon.setText(salon.getScrumMaster());
-        //binding.dateCreaSalon.setText(salon.getCreationDate().toString());
+        String formattedDate = new SimpleDateFormat("dd/MM/yyyy à HH:mm").format(salon.getCreationDate().toDate());
+        binding.dateCreaSalon.setText(formattedDate);
 
 
     }
