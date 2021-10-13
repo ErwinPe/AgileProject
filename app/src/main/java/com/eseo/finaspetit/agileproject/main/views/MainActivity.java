@@ -8,14 +8,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eseo.finaspetit.agileproject.R;
@@ -29,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ReadAllMessagesInterface {
@@ -42,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
         View root = binding.getRoot();
         setContentView(root);
         auth = FirebaseAuth.getInstance();
+
         if(auth.getCurrentUser() == null) {
             ActivityResultLauncher<Intent> signinLauncher = registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -71,8 +81,6 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
             Database ddb=new Database();
             ddb.addEmailInDatabaseIfUserInexistant(auth.getCurrentUser().getEmail());
             ddb.getAllSalon(this,auth.getCurrentUser().getEmail());
-            //Intent intent = new Intent(this, USActivity.class);
-            //startActivity(intent);
         }
 
         binding.buttonCreate.setOnClickListener( new View.OnClickListener() {
@@ -90,8 +98,6 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
                 startActivity(intent);
             }
         });
-
-
     }
 
     @Override
@@ -99,8 +105,6 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
         getMenuInflater().inflate(R.menu.main_menu,menu);
         return true;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
@@ -118,32 +122,27 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
     public void handleResultAllSalon(List<Salon> content) {
         List<String> salonNames= new ArrayList<>();
         for(Salon s : content){
-            salonNames.add(s.getNom());
+            if(auth.getCurrentUser().getEmail().equals(s.getScrumMaster())){
+                salonNames.add("★  "+s.getNom()+"  ★");
+            }else{
+                salonNames.add(s.getNom());
+            }
+
         }
 
         final Spinner spinnerRegion = binding.searchSaloon;
-        ArrayAdapter<String> dataAdapterR = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,salonNames);
+        ArrayAdapter<String> dataAdapterR = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, salonNames);
         dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRegion.setAdapter(dataAdapterR);
 
         spinnerRegion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
-                String myRegion = String.valueOf(spinnerRegion.getSelectedItem());
-                Toast.makeText(MainActivity.this,
-                        "Salon : " +
-                                "\nnom : " + myRegion +
-                                "\nposition : " + position +
-                                "\nid saloon  : " + content.get(position).getId(),
-                        Toast.LENGTH_SHORT).show();
                 ((Constants) MainActivity.this.getApplication()).setCurentSaloon(content.get(position));
-                System.out.println("id saloon  : " + ((Constants) MainActivity.this.getApplication()).getCurentSaloon().getId());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
-
         });
 
 

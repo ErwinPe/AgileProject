@@ -113,7 +113,8 @@ public class Database {
                         Salon sal=new Salon(document.getId(),
                                 document.getString("nom"),
                                 document.getString("description"),
-                                document.getString("scrumMaster"));
+                                document.getString("scrumMaster"),
+                                document.getTimestamp("creationDate"));
                         list.add(sal);
 
                     }

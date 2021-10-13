@@ -115,11 +115,12 @@ public class Salon {
         this.US = us;
     }
 
-    public Salon(String id, String nom, String desc, String scrumMaster){
+    public Salon(String id, String nom, String desc, String scrumMaster,Timestamp date){
         this.id=id;
         this.description=desc;
         this.nom=nom;
         this.scrumMaster = scrumMaster;
+        this.creationDate = date;
     }
 
 

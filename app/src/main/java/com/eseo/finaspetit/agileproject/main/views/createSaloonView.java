@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
 //import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.eseo.finaspetit.agileproject.databinding.ActivityCreatesaloonBinding;
@@ -41,6 +42,8 @@ public class createSaloonView  extends AppCompatActivity implements CreateSaloon
 
         db.getAllUser(this);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Création d'un salon : ");
 
         binding.buttonCreateSaloon.setOnClickListener( new View.OnClickListener() {
             @Override
