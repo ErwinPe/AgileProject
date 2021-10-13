@@ -52,7 +52,7 @@ public class CustomClassAdaptater extends BaseAdapter {
         }
         Notification notif= this.listData.get(position);
         holder.textViewtitle.setText(notif.getTitle());
-        holder.textViewDesc.setText("Message: " + notif.getMessage());
+        holder.textViewDesc.setText(notif.getMessage());
         int imageId = this.getMipmapResIdByName("ic_launcher");
         holder.logoView.setImageResource(imageId);
         return convertView;

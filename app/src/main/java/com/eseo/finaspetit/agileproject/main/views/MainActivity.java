@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
         setContentView(root);
         auth = FirebaseAuth.getInstance();
 
+        binding.buttonJoin.setEnabled(false);
+
         if(auth.getCurrentUser() == null) {
             ActivityResultLauncher<Intent> signinLauncher = registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -129,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
             }
 
         }
+        binding.buttonJoin.setEnabled(true);
 
         final Spinner spinnerRegion = binding.searchSaloon;
         ArrayAdapter<String> dataAdapterR = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, salonNames);
