@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,9 +43,12 @@ public class NotificationView extends AppCompatActivity implements Notifications
                 Notification notif = (Notification) o;
                 if(notif.getIdSalon()!= null){
                     ddb.addMembersToSalon(notif.getIdSalon(),auth.getCurrentUser().getEmail());
+                    Toast.makeText(NotificationView.this,
+                            "Salon rejoint ! ",
+                            Toast.LENGTH_SHORT).show();
                 }
                 ddb.deleteDocument(notif.getId(),"notification");
-                //TODO: Faire retour sur la page précédente
+
             }
         });
 
