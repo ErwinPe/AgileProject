@@ -3,6 +3,7 @@ package com.eseo.finaspetit.agileproject.main.views;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.eseo.finaspetit.agileproject.databinding.ActivityChatBinding;
@@ -28,6 +29,9 @@ public class USActivity extends AppCompatActivity implements UsViewInterface {
         binding = ActivityUsBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
         setContentView(root);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("US : ");
 
         //idSalon =((Constants) USActivity.this.getApplication()).getCurentSaloon().getId();
         bdd.getAllUS(this,idSalon);

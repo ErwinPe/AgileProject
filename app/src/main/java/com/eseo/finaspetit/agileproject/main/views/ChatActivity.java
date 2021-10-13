@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.eseo.finaspetit.agileproject.R;
@@ -40,6 +41,9 @@ public class ChatActivity extends AppCompatActivity implements ChatViewInterface
         setContentView(root);
 
         idSalon =((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getId();
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Salon : "+((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getNom());
 
         bdd.getAllMessages(this,idSalon);
         scrollListViewToBottom();

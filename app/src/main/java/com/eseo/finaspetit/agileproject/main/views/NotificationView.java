@@ -2,8 +2,14 @@ package com.eseo.finaspetit.agileproject.main.views;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityNotificationBinding;
 import com.eseo.finaspetit.agileproject.main.components.CustomClassAdaptater;
 import com.eseo.finaspetit.agileproject.main.interfaces.NotificationsViewsInterface;
@@ -24,6 +30,10 @@ public class NotificationView extends AppCompatActivity implements Notifications
         View root = binding.getRoot();
         setContentView(root);
         ddb.getAllNotif(this,auth.getCurrentUser().getEmail());
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Notifications : ");
+
         binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
