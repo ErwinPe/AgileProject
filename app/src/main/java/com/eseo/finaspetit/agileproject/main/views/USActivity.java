@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.os.Parcelable;
 import android.view.View;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -16,6 +18,8 @@ import com.eseo.finaspetit.agileproject.main.components.CustomClassAdaptaterUS;
 import com.eseo.finaspetit.agileproject.main.interfaces.UsViewInterface;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
+import com.eseo.finaspetit.agileproject.main.library.Message;
+import com.eseo.finaspetit.agileproject.main.library.Notification;
 import com.eseo.finaspetit.agileproject.main.library.US;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -23,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class USActivity extends AppCompatActivity implements UsViewInterface {
-    String idSalon="KByifjkaJmwIfSZzGOni";
+    String idSalon="";
     ActivityUsBinding binding;
     Database bdd=new Database();
     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -38,9 +42,20 @@ public class USActivity extends AppCompatActivity implements UsViewInterface {
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("US : ");
-
-        //idSalon =((Constants) USActivity.this.getApplication()).getCurentSaloon().getId();
+        idSalon=((Constants) USActivity.this.getApplication()).getCurentSaloon().getId();
         bdd.getAllUS(this,idSalon);
+
+        binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                Object o = binding.listView.getItemAtPosition(position);
+                US us = (US) o;
+                Intent intent = new Intent(USActivity.this, ChatUS.class);
+                ((Constants) USActivity.this.getApplication()).setCurentUS(us);
+                startActivity(intent);
+                //TODO: ALLER SUR LA PAGE DETAIL US
+            }
+        });
     }
 
     @Override
