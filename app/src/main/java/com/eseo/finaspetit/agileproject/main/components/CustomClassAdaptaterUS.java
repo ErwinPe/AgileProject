@@ -53,7 +53,7 @@ public class CustomClassAdaptaterUS extends BaseAdapter {
 
         US us= this.listData.get(position);
         String formattedDate = new SimpleDateFormat("dd/MM/yyyy à HH:mm").format(us.getDateCreation().toDate());
-        holder.txtUser.setText(us.getNom()+"  "+formattedDate);
+        holder.txtUser.setText(us.getNom()+" - ["+formattedDate+"]");
         holder.txtMsg.setText(us.getDescription());
         return convertView;
     }

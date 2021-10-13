@@ -271,11 +271,14 @@ public class Database {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Map<String, Object> address = (Map<String, Object>) document.getData().get("us");
-                        for(int i=0;i<address.size();i++){
-                            Map<String, Object> usEntity = (Map<String, Object>) address.get(""+i);
-                            us.add(new US((String)usEntity.get("nom"),(String)usEntity.get("description"),(HashMap<String,Integer>) usEntity.get("notes"),new ArrayList<Message>(),(boolean) usEntity.get("isVoted"),(Timestamp) usEntity.get("dateCreation"),(String) usEntity.get("etat")));
+                        if(address != null){
+                            for(int i=0;i<address.size();i++){
+                                Map<String, Object> usEntity = (Map<String, Object>) address.get(""+i);
+                                us.add(new US((String)usEntity.get("nom"),(String)usEntity.get("description"),(HashMap<String,Integer>) usEntity.get("notes"),new ArrayList<Message>(),(boolean) usEntity.get("isVoted"),(Timestamp) usEntity.get("dateCreation"),(String) usEntity.get("etat")));
+                            }
+                            //System.out.println("US :\n"+us.toString());
                         }
-                        //System.out.println("US :\n"+us.toString());
+                        //System.out.println("liste US "+us.toString());
                         ((UsViewInterface)act).handleUS(us);
                     } else {
                         Log.d(TAG, "No such document");

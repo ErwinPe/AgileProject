@@ -9,6 +9,7 @@ public class Constants extends Application {
     public static final String CHAT_COLLECTION= "CHAT";
 
     private Salon curentSaloon;
+    private US currentUS;
 
     public Salon getCurentSaloon() {
         return curentSaloon;
@@ -16,6 +17,14 @@ public class Constants extends Application {
 
     public void setCurentSaloon(Salon curentSaloon) {
         this.curentSaloon = curentSaloon;
+    }
+
+    public US getCurentUS() {
+        return currentUS;
+    }
+
+    public void setCurentUS(US u) {
+        this.currentUS = u;
     }
 
 }

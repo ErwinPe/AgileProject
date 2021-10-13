@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/acticity_chat_us.xml" value="0.25416666666666665" />
         <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_chat.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_chat_us.xml" value="0.25416666666666665" />
         <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_createsaloon.xml" value="0.25416666666666665" />
         <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProjects/AgileProject/app/src/main/res/layout/activity_notification.xml" value="0.17760416666666667" />
