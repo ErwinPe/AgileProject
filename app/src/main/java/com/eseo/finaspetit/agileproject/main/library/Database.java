@@ -154,6 +154,28 @@ public class Database {
     public void addMessageToUSChat(String idSalon,Message message, String idUS){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference washingtonRef = firestore.collection("salon").document(idSalon);
+        DocumentReference usRef= washingtonRef.collection("us").document(idUS);
+        System.out.println(usRef.toString());
+        /*Map<String, Object> address = (Map<String, Object>) snapshot.getData().get("us");
+        List<Message> messages=new ArrayList<>();
+        //System.out.println("ici la: "+address.toString());
+
+        if( address != null ){
+            HashMap<String,Object> test= (HashMap<String, Object>) (address).get(idUS);
+            HashMap<String,Object> messagesUS= (HashMap<String, Object>) (test).get("messages");
+
+            for(int i=1;i<=messagesUS.size();i++){
+                HashMap<String,Object> mes= (HashMap<String,Object>)messagesUS.get(i+"");
+                //System.out.println("Message n°"+i+" ,"+mes);
+                if(mes !=null){
+                    String txt= (String) mes.get("messageText");
+                    String user= (String) mes.get("messageUser");
+                    Timestamp tm= (Timestamp) mes.get("messageTime");
+                    messages.add(new Message(txt,user,tm));
+                }
+
+            }
+        }*/
 
         //washingtonRef.update("messages", FieldValue.arrayUnion(message));
 

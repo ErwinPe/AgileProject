@@ -43,6 +43,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements ReadAllMessagesInterface {
     private ActivityMainBinding binding;
     private FirebaseAuth auth;
+    private Database ddb=new Database();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +78,10 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
                     .setLogo(R.mipmap.ic_launcher)
                     .setAvailableProviders(providers).build();
             signinLauncher.launch(signInIntent);
-
+            ddb.addEmailInDatabaseIfUserInexistant(auth.getCurrentUser().getEmail());
 
         }else{
-            Database ddb=new Database();
+
             ddb.addEmailInDatabaseIfUserInexistant(auth.getCurrentUser().getEmail());
             ddb.getAllSalon(this,auth.getCurrentUser().getEmail());
         }
