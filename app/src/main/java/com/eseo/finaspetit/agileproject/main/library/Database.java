@@ -328,31 +328,23 @@ public class Database {
                     Log.w(TAG, "Listen failed.", e);
                     return;
                 }
-
-                //Object group = snapshot.get("us");
-                Map<String, Object> address = (Map<String, Object>) snapshot.getData().get("us");
-                List<Message> messages=new ArrayList<>();
-                //System.out.println("ici la: "+address.toString());
-
-                if( address != null ){
-                    HashMap<String,Object> test= (HashMap<String, Object>) (address).get(idUS);
-                    HashMap<String,Object> messagesUS= (HashMap<String, Object>) (test).get("messages");
-
-                    for(int i=1;i<=messagesUS.size();i++){
-                        HashMap<String,Object> mes= (HashMap<String,Object>)messagesUS.get(i+"");
-                        //System.out.println("Message n°"+i+" ,"+mes);
-                        if(mes !=null){
-                            String txt= (String) mes.get("messageText");
-                            String user= (String) mes.get("messageUser");
-                            Timestamp tm= (Timestamp) mes.get("messageTime");
-                            messages.add(new Message(txt,user,tm));
+                    ArrayList<Message> listMessage = new ArrayList<>();
+                    DocumentSnapshot document = snapshot;
+                    if (snapshot.exists()) {
+                        HashMap<String, Object> address = (HashMap<String, java.lang.Object>) document.getData();
+                        ArrayList<Object> USS = (ArrayList<Object>) address.get("us");
+                        HashMap<String, Object> usHash2 = (HashMap<String, Object>) USS.get(Integer.parseInt(idUS));
+                        ArrayList<Object> messagesHash= (ArrayList<Object>) usHash2.get("messages");
+                        for(int j=0; j< messagesHash.size();j++){
+                            HashMap<String,Object> n= (HashMap<String, Object>) messagesHash.get(j);
+                            listMessage.add(new Message((String)n.get("messageText"),(String)n.get("messageUser"),(Timestamp) n.get("messageTime")));
                         }
 
-                    }
-                }
 
-                Collections.sort(messages, Comparator.comparing(Message::getMessageTime));
-                ((ChatUSViewInterface)act).handleMessageUS(messages);
+                        Collections.sort(listMessage, Comparator.comparing(Message::getMessageTime));
+                        ((ChatUSViewInterface)act).handleMessageUS(listMessage);
+
+                    }
 
             }
         });
