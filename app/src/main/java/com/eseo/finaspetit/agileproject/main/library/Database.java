@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.CollectionReference;
@@ -38,34 +39,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class Database {
 
     public Database(){
 
-    }
-
-    public String getupdate(){
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        String data="";
-        final DocumentReference docRef = firestore.collection("notification").document("abRmGEOuOeXl8kj4zWf2");
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    System.out.println("Listen failed");
-                    return;
-                }
-
-                if (snapshot != null && snapshot.exists()) {
-                    System.out.println("Current data "+snapshot.getData());
-                } else {
-                    System.out.println("Current data : null");
-                }
-            }
-        });
-        return data;
     }
 
     public void getAllMessages(AppCompatActivity act,String idSalon) {
@@ -294,14 +273,36 @@ public class Database {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Map<String, Object> address = (Map<String, Object>) document.getData().get("us");
-                        if(address != null){
-                            for(int i=0;i<address.size();i++){
-                                Map<String, Object> usEntity = (Map<String, Object>) address.get(""+i);
-                                us.add(new US((String)usEntity.get("nom"),(String)usEntity.get("description"),(HashMap<String,Integer>) usEntity.get("notes"),new ArrayList<Message>(),(boolean) usEntity.get("isVoted"),(Timestamp) usEntity.get("dateCreation"),(String) usEntity.get("etat")));
+                        ArrayList<US> usList=new ArrayList<>();
+                        HashMap<String, Object> address = (HashMap<String, java.lang.Object>) document.getData();
+                        ArrayList<Object> USS= (ArrayList<Object>) address.get("us");
+
+                        for(int i=0;i<USS.size();i++){
+                            HashMap<String,Object> usHash= (HashMap<String, Object>) USS.get(i);
+                            System.out.println("US: "+usHash);
+                            Timestamp dateCreation= (Timestamp) usHash.get("dateCreation");
+
+                            ArrayList<Object> notesHash= ( ArrayList<Object>) usHash.get("notes");
+                            ArrayList<Note> notes=new ArrayList<>();
+                            for(int j=0; j< notesHash.size();j++){
+                                HashMap<String,Object> n= (HashMap<String, Object>) notesHash.get(j);
+                                notes.add(new Note(Integer.parseInt(n.get("note").toString()),n.get("emailUser").toString()));
                             }
+
+                            String desc= (String) usHash.get("description");
+                            System.out.println("desc "+desc);
+                            String nom= (String) usHash.get("nom");
+                            System.out.println("nom "+nom);
+                            String etat= (String) usHash.get("etat");
+                            System.out.println("etat "+etat);
+                            boolean voted= (boolean) usHash.get("voted");
+
+                            US usToAdd=new US(nom, desc, notes, null, voted , dateCreation, etat);
+                            usList.add(usToAdd);
                         }
-                        ((UsViewInterface)act).handleUS(us);
+
+
+                        ((UsViewInterface)act).handleUS(usList);
                     } else {
                         Log.d(TAG, "No such document");
                     }

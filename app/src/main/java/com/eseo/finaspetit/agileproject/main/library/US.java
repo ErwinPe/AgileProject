@@ -2,19 +2,19 @@ package com.eseo.finaspetit.agileproject.main.library;
 
 import com.google.firebase.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
+
 
 public class US {
     int id;
     Timestamp dateCreation;
     String description;
     String nom;
-    HashMap<String, Integer> notes;
+    ArrayList<Note> notes;
     ArrayList<Message> messages = new ArrayList<>();
     boolean isVoted;
     String etat;
 
-    public US(String nom, String desc, HashMap<String,Integer> notes, ArrayList<Message> messages, boolean isVoted, com.google.firebase.Timestamp dateCreation, String etat){
+    public US(String nom, String desc, ArrayList<Note> notes, ArrayList<Message> messages, boolean isVoted, com.google.firebase.Timestamp dateCreation, String etat){
         this.nom=nom;
         this.description=desc;
         this.notes=notes;
@@ -56,11 +56,11 @@ public class US {
         this.nom = nom;
     }
 
-    public HashMap<String,Integer> getNotes() {
+    public ArrayList<Note> getNotes() {
         return notes;
     }
 
-    public void setNotes(HashMap<String,Integer> notes) {
+    public void setNotes(ArrayList<Note> notes) {
         this.notes = notes;
     }
 

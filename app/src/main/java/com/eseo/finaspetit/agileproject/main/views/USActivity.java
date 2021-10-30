@@ -53,7 +53,6 @@ public class USActivity extends AppCompatActivity implements UsViewInterface {
                 Intent intent = new Intent(USActivity.this, ChatUS.class);
                 ((Constants) USActivity.this.getApplication()).setCurentUS(us);
                 startActivity(intent);
-                //TODO: ALLER SUR LA PAGE DETAIL US
             }
         });
     }
@@ -66,7 +65,6 @@ public class USActivity extends AppCompatActivity implements UsViewInterface {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        System.out.println("USSSSSS ");
         getMenuInflater().inflate(R.menu.menu_us,menu);
         if (!((Constants) USActivity.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
 

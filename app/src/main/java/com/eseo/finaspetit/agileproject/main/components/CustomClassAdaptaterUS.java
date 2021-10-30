@@ -12,14 +12,15 @@ import com.eseo.finaspetit.agileproject.main.library.Message;
 import com.eseo.finaspetit.agileproject.main.library.US;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomClassAdaptaterUS extends BaseAdapter {
-    private List<US> listData;
+    private ArrayList<US> listData;
     private LayoutInflater layoutInflater;
     private Context context;
 
-    public CustomClassAdaptaterUS(Context aContext, List<US> listData) {
+    public CustomClassAdaptaterUS(Context aContext, ArrayList<US> listData) {
         this.context = aContext;
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
@@ -50,10 +51,12 @@ public class CustomClassAdaptaterUS extends BaseAdapter {
         } else {
             holder = (CustomClassAdaptaterMessage.ViewHolder) convertView.getTag();
         }
-
+        for(US iu:this.listData){
+            System.out.println("bienvenido "+iu);
+        }
+        System.out.println("hola "+this.listData.size());
         US us= this.listData.get(position);
-        String formattedDate = new SimpleDateFormat("dd/MM/yyyy à HH:mm").format(us.getDateCreation().toDate());
-        holder.txtUser.setText(us.getNom()+" - ["+formattedDate+"]");
+       holder.txtUser.setText(us.getNom());
         holder.txtMsg.setText(us.getDescription());
         return convertView;
     }
