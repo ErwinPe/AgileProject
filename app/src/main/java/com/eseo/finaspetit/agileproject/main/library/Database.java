@@ -272,14 +272,14 @@ public class Database {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference docRef = firestore.collection("salon").document(idSalon);
         String TAG="ok";
-        ArrayList<US> us= new ArrayList<>();
+        ArrayList<US> usList=new ArrayList<>();
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        ArrayList<US> usList=new ArrayList<>();
+
                         HashMap<String, Object> address = (HashMap<String, java.lang.Object>) document.getData();
                         ArrayList<Object> USS= (ArrayList<Object>) address.get("us");
 
@@ -308,6 +308,7 @@ public class Database {
                                 boolean voted= (boolean) usHash.get("voted");
 
                                 US usToAdd=new US(nom, desc, notes, null, voted , dateCreation, etat);
+                                usToAdd.setId(i);
                                 usList.add(usToAdd);
                             }
                         }

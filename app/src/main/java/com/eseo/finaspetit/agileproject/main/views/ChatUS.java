@@ -31,13 +31,8 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         setContentView(root);
 
         idSalon =((Constants) ChatUS.this.getApplication()).getCurentSaloon().getId();
-
-        //US firstKeyName = (US) getIntent().getSerializableExtra("actualUS");
         US a=((Constants) ChatUS.this.getApplication()).getCurentUS();
-        System.out.println(a.toString());
-
-        bdd.getAllMessagesFromUS(this,idSalon,"0");
-        //binding.textView6.setText("ok");
+        bdd.getAllMessagesFromUS(this,idSalon,a.getId()+"");
     }
 
     @Override
