@@ -291,10 +291,13 @@ public class Database {
 
                                 ArrayList<Object> notesHash= ( ArrayList<Object>) usHash.get("notes");
                                 ArrayList<Note> notes=new ArrayList<>();
-                                for(int j=0; j< notesHash.size();j++){
-                                    HashMap<String,Object> n= (HashMap<String, Object>) notesHash.get(j);
-                                    notes.add(new Note(Integer.parseInt(n.get("note").toString()),n.get("emailUser").toString()));
+                                if(notesHash!=null){
+                                    for(int j=0; j< notesHash.size();j++){
+                                        HashMap<String,Object> n= (HashMap<String, Object>) notesHash.get(j);
+                                        notes.add(new Note(Integer.parseInt(n.get("note").toString()),n.get("emailUser").toString()));
+                                    }
                                 }
+
 
                                 String desc= (String) usHash.get("description");
                                 System.out.println("desc "+desc);
