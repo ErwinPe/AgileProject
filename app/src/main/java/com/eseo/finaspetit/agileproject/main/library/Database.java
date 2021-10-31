@@ -130,6 +130,12 @@ public class Database {
         washingtonRef.update("chat", FieldValue.arrayUnion(message));
     }
 
+    public void addUSToSalon(US us, String idSalon){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        DocumentReference washingtonRef = firestore.collection("salon").document(idSalon);
+        washingtonRef.update("us", FieldValue.arrayUnion(us));
+    }
+
     public void addMessageToUSChat(String idSalon,Message message, String idUS){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference washingtonRef = firestore.collection("salon").document(idSalon);
@@ -277,30 +283,31 @@ public class Database {
                         HashMap<String, Object> address = (HashMap<String, java.lang.Object>) document.getData();
                         ArrayList<Object> USS= (ArrayList<Object>) address.get("us");
 
-                        for(int i=0;i<USS.size();i++){
-                            HashMap<String,Object> usHash= (HashMap<String, Object>) USS.get(i);
-                            System.out.println("US: "+usHash);
-                            Timestamp dateCreation= (Timestamp) usHash.get("dateCreation");
+                        if(USS != null){
+                            for(int i=0;i<USS.size();i++){
+                                HashMap<String,Object> usHash= (HashMap<String, Object>) USS.get(i);
+                                System.out.println("US: "+usHash);
+                                Timestamp dateCreation= (Timestamp) usHash.get("dateCreation");
 
-                            ArrayList<Object> notesHash= ( ArrayList<Object>) usHash.get("notes");
-                            ArrayList<Note> notes=new ArrayList<>();
-                            for(int j=0; j< notesHash.size();j++){
-                                HashMap<String,Object> n= (HashMap<String, Object>) notesHash.get(j);
-                                notes.add(new Note(Integer.parseInt(n.get("note").toString()),n.get("emailUser").toString()));
+                                ArrayList<Object> notesHash= ( ArrayList<Object>) usHash.get("notes");
+                                ArrayList<Note> notes=new ArrayList<>();
+                                for(int j=0; j< notesHash.size();j++){
+                                    HashMap<String,Object> n= (HashMap<String, Object>) notesHash.get(j);
+                                    notes.add(new Note(Integer.parseInt(n.get("note").toString()),n.get("emailUser").toString()));
+                                }
+
+                                String desc= (String) usHash.get("description");
+                                System.out.println("desc "+desc);
+                                String nom= (String) usHash.get("nom");
+                                System.out.println("nom "+nom);
+                                String etat= (String) usHash.get("etat");
+                                System.out.println("etat "+etat);
+                                boolean voted= (boolean) usHash.get("voted");
+
+                                US usToAdd=new US(nom, desc, notes, null, voted , dateCreation, etat);
+                                usList.add(usToAdd);
                             }
-
-                            String desc= (String) usHash.get("description");
-                            System.out.println("desc "+desc);
-                            String nom= (String) usHash.get("nom");
-                            System.out.println("nom "+nom);
-                            String etat= (String) usHash.get("etat");
-                            System.out.println("etat "+etat);
-                            boolean voted= (boolean) usHash.get("voted");
-
-                            US usToAdd=new US(nom, desc, notes, null, voted , dateCreation, etat);
-                            usList.add(usToAdd);
                         }
-
 
                         ((UsViewInterface)act).handleUS(usList);
                     } else {

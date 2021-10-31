@@ -19,8 +19,10 @@ import com.eseo.finaspetit.agileproject.main.interfaces.UsViewInterface;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
 import com.eseo.finaspetit.agileproject.main.library.Message;
+import com.eseo.finaspetit.agileproject.main.library.Note;
 import com.eseo.finaspetit.agileproject.main.library.Notification;
 import com.eseo.finaspetit.agileproject.main.library.US;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -39,17 +41,19 @@ public class USActivity extends AppCompatActivity implements UsViewInterface {
         View root = binding.getRoot();
         setContentView(root);
 
+
+
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("US : ");
         idSalon=((Constants) USActivity.this.getApplication()).getCurentSaloon().getId();
         bdd.getAllUS(this,idSalon);
-
         binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Object o = binding.listView.getItemAtPosition(position);
                 US us = (US) o;
+                System.out.println("ici ugetId: "+us);
                 Intent intent = new Intent(USActivity.this, ChatUS.class);
                 ((Constants) USActivity.this.getApplication()).setCurentUS(us);
                 startActivity(intent);
