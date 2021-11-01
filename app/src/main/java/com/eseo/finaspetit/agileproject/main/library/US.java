@@ -9,18 +9,16 @@ public class US {
     Timestamp dateCreation;
     String description;
     String nom;
-    ArrayList<Note> notes;
-    ArrayList<Message> messages = new ArrayList<>();
+    //ArrayList<Note> notes;
+    //ArrayList<Message> messages = new ArrayList<>();
     boolean isVoted;
     String etat;
     String idSalon;
 
-    public US(String id, String nom, String desc, ArrayList<Note> notes, ArrayList<Message> messages, boolean isVoted, com.google.firebase.Timestamp dateCreation, String etat, String idSalon){
+    public US(String id, String nom, String desc, boolean isVoted, com.google.firebase.Timestamp dateCreation, String etat, String idSalon){
         this.id=id;
         this.nom=nom;
         this.description=desc;
-        this.notes=notes;
-        this.messages=messages;
         this.isVoted=isVoted;
         this.dateCreation=dateCreation;
         this.etat=etat;
@@ -39,9 +37,7 @@ public class US {
         return idSalon;
     }
 
-    public void setIdSalon(String id) {
-        this.idSalon = idSalon;
-    }
+    public void setIdSalon(String id) { this.idSalon = idSalon; }
 
     public Timestamp getDateCreation() {
         return dateCreation;
@@ -67,22 +63,6 @@ public class US {
         this.nom = nom;
     }
 
-    public ArrayList<Note> getNotes() {
-        return notes;
-    }
-
-    public void setNotes(ArrayList<Note> notes) {
-        this.notes = notes;
-    }
-
-    public ArrayList<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(ArrayList<Message> messages) {
-        this.messages = messages;
-    }
-
     public boolean isVoted() {
         return isVoted;
     }
@@ -93,6 +73,6 @@ public class US {
 
     @Override
     public String toString(){
-        return this.nom+" "+this.dateCreation.toDate().toString()+" "+this.etat+" "+this.description+" "+this.notes+" "+this.idSalon;
+        return this.nom+" "+this.dateCreation.toDate().toString()+" "+this.etat+" "+this.description+" "+this.idSalon;
     }
 }

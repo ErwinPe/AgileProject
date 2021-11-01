@@ -15,14 +15,12 @@ import com.eseo.finaspetit.agileproject.main.library.Salon;
 import com.eseo.finaspetit.agileproject.main.library.US;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     private ActivityChatUsBinding binding;
-    private Database bdd=new Database();
+    private final Database bdd=new Database();
     private Salon currentSaloon = null;
     private US currentUS=null;
 
@@ -40,7 +38,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             @Override
             public void onClick(View v) {
                 Message mes=new Message(binding.editTextTextPersonName.getText().toString(),auth.getCurrentUser().getEmail(), Timestamp.now());
-                bdd.addMessageToUSChat(currentSaloon.getId(),mes,currentUS.getId());
+                bdd.addMessageToUSChat(mes,currentUS.getId());
             }
         });
     }

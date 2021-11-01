@@ -140,7 +140,7 @@ public class Database {
         System.out.println("US ajoutée: "+us.toString());
     }
 
-    public void addMessageToUSChat(String idSalon,Message message, String idUS){
+    public void addMessageToUSChat(Message message, String idUS){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference washingtonRef = firestore.collection("us").document(idUS);
         washingtonRef.update("messages", FieldValue.arrayUnion(message));
@@ -204,12 +204,8 @@ public class Database {
 
                     ArrayList<String> listmembers =new ArrayList<>();
                     for (QueryDocumentSnapshot document : task.getResult()) {
-
                         String email = document.getString("email");
-                        System.out.println("all USER FOR  " +  email);
-
                         listmembers.add(email);
-
                     }
                     ((CreateSaloonViewInterface)act).handleGetAllUser(listmembers);
                 } else {
@@ -235,9 +231,7 @@ public class Database {
                     Log.w(TAG, "listen:error", e);
                     return;
                 }
-                //snapshots.getDocuments()
                 for (DocumentSnapshot dc : snapshots.getDocuments()) {
-
                     Notification notif=new Notification(dc.getId(),dc.getString("message"),dc.getTimestamp("dateCreation"),dc.getString("receiver"),dc.getString("title"),dc.getString("idSalon"));
                     allNotif.add(notif);
                 }
@@ -250,7 +244,6 @@ public class Database {
 
     public void getAllUS(AppCompatActivity act,String idSalon) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        DocumentReference docRef = firestore.collection("us").document(idSalon);
         String TAG="ok";
         ArrayList<US> usList=new ArrayList<>();
 
@@ -261,15 +254,11 @@ public class Database {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Map data= document.getData();
-
-                            //TODO : get messages and notes
-                            US usToAdd=new US(document.getId(),(String)data.get("nom"),(String)data.get("description"),null,null,false,Timestamp.now(),"CREATED",idSalon);
-
+                            US usToAdd=new US(document.getId(),(String)data.get("nom"),(String)data.get("description"),false,Timestamp.now(),"CREATED",idSalon);
                             usList.add(usToAdd);
-
                         }
                     } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
+                        System.out.println( "Error getting documents: "+ task.getException());
                     }
                     ((UsViewInterface)act).handleUS(usList);
                 }
@@ -299,11 +288,13 @@ public class Database {
                 if (snapshot.exists()) {
                     HashMap<String, Object> address = (HashMap<String, java.lang.Object>) document.getData();
                     ArrayList<Object> usHash2 = (ArrayList<Object>) address.get("messages");
-                    System.out.println("usHash2: "+usHash2);
-                    for(int j=0; j< usHash2.size();j++){
-                        HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
-                        listMessage.add(new Message((String)n.get("messageText"),(String)n.get("messageUser"),(Timestamp) n.get("messageTime")));
+                    if(usHash2 !=null){
+                        for(int j=0; j< usHash2.size();j++){
+                            HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
+                            listMessage.add(new Message((String)n.get("messageText"),(String)n.get("messageUser"),(Timestamp) n.get("messageTime")));
+                        }
                     }
+
                     Collections.sort(listMessage, Comparator.comparing(Message::getMessageTime));
                     ((ChatUSViewInterface)act).handleMessageUS(listMessage);
 
@@ -311,38 +302,6 @@ public class Database {
 
             }
         });
-
-
-
-        /*
-        docRef.addSnapshotListener( new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
-                    ArrayList<Message> listMessage = new ArrayList<>();
-                    DocumentSnapshot document = snapshot;
-                    if (snapshot.exists()) {
-                        HashMap<String, Object> address = (HashMap<String, java.lang.Object>) document.getData();
-                        ArrayList<Object> USS = (ArrayList<Object>) address.get("us");
-                        HashMap<String, Object> usHash2 = (HashMap<String, Object>) USS.get(Integer.parseInt(idUS));
-                        ArrayList<Object> messagesHash= (ArrayList<Object>) usHash2.get("messages");
-                        for(int j=0; j< messagesHash.size();j++){
-                            HashMap<String,Object> n= (HashMap<String, Object>) messagesHash.get(j);
-                            listMessage.add(new Message((String)n.get("messageText"),(String)n.get("messageUser"),(Timestamp) n.get("messageTime")));
-                        }
-
-
-                        Collections.sort(listMessage, Comparator.comparing(Message::getMessageTime));
-                        ((ChatUSViewInterface)act).handleMessageUS(listMessage);
-
-                    }
-
-            }
-        });*/
 
     }
 
