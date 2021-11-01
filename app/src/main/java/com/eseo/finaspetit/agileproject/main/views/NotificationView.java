@@ -2,15 +2,10 @@ package com.eseo.finaspetit.agileproject.main.views;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityNotificationBinding;
 import com.eseo.finaspetit.agileproject.main.components.CustomClassAdaptater;
 import com.eseo.finaspetit.agileproject.main.interfaces.NotificationsViewsInterface;
@@ -21,8 +16,8 @@ import java.util.List;
 
 public class NotificationView extends AppCompatActivity implements NotificationsViewsInterface {
     private ActivityNotificationBinding binding;
-    private Database ddb=new Database();
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final Database ddb=new Database();
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

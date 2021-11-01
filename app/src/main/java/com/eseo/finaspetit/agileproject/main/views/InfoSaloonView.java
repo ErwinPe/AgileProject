@@ -5,15 +5,11 @@ import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.eseo.finaspetit.agileproject.databinding.ActivityCreatesaloonBinding;
 import com.eseo.finaspetit.agileproject.databinding.ActivityInfoSaloonBinding;
-import com.eseo.finaspetit.agileproject.databinding.ActivityMainBinding;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
-
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
 
 public class InfoSaloonView extends AppCompatActivity {
 

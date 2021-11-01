@@ -9,27 +9,22 @@ import android.widget.MultiAutoCompleteTextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.eseo.finaspetit.agileproject.databinding.ActivityCreatesaloonBinding;
 import com.eseo.finaspetit.agileproject.main.interfaces.CreateSaloonViewInterface;
-import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
 import com.eseo.finaspetit.agileproject.main.library.Message;
 import com.eseo.finaspetit.agileproject.main.library.Notification;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.sql.Array;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class createSaloonView  extends AppCompatActivity implements CreateSaloonViewInterface {
     private ActivityCreatesaloonBinding binding;
-    private Database db = new Database();
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final Database db = new Database();
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private MultiAutoCompleteTextView textMembersSaloon;
 
 

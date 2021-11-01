@@ -1,21 +1,16 @@
 package com.eseo.finaspetit.agileproject.main.views;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.eseo.finaspetit.agileproject.databinding.ActivityCreateusBinding;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
-import com.eseo.finaspetit.agileproject.main.library.Message;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
 import com.eseo.finaspetit.agileproject.main.library.US;
 import com.google.firebase.Timestamp;
 
-import java.util.ArrayList;
 
 public class CreateUsView extends AppCompatActivity {
 

@@ -11,7 +11,6 @@ import com.eseo.finaspetit.agileproject.main.interfaces.ChatUSViewInterface;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
 import com.eseo.finaspetit.agileproject.main.library.Message;
-import com.eseo.finaspetit.agileproject.main.library.Note;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
 import com.eseo.finaspetit.agileproject.main.library.US;
 import com.google.firebase.Timestamp;
@@ -22,7 +21,6 @@ import java.util.List;
 public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     private ActivityChatUsBinding binding;
     private final Database bdd=new Database();
-    private Salon currentSaloon = null;
     private US currentUS=null;
 
     @Override
@@ -31,7 +29,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         binding = ActivityChatUsBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
         setContentView(root);
-        currentSaloon = ((Constants) ChatUS.this.getApplication()).getCurentSaloon();
+        Salon currentSaloon = ((Constants) ChatUS.this.getApplication()).getCurentSaloon();
         currentUS =((Constants) ChatUS.this.getApplication()).getCurentUS();
         bdd.getAllMessagesFromUS(this,currentSaloon.getId(),currentUS.getId());
         FirebaseAuth auth=FirebaseAuth.getInstance();

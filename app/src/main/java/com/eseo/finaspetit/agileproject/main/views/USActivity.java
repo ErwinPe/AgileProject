@@ -4,25 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityUsBinding;
 import com.eseo.finaspetit.agileproject.main.components.CustomClassAdaptaterUS;
 import com.eseo.finaspetit.agileproject.main.interfaces.UsViewInterface;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
-import com.eseo.finaspetit.agileproject.main.library.Message;
-import com.eseo.finaspetit.agileproject.main.library.Note;
-import com.eseo.finaspetit.agileproject.main.library.Notification;
 import com.eseo.finaspetit.agileproject.main.library.US;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
