@@ -1,6 +1,7 @@
 package com.eseo.finaspetit.agileproject.main.library;
 
 import android.util.Log;
+import android.widget.Filter;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import com.eseo.finaspetit.agileproject.main.interfaces.NotificationsViewsInterf
 import com.eseo.finaspetit.agileproject.main.interfaces.ReadAllMessagesInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.UsViewInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.database.DataSnapshot;
@@ -25,13 +27,16 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.model.Document;
 
+import java.io.FilePermission;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -130,40 +135,15 @@ public class Database {
         washingtonRef.update("chat", FieldValue.arrayUnion(message));
     }
 
-    public void addUSToSalon(US us, String idSalon){
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        DocumentReference washingtonRef = firestore.collection("salon").document(idSalon);
-        washingtonRef.update("us", FieldValue.arrayUnion(us));
+    public void addUSToSalon(US us){
+        createDocument(us,"us");
+        System.out.println("US ajoutée: "+us.toString());
     }
 
     public void addMessageToUSChat(String idSalon,Message message, String idUS){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        DocumentReference washingtonRef = firestore.collection("salon").document(idSalon);
-        DocumentReference usRef= washingtonRef.collection("us").document(idUS);
-        System.out.println(usRef.toString());
-        /*Map<String, Object> address = (Map<String, Object>) snapshot.getData().get("us");
-        List<Message> messages=new ArrayList<>();
-        //System.out.println("ici la: "+address.toString());
-
-        if( address != null ){
-            HashMap<String,Object> test= (HashMap<String, Object>) (address).get(idUS);
-            HashMap<String,Object> messagesUS= (HashMap<String, Object>) (test).get("messages");
-
-            for(int i=1;i<=messagesUS.size();i++){
-                HashMap<String,Object> mes= (HashMap<String,Object>)messagesUS.get(i+"");
-                //System.out.println("Message n°"+i+" ,"+mes);
-                if(mes !=null){
-                    String txt= (String) mes.get("messageText");
-                    String user= (String) mes.get("messageUser");
-                    Timestamp tm= (Timestamp) mes.get("messageTime");
-                    messages.add(new Message(txt,user,tm));
-                }
-
-            }
-        }*/
-
-        //washingtonRef.update("messages", FieldValue.arrayUnion(message));
-
+        DocumentReference washingtonRef = firestore.collection("us").document(idUS);
+        washingtonRef.update("messages", FieldValue.arrayUnion(message));
     }
 
     public void getNotification(AppCompatActivity act,String email){
@@ -270,58 +250,31 @@ public class Database {
 
     public void getAllUS(AppCompatActivity act,String idSalon) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        DocumentReference docRef = firestore.collection("salon").document(idSalon);
+        DocumentReference docRef = firestore.collection("us").document(idSalon);
         String TAG="ok";
         ArrayList<US> usList=new ArrayList<>();
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
 
-                        HashMap<String, Object> address = (HashMap<String, java.lang.Object>) document.getData();
-                        ArrayList<Object> USS= (ArrayList<Object>) address.get("us");
+        firestore.collection("us").whereEqualTo("idSalon",idSalon).get()
+        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Map data= document.getData();
 
-                        if(USS != null){
-                            for(int i=0;i<USS.size();i++){
-                                HashMap<String,Object> usHash= (HashMap<String, Object>) USS.get(i);
-                                System.out.println("US: "+usHash);
-                                Timestamp dateCreation= (Timestamp) usHash.get("dateCreation");
+                            //TODO : get messages and notes
+                            US usToAdd=new US(document.getId(),(String)data.get("nom"),(String)data.get("description"),null,null,false,Timestamp.now(),"CREATED",idSalon);
 
-                                ArrayList<Object> notesHash= ( ArrayList<Object>) usHash.get("notes");
-                                ArrayList<Note> notes=new ArrayList<>();
-                                if(notesHash!=null){
-                                    for(int j=0; j< notesHash.size();j++){
-                                        HashMap<String,Object> n= (HashMap<String, Object>) notesHash.get(j);
-                                        notes.add(new Note(Integer.parseInt(n.get("note").toString()),n.get("emailUser").toString()));
-                                    }
-                                }
+                            usList.add(usToAdd);
 
-
-                                String desc= (String) usHash.get("description");
-                                System.out.println("desc "+desc);
-                                String nom= (String) usHash.get("nom");
-                                System.out.println("nom "+nom);
-                                String etat= (String) usHash.get("etat");
-                                System.out.println("etat "+etat);
-                                boolean voted= (boolean) usHash.get("voted");
-
-                                US usToAdd=new US(nom, desc, notes, null, voted , dateCreation, etat);
-                                usToAdd.setId(i);
-                                usList.add(usToAdd);
-                            }
                         }
-
-                        ((UsViewInterface)act).handleUS(usList);
                     } else {
-                        Log.d(TAG, "No such document");
+                        Log.d(TAG, "Error getting documents: ", task.getException());
                     }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
+                    ((UsViewInterface)act).handleUS(usList);
                 }
-            }
-        });
+            });
+
 
     }
 
@@ -330,7 +283,38 @@ public class Database {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference docRef = firestore.collection("salon").document(idSalon);
         String TAG="ok";
+        ArrayList<Message> listMessage = new ArrayList<>();
 
+
+        firestore.collection("us").document(idUS).addSnapshotListener( new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                ArrayList<Message> listMessage = new ArrayList<>();
+                DocumentSnapshot document = snapshot;
+                if (snapshot.exists()) {
+                    HashMap<String, Object> address = (HashMap<String, java.lang.Object>) document.getData();
+                    ArrayList<Object> usHash2 = (ArrayList<Object>) address.get("messages");
+                    System.out.println("usHash2: "+usHash2);
+                    for(int j=0; j< usHash2.size();j++){
+                        HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
+                        listMessage.add(new Message((String)n.get("messageText"),(String)n.get("messageUser"),(Timestamp) n.get("messageTime")));
+                    }
+                    Collections.sort(listMessage, Comparator.comparing(Message::getMessageTime));
+                    ((ChatUSViewInterface)act).handleMessageUS(listMessage);
+
+                }
+
+            }
+        });
+
+
+
+        /*
         docRef.addSnapshotListener( new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -358,7 +342,7 @@ public class Database {
                     }
 
             }
-        });
+        });*/
 
     }
 

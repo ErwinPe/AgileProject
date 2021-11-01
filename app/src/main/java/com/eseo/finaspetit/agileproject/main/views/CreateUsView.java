@@ -39,8 +39,8 @@ public class CreateUsView extends AppCompatActivity {
             public void onClick(View v) {
                 ArrayList<Message> messages=new ArrayList<>();
                 messages.add(new Message("US créée ","System", Timestamp.now()));
-                US usToAdd=new US(binding.editTextNameUS.getText().toString(),binding.editTextDescUS.getText().toString(),null,messages,false,Timestamp.now(),"Created");
-                ddb.addUSToSalon(usToAdd,currentSaloon.getId());
+                US usToAdd=new US("",binding.editTextNameUS.getText().toString(),binding.editTextDescUS.getText().toString(),null,messages,false,Timestamp.now(),"Created",currentSaloon.getId());
+                ddb.addUSToSalon(usToAdd);
                 System.out.println("CURRENT SALLON: "+currentSaloon.getId());
             }
         });

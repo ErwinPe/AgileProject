@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 public class US {
-    int id;
+    String id;
     Timestamp dateCreation;
     String description;
     String nom;
@@ -13,8 +13,10 @@ public class US {
     ArrayList<Message> messages = new ArrayList<>();
     boolean isVoted;
     String etat;
+    String idSalon;
 
-    public US(String nom, String desc, ArrayList<Note> notes, ArrayList<Message> messages, boolean isVoted, com.google.firebase.Timestamp dateCreation, String etat){
+    public US(String id, String nom, String desc, ArrayList<Note> notes, ArrayList<Message> messages, boolean isVoted, com.google.firebase.Timestamp dateCreation, String etat, String idSalon){
+        this.id=id;
         this.nom=nom;
         this.description=desc;
         this.notes=notes;
@@ -22,14 +24,23 @@ public class US {
         this.isVoted=isVoted;
         this.dateCreation=dateCreation;
         this.etat=etat;
+        this.idSalon=idSalon;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public String getIdSalon() {
+        return idSalon;
+    }
+
+    public void setIdSalon(String id) {
+        this.idSalon = idSalon;
     }
 
     public Timestamp getDateCreation() {
@@ -82,6 +93,6 @@ public class US {
 
     @Override
     public String toString(){
-        return this.nom+" "+this.dateCreation.toDate().toString()+" "+this.etat+" "+this.description+" "+this.notes;
+        return this.nom+" "+this.dateCreation.toDate().toString()+" "+this.etat+" "+this.description+" "+this.notes+" "+this.idSalon;
     }
 }
