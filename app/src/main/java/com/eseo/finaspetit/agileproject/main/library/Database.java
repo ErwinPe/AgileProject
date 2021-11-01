@@ -85,8 +85,6 @@ public class Database {
 
     public void getAllSalon(AppCompatActivity act,String email) {//Context context
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
-
         firestore.collection("salon").whereArrayContains("members",email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -303,6 +301,93 @@ public class Database {
             }
         });
 
+    }
+
+    public void addNoteToUS(Note note, String idUS){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        DocumentReference washingtonRef = firestore.collection("us").document(idUS);
+        washingtonRef.update("notes", FieldValue.arrayUnion(note));
+    }
+
+    public void getAllNoteFromUS(AppCompatActivity act, String idUS) {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        DocumentReference docRef = firestore.collection("us").document(idUS);
+        String TAG="getAllNoteFromUS";
+        ArrayList<Note> listNotes = new ArrayList<>();
+
+        firestore.collection("us").document(idUS).addSnapshotListener( new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                DocumentSnapshot document = snapshot;
+                if (snapshot.exists()) {
+                    HashMap<String, Object> address = (HashMap<String, java.lang.Object>) document.getData();
+                    ArrayList<Object> usHash2 = (ArrayList<Object>) address.get("notes");
+                    if(usHash2 !=null){
+                        for(int j=0; j< usHash2.size();j++){
+                            HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
+                            listNotes.add(new Note((int)((long)n.get("note")),(String) n.get("user")));
+                        }
+                    }
+                    Log.w(TAG, "Liste notes: "+ listNotes);
+                   //reste a appeler la fonction de ton interface qui gère la liste des notes
+                    //((ChatUSViewInterface)act).handleMessageUS(listMessage);
+
+                }
+
+            }
+        });
+
+    }
+
+    public void getLowerAndHigherNote(AppCompatActivity act, String idUS){
+        String TAG="getLowerAndHigherNote";
+        ArrayList<Note> listNotes = new ArrayList<>();
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("us").document(idUS).addSnapshotListener( new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                DocumentSnapshot document = snapshot;
+                if (snapshot.exists()) {
+                    HashMap<String, Object> address = (HashMap<String, java.lang.Object>) document.getData();
+                    ArrayList<Object> usHash2 = (ArrayList<Object>) address.get("notes");
+                    if(usHash2 !=null){
+                        HashMap<String,Object> firstNote= (HashMap<String, Object>) usHash2.get(0);
+                        Note noteHigh=new Note((int)((long)firstNote.get("note")),(String) firstNote.get("user"));
+                        Note noteLow=new Note((int)((long)firstNote.get("note")),(String) firstNote.get("user"));
+                        if(usHash2.size()>1){
+                            for(int j=1; j< usHash2.size();j++){
+                                HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
+                                if((int)((long)n.get("note"))>noteHigh.getNote()){
+                                    noteHigh=new Note((int)((long)n.get("note")),(String) n.get("user"));
+                                }
+                                if((int)((long)n.get("note"))<noteLow.getNote()){
+                                    noteLow=new Note((int)((long)n.get("note")),(String) n.get("user"));
+                                }
+
+                                listNotes.add(noteLow);
+                                listNotes.add(noteHigh);
+                            }
+                        }
+
+                    }
+                    Log.w(TAG, "Liste notes: "+ listNotes);
+                    //reste a appeler la fonction de ton interface qui gère la liste des notes
+                    //((ChatUSViewInterface)act).handleMessageUS(listMessage);
+
+                }
+
+            }
+        });
     }
 
 }

@@ -11,6 +11,7 @@ import com.eseo.finaspetit.agileproject.main.interfaces.ChatUSViewInterface;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
 import com.eseo.finaspetit.agileproject.main.library.Message;
+import com.eseo.finaspetit.agileproject.main.library.Note;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
 import com.eseo.finaspetit.agileproject.main.library.US;
 import com.google.firebase.Timestamp;
@@ -34,6 +35,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         currentUS =((Constants) ChatUS.this.getApplication()).getCurentUS();
         bdd.getAllMessagesFromUS(this,currentSaloon.getId(),currentUS.getId());
         FirebaseAuth auth=FirebaseAuth.getInstance();
+
         binding.button4.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
