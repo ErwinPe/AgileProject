@@ -34,6 +34,9 @@
             android:name=".main.views.InfoSaloonView"
             android:parentActivityName=".main.views.ChatActivity"
             />
+        <activity
+            android:name=".main.views.ChoiceVoteActivity"
+            />
 
         <activity
             android:name=".main.views.MainActivity"

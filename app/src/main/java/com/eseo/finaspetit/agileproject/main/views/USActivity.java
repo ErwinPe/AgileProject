@@ -38,7 +38,7 @@ public class USActivity extends AppCompatActivity implements UsViewInterface {
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("US : ");
+        actionBar.setTitle("Liste des US : ");
         idSalon=((Constants) USActivity.this.getApplication()).getCurentSaloon().getId();
         bdd.getAllUS(this,idSalon);
         binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
