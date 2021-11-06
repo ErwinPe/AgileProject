@@ -51,6 +51,9 @@ public class CustomClassAdaptaterMessage extends BaseAdapter {
         Message msg= this.listData.get(position);
         String formattedDate = new SimpleDateFormat("dd/MM/yyyy à HH:mm", Locale.FRANCE).format(msg.getMessageTime().toDate());
         String headerText=msg.getMessageUser()+"  "+formattedDate;
+        ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) holder.txtMsg.getLayoutParams();
+        params.height = (msg.getMessageText().length()/24+1)*85;
+        holder.txtMsg.setLayoutParams(params);
         holder.txtUser.setText(headerText);
         holder.txtMsg.setText(msg.getMessageText());
         return convertView;
@@ -60,4 +63,5 @@ public class CustomClassAdaptaterMessage extends BaseAdapter {
         TextView txtUser;
         TextView txtMsg;
     }
+
 }

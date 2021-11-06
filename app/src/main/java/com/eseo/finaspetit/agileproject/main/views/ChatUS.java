@@ -45,7 +45,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         currentSaloon = ((Constants) ChatUS.this.getApplication()).getCurentSaloon();
         currentUS =((Constants) ChatUS.this.getApplication()).getCurentUS();
         bdd.getAllMessagesFromUS(this,currentSaloon.getId(),currentUS.getId());
-
+        
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("US : "+currentUS.getNom());
@@ -91,7 +91,6 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     }
 
     public void gestBtnVote(US newUs){
-        System.out.println("gestBtnVoteAppele");
         currentUS.setEtat(newUs.getEtat());
         if(currentUS.getEtat().equals("CREATED")) {
             btnCloseVote.setVisible(false);

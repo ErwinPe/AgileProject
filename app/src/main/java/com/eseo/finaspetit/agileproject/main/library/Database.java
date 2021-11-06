@@ -99,7 +99,6 @@ public class Database {
         DocumentReference docRef = firestore.collection(collection).document();
         String idRef = docRef.getId();
 
-        System.out.println("IDREF "+idRef);
 
         firestore.collection(collection).document(idRef).set(obj);
         return idRef;
@@ -118,7 +117,6 @@ public class Database {
 
     public void addUSToSalon(US us){
         createDocument(us,"us");
-        System.out.println("US ajoutée: "+us.toString());
     }
 
     public void addMessageToUSChat(Message message, String idUS){
@@ -321,10 +319,43 @@ public class Database {
 
     }
 
-    public void addNoteToUS(Note note, String idUS){
+    public void addNoteToUS(Note note, String idUS ,String user){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference washingtonRef = firestore.collection("us").document(idUS);
         washingtonRef.update("notes", FieldValue.arrayUnion(note));
+        Message mes=new Message(note.getUser()+" a voté !","System");
+        addMessageToUSChat(mes, idUS);
+    }
+
+    public void addNoteResumeToChatUS(String idUS){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        DocumentReference washingtonRef = firestore.collection("us").document(idUS);
+
+        firestore.collection("us").whereEqualTo(FieldPath.documentId(),idUS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    String contentMessage="Résume des votes \n la";
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map data= document.getData();
+                        ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
+                        if(usHash2 != null){
+                            for(int j=0; j< usHash2.size();j++){
+                                HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
+                                contentMessage=contentMessage.concat((String) n.get("user")+" a voté"+(String) n.get("note")+"\n");
+                            }
+                        }
+                    }
+                    Message mes=new Message(contentMessage,"System");
+                    addMessageToUSChat(mes, idUS);
+                } else {
+                    System.out.println( "Error getting documents: "+ task.getException());
+                }
+            }
+        });
+
+
+
     }
 
     public void getAllNoteFromUS(AppCompatActivity act, String idUS) {
@@ -339,7 +370,6 @@ public class Database {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Map data= document.getData();
-                        System.out.println("dataaaa: "+data);
                         ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
                         if(usHash2 != null){
                             for(int j=0; j< usHash2.size();j++){
