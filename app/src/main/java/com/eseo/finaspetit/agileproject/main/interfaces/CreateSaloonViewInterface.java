@@ -5,5 +5,5 @@ import com.eseo.finaspetit.agileproject.main.library.Notification;
 import java.util.List;
 
 public interface CreateSaloonViewInterface {
-    public void handleGetAllUser(List<String> list);
+    void handleGetAllUser(List<String> list);
 }

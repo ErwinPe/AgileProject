@@ -5,5 +5,5 @@ import com.eseo.finaspetit.agileproject.main.library.Salon;
 import java.util.List;
 
 public interface ReadAllMessagesInterface {
-    public void handleResultAllSalon(List<Salon> content);
+    void handleResultAllSalon(List<Salon> content);
 }

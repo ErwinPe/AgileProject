@@ -5,5 +5,5 @@ import com.eseo.finaspetit.agileproject.main.library.Message;
 import java.util.List;
 
 public interface ChatUSViewInterface {
-    public void handleMessageUS(List<Message> list);
+    void handleMessageUS(List<Message> list);
 }
