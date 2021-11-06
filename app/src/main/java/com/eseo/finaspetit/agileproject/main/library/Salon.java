@@ -19,6 +19,14 @@ public class Salon {
 
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public Timestamp getCreationDate() {
         return creationDate;
     }
@@ -35,12 +43,20 @@ public class Salon {
         this.description = description;
     }
 
+    public String getNom() {
+        return nom;
+    }
+
     public void setNom(String nom) {
         this.nom = nom;
     }
 
-    public String getNom(){
-        return this.nom;
+    public ArrayList<Message> getChat() {
+        return chat;
+    }
+
+    public void setChat(ArrayList<Message> chat) {
+        this.chat = chat;
     }
 
     public ArrayList<String> getMembers() {
@@ -49,12 +65,6 @@ public class Salon {
 
     public void setMembers(ArrayList<String> members) {
         this.members = members;
-    }
-
-    public String getId() { return id; }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public ArrayList<com.eseo.finaspetit.agileproject.main.library.US> getUS() {
@@ -73,7 +83,7 @@ public class Salon {
         this.scrumMaster = scrumMaster;
     }
 
-    public Salon(String nom,String desc){
+    public Salon(String nom, String desc){
         this.nom=nom;
         System.out.println("Nom: "+nom);
         this.description=desc;
