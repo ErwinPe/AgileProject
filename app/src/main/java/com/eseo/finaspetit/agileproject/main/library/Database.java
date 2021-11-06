@@ -239,7 +239,7 @@ public class Database {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Map data= document.getData();
-                            US usToAdd=new US(document.getId(),(String)data.get("nom"),(String)data.get("description"),false,Timestamp.now(),"CREATED",idSalon);
+                            US usToAdd=new US(document.getId(),(String)data.get("nom"),(String)data.get("description"),(boolean) data.get("voted"),(Timestamp)data.get("dateCreation"),(String)data.get("etat"),idSalon);
                             usList.add(usToAdd);
                         }
                     } else {
