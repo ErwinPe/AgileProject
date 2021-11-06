@@ -48,12 +48,10 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         assert actionBar != null;
         actionBar.setTitle("US : "+currentUS.getNom());
 
-        binding.button4.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Message mes=new Message(binding.editTextTextPersonName.getText().toString(),auth.getCurrentUser().getEmail(), Timestamp.now());
-                bdd.addMessageToUSChat(mes,currentUS.getId());
-            }
+        binding.button4.setOnClickListener(v -> {
+            Message mes=new Message(binding.editTextTextPersonName.getText().toString(), Objects.requireNonNull(auth.getCurrentUser()).getEmail(), Timestamp.now());
+            bdd.addMessageToUSChat(mes,currentUS.getId());
+            binding.editTextTextPersonName.setText("");
         });
     }
 

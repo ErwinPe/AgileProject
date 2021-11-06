@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements ReadAllMessagesInterface {
     private ActivityMainBinding binding;
@@ -75,20 +76,14 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
             ddb.getAllSalon(this,auth.getCurrentUser().getEmail());
         }
 
-        binding.buttonCreate.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, createSaloonView.class);
-                startActivity(intent);
-            }
+        binding.buttonCreate.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, createSaloonView.class);
+            startActivity(intent);
         });
 
-        binding.buttonJoin.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                startActivity(intent);
-            }
+        binding.buttonJoin.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -114,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
     public void handleResultAllSalon(List<Salon> content) {
         List<String> salonNames= new ArrayList<>();
         for(Salon s : content){
-            if(auth.getCurrentUser().getEmail().equals(s.getScrumMaster())){
+            if(Objects.requireNonNull(auth.getCurrentUser()).getEmail().equals(s.getScrumMaster())){
                 salonNames.add("★  "+s.getNom()+"  ★");
             }else{
                 salonNames.add(s.getNom());
@@ -124,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
         binding.buttonJoin.setEnabled(true);
 
         final Spinner spinnerRegion = binding.searchSaloon;
-        ArrayAdapter<String> dataAdapterR = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, salonNames);
+        ArrayAdapter<String> dataAdapterR = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, salonNames);
         dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRegion.setAdapter(dataAdapterR);
 

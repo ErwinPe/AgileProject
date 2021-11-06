@@ -40,47 +40,31 @@ public class ChatActivity extends AppCompatActivity implements ChatViewInterface
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("Salon : "+((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getNom());
-
         bdd.getAllMessages(this,idSalon);
         scrollListViewToBottom();
-        binding.btnEnvoi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Message msg=new Message(binding.textInput.getText().toString(),auth.getCurrentUser().getEmail());
-                System.out.println("DATA MESSAGE: "+msg.getMessageText());
-                if(!msg.getMessageText().isEmpty()){
-                    bdd.addMessageToGeneralChat(idSalon,msg);
-                    binding.textInput.setText("");
-                }
-
+        binding.btnEnvoi.setOnClickListener(v -> {
+            Message msg=new Message(Objects.requireNonNull(binding.textInput.getText()).toString(), Objects.requireNonNull(auth.getCurrentUser()).getEmail());
+            if(!msg.getMessageText().isEmpty()){
+                bdd.addMessageToGeneralChat(idSalon,msg);
+                binding.textInput.setText("");
             }
-        }
-        );
+        });
     }
+
     @Override
     public void handleMessage(List<Message> list) {
         CustomClassAdaptaterMessage adapt=new CustomClassAdaptaterMessage(this,list);
         binding.listView.setAdapter(adapt);
-
     }
 
     private void scrollListViewToBottom() {
-
-        binding.listView.post(new Runnable() {
-            @Override
-            public void run() {
-                // Select the last row so it will scroll into view...
-                binding.listView.setSelection(binding.listView.getCount());
-            }
-        });
+        binding.listView.post(() -> binding.listView.setSelection(binding.listView.getCount()));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_main_saloon,menu);
         if (!((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
-
-
             menu.findItem(R.id.dlt_saloon_btn).setVisible(false);
         }
         return true;

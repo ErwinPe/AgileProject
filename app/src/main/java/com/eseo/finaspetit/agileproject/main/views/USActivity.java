@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,16 +40,13 @@ public class USActivity extends AppCompatActivity implements UsViewInterface {
         actionBar.setTitle("Liste des US : ");
         idSalon=((Constants) USActivity.this.getApplication()).getCurentSaloon().getId();
         bdd.getAllUS(this,idSalon);
-        binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Object o = binding.listView.getItemAtPosition(position);
-                US us = (US) o;
-                System.out.println("ici ugetId: "+us);
-                Intent intent = new Intent(USActivity.this, ChatUS.class);
-                ((Constants) USActivity.this.getApplication()).setCurentUS(us);
-                startActivity(intent);
-            }
+        binding.listView.setOnItemClickListener((a, v, position, id) -> {
+            Object o = binding.listView.getItemAtPosition(position);
+            US us = (US) o;
+            System.out.println("ici ugetId: "+us);
+            Intent intent = new Intent(USActivity.this, ChatUS.class);
+            ((Constants) USActivity.this.getApplication()).setCurentUS(us);
+            startActivity(intent);
         });
     }
 

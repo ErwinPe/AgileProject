@@ -25,16 +25,14 @@ public class CreateUsView extends AppCompatActivity {
         setContentView(root);
         Database ddb= new Database();
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setTitle("Création d'US : ");
 
         currentSaloon = ((Constants) CreateUsView.this.getApplication()).getCurentSaloon();
 
-        binding.button3.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                US usToAdd=new US("",binding.editTextNameUS.getText().toString(),binding.editTextDescUS.getText().toString(),false,Timestamp.now(),"Created",currentSaloon.getId());
-                ddb.addUSToSalon(usToAdd);
-            }
+        binding.button3.setOnClickListener(v -> {
+            US usToAdd=new US("",binding.editTextNameUS.getText().toString(),binding.editTextDescUS.getText().toString(),false,Timestamp.now(),"Created",currentSaloon.getId());
+            ddb.addUSToSalon(usToAdd);
         });
     }
 }
