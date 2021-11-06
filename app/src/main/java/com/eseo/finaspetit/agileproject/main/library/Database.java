@@ -347,7 +347,7 @@ public class Database {
                     if(usHash2 !=null){
                         for(int j=0; j< usHash2.size();j++){
                             HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
-                            listNotes.add(new Note((int)((long)n.get("note")),(String) n.get("user")));
+                            listNotes.add(new Note((String)n.get("note"),(String) n.get("user")));
                         }
                     }
                     Log.w(TAG, "Liste notes: "+ listNotes);
@@ -379,22 +379,27 @@ public class Database {
                     ArrayList<Object> usHash2 = (ArrayList<Object>) address.get("notes");
                     if(usHash2 !=null){
                         HashMap<String,Object> firstNote= (HashMap<String, Object>) usHash2.get(0);
-                        Note noteHigh=new Note((int)((long)firstNote.get("note")),(String) firstNote.get("user"));
-                        Note noteLow=new Note((int)((long)firstNote.get("note")),(String) firstNote.get("user"));
+                        Note noteHigh=new Note((String)(firstNote.get("note")),(String) firstNote.get("user"));
+                        Note noteLow=new Note((String)(firstNote.get("note")),(String) firstNote.get("user"));
                         if(usHash2.size()>1){
                             for(int j=1; j< usHash2.size();j++){
                                 HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
-                                if((int)((long)n.get("note"))>noteHigh.getNote()){
-                                    noteHigh=new Note((int)((long)n.get("note")),(String) n.get("user"));
-                                }
-                                if((int)((long)n.get("note"))<noteLow.getNote()){
-                                    noteLow=new Note((int)((long)n.get("note")),(String) n.get("user"));
+                                if(isInteger((String)n.get("note"))){
+                                    int note=Integer.parseInt((String)n.get("note"));
+                                    if(note >Integer.parseInt(noteHigh.getNote())){
+                                        noteHigh=new Note((String)n.get("note"),(String) n.get("user"));
+                                    }
+                                    if(note<Integer.parseInt(noteHigh.getNote())){
+                                        noteLow=new Note((String)n.get("note"),(String) n.get("user"));
+                                    }
                                 }
 
-                                listNotes.add(noteLow);
-                                listNotes.add(noteHigh);
+
+
                             }
                         }
+                        listNotes.add(noteLow);
+                        listNotes.add(noteHigh);
 
                     }
                     Log.w(TAG, "Liste notes: "+ listNotes);
@@ -405,6 +410,17 @@ public class Database {
 
             }
         });
+    }
+
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        } catch(NullPointerException e) {
+            return false;
+        }
+        return true;
     }
 
 }

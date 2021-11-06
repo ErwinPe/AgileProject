@@ -3,19 +3,19 @@ package com.eseo.finaspetit.agileproject.main.library;
 import androidx.annotation.NonNull;
 
 public class Note {
-    private int note;
+    private String note;
     private String user;
 
-    public Note(int note, String u){
+    public Note(String note, String u){
         this.note=note;
         this.user=u;
     }
 
-    public int getNote() {
+    public String getNote() {
         return note;
     }
 
-    public void setNote(int note) {
+    public void setNote(String note) {
         this.note = note;
     }
 
