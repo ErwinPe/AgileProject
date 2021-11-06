@@ -11,7 +11,6 @@ public class Note {
         this.user=u;
     }
 
-
     public int getNote() {
         return note;
     }
