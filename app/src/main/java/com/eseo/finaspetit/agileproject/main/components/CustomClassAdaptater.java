@@ -13,9 +13,9 @@ import java.util.List;
 
 public class CustomClassAdaptater extends BaseAdapter {
 
-    private List<Notification> listData;
-    private LayoutInflater layoutInflater;
-    private Context context;
+    private final List<Notification> listData;
+    private final LayoutInflater layoutInflater;
+    private final Context context;
 
     public CustomClassAdaptater(Context aContext,  List<Notification> listData) {
         this.context = aContext;
@@ -60,8 +60,7 @@ public class CustomClassAdaptater extends BaseAdapter {
 
     public int getMipmapResIdByName(String resName)  {
         String pkgName = context.getPackageName();
-        int resID = context.getResources().getIdentifier(resName , "mipmap", pkgName);
-        return resID;
+        return context.getResources().getIdentifier(resName , "mipmap", pkgName);
     }
 
     static class ViewHolder {

@@ -6,22 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.eseo.finaspetit.agileproject.R;
-import com.eseo.finaspetit.agileproject.main.library.Message;
 import com.eseo.finaspetit.agileproject.main.library.US;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CustomClassAdaptaterUS extends BaseAdapter {
-    private ArrayList<US> listData;
-    private LayoutInflater layoutInflater;
-    private Context context;
+    private final ArrayList<US> listData;
+    private final LayoutInflater layoutInflater;
 
     public CustomClassAdaptaterUS(Context aContext, ArrayList<US> listData) {
-        this.context = aContext;
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
     }
@@ -41,22 +34,18 @@ public class CustomClassAdaptaterUS extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        CustomClassAdaptaterMessage.ViewHolder holder;
+        CustomClassAdaptaterUS.ViewHolder holder;
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.list_item_us, null);
-            holder = new CustomClassAdaptaterMessage.ViewHolder();
+            holder = new CustomClassAdaptaterUS.ViewHolder();
             holder.txtUser = (TextView) convertView.findViewById(R.id.textViewtitle);
             holder.txtMsg = (TextView) convertView.findViewById(R.id.textViewDesc);
             convertView.setTag(holder);
         } else {
-            holder = (CustomClassAdaptaterMessage.ViewHolder) convertView.getTag();
+            holder = (CustomClassAdaptaterUS.ViewHolder) convertView.getTag();
         }
-        for(US iu:this.listData){
-            System.out.println("bienvenido "+iu);
-        }
-        System.out.println("hola "+this.listData.size());
         US us= this.listData.get(position);
-       holder.txtUser.setText(us.getNom());
+        holder.txtUser.setText(us.getNom());
         holder.txtMsg.setText(us.getDescription());
         return convertView;
     }

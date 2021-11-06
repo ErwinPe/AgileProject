@@ -5,24 +5,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.main.library.Message;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomClassAdaptaterMessage extends BaseAdapter {
 
-    private List<Message> listData;
-    private LayoutInflater layoutInflater;
-    private Context context;
+    private final List<Message> listData;
+    private final LayoutInflater layoutInflater;
 
     public CustomClassAdaptaterMessage(Context aContext,  List<Message> listData) {
-        this.context = aContext;
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
     }
@@ -54,8 +49,9 @@ public class CustomClassAdaptaterMessage extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         Message msg= this.listData.get(position);
-        String formattedDate = new SimpleDateFormat("dd/MM/yyyy à HH:mm").format(msg.getMessageTime().toDate());
-        holder.txtUser.setText(msg.getMessageUser()+"  "+formattedDate);
+        String formattedDate = new SimpleDateFormat("dd/MM/yyyy à HH:mm", Locale.FRANCE).format(msg.getMessageTime().toDate());
+        String headerText=msg.getMessageUser()+"  "+formattedDate;
+        holder.txtUser.setText(headerText);
         holder.txtMsg.setText(msg.getMessageText());
         return convertView;
     }
