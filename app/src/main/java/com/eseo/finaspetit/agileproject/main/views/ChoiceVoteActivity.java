@@ -15,9 +15,11 @@ import com.eseo.finaspetit.agileproject.databinding.ActivityVoteBinding;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
 import com.eseo.finaspetit.agileproject.main.library.Message;
+import com.eseo.finaspetit.agileproject.main.library.Note;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
 import com.eseo.finaspetit.agileproject.main.library.US;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ public class ChoiceVoteActivity extends AppCompatActivity {
     private final Database bdd=new Database();
     US currentUS;
     private ActivityVoteBinding binding;
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
 
 
     @Override
@@ -46,7 +49,8 @@ public class ChoiceVoteActivity extends AppCompatActivity {
         binding.userVote.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Note note = new Note(binding.choiceNote.getSelectedItem().toString(), auth.getCurrentUser().getEmail() );
+                bdd.addNoteToUS(note, currentUS.getId());
                 Intent intent = new Intent(ChoiceVoteActivity.this, ChatUS.class);
                 startActivity(intent);
             }

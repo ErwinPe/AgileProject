@@ -17,6 +17,7 @@ import com.eseo.finaspetit.agileproject.main.interfaces.ChatUSViewInterface;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Database;
 import com.eseo.finaspetit.agileproject.main.library.Message;
+import com.eseo.finaspetit.agileproject.main.library.Note;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
 import com.eseo.finaspetit.agileproject.main.library.US;
 import com.google.firebase.Timestamp;
@@ -50,7 +51,6 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         actionBar.setTitle("US : "+currentUS.getNom());
 
 
-
         binding.button4.setOnClickListener(v -> {
             Message mes=new Message(binding.editTextTextPersonName.getText().toString(), Objects.requireNonNull(auth.getCurrentUser()).getEmail(), Timestamp.now());
             bdd.addMessageToUSChat(mes,currentUS.getId());
@@ -71,12 +71,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         btnOpenVote =  menu.findItem(R.id.openVote);
         btnVote = menu.findItem(R.id.vote);
         bdd.gestUs(this,currentSaloon.getId(),currentUS.getId());
-        /*if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
-            btnOpenVote.setVisible(false);
 
-        }
-        btnCloseVote.setVisible(false);
-        btnVote.setVisible(false);*/
         return true;
     }
     @Override
@@ -100,8 +95,8 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
         }else if(currentUS.getEtat().equals("OPENVOTE")){
+            bdd.getAllNoteFromUS(this,currentUS.getId());
             btnCloseVote.setVisible(true);
-            btnVote.setVisible(true);
             btnOpenVote.setVisible(false);
         }else if(currentUS.getEtat().equals("CLOSEVOTE")) {
             btnCloseVote.setVisible(false);
@@ -115,6 +110,17 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
             btnOpenVote.setVisible(false);
             btnCloseVote.setVisible(false);
+        }
+
+    }
+
+    public void gestBtnVoteByNote(List<Note> lNote){
+        for (Note n : lNote){
+            if(n.getUser().equals(auth.getCurrentUser().getEmail())){
+                btnVote.setVisible(false);
+            }else{
+                btnVote.setVisible(true);
+            }
         }
     }
 }

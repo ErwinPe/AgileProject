@@ -351,9 +351,8 @@ public class Database {
                         }
                     }
                     Log.w(TAG, "Liste notes: "+ listNotes);
-                   //reste a appeler la fonction de ton interface qui gère la liste des notes
-                    //((ChatUSViewInterface)act).handleMessageUS(listMessage);
 
+                    ((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes);
                 }
 
             }
