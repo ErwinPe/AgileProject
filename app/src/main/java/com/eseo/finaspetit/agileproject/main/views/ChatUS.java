@@ -70,8 +70,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         btnCloseVote = menu.findItem(R.id.closeVote);
         btnOpenVote =  menu.findItem(R.id.openVote);
         btnVote = menu.findItem(R.id.vote);
-        bdd.gestUs(this,currentSaloon.getId(),currentUS.getId());
-
+        bdd.gestUs(this,currentUS.getId());
         return true;
     }
     @Override
@@ -79,7 +78,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         if(item.getItemId()==R.id.openVote){
             bdd.updateEtatUs(currentUS.getId(), "OPENVOTE");
             bdd.resetNoteFromUS(currentUS.getId());
-            bdd.getAllNoteFromUS(this,currentUS.getId());
+
         }else if(item.getItemId()==R.id.closeVote){
             bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
         }else if(item.getItemId()==R.id.vote){
@@ -91,16 +90,20 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     }
 
     public void gestBtnVote(US newUs){
+
+
         currentUS.setEtat(newUs.getEtat());
         if(currentUS.getEtat().equals("CREATED")) {
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
         }else if(currentUS.getEtat().equals("OPENVOTE")){
-            bdd.getAllNoteFromUS(this,currentUS.getId());
+            btnOpenVote.setVisible(true);
+            bdd.getAllNoteFromUS(this, currentUS.getId());
             btnCloseVote.setVisible(true);
             btnOpenVote.setVisible(false);
         }else if(currentUS.getEtat().equals("CLOSEVOTE")) {
+            System.out.println("CLOSED");
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
@@ -117,12 +120,13 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     }
 
     public void gestBtnVoteByNote(List<Note> lNote){
+        boolean finf = true;
         for (Note n : lNote){
             if(n.getUser().equals(auth.getCurrentUser().getEmail())){
-                btnVote.setVisible(false);
-            }else{
-                btnVote.setVisible(true);
+                finf = false;
             }
         }
+        btnVote.setVisible(finf);
+
     }
 }

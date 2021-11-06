@@ -252,11 +252,9 @@ public class Database {
 
     }
 
-    public void gestUs(AppCompatActivity act,String idSalon, String idUS) {
+    public void gestUs(AppCompatActivity act, String idUS) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        DocumentReference docRef = firestore.collection("salon").document(idSalon);
         String TAG="ok";
-        ArrayList<Message> listMessage = new ArrayList<>();
 
 
         firestore.collection("us").document(idUS).addSnapshotListener( new EventListener<DocumentSnapshot>() {
@@ -334,7 +332,7 @@ public class Database {
 
         firestore.collection("us").document(idUS).addSnapshotListener( new EventListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
+            public void onComplete(@Nullable DocumentSnapshot snapshot,
                                 @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e);
