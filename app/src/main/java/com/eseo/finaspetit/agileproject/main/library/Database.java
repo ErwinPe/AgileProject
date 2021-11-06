@@ -219,7 +219,12 @@ public class Database {
 
             }
         });
+    }
 
+    public void updateEtatUs(String idUs, String etat){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        DocumentReference washingtonRef = firestore.collection("us").document(idUs);
+        washingtonRef.update("etat", etat);
     }
 
     public void getAllUS(AppCompatActivity act,String idSalon) {

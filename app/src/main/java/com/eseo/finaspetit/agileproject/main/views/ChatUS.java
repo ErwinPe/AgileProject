@@ -82,9 +82,9 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         if(item.getItemId()==R.id.openVote){
-
+            bdd.updateEtatUs(currentUS.getId(), "OPENVOTE");
         }else if(item.getItemId()==R.id.closeVote){
-
+            bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
         }else if(item.getItemId()==R.id.vote){
             Intent intent = new Intent(this, ChoiceVoteActivity.class);
             startActivity(intent);
@@ -97,20 +97,24 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         currentUS.setEtat(newUs.getEtat());
         if(currentUS.getEtat().equals("CREATED")) {
             btnCloseVote.setVisible(false);
+            btnVote.setVisible(false);
+            btnOpenVote.setVisible(true);
+        }else if(currentUS.getEtat().equals("OPENVOTE")){
+            btnCloseVote.setVisible(true);
             btnVote.setVisible(true);
             btnOpenVote.setVisible(false);
-        }else if(currentUS.getEtat().equals("OPENVOTE")){
+        }else if(currentUS.getEtat().equals("CLOSEVOTE")) {
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
-        }else if(currentUS.getEtat().equals("CLOSEVOTE")) {
-            btnCloseVote.setVisible(true);
-            btnVote.setVisible(false);
-            btnOpenVote.setVisible(false);
         }else if(currentUS.getEtat().equals("VOTED")) {
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(false);
+        }
+        if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
+            btnOpenVote.setVisible(false);
+            btnCloseVote.setVisible(false);
         }
     }
 }
