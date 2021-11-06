@@ -78,6 +78,8 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         if(item.getItemId()==R.id.openVote){
             bdd.updateEtatUs(currentUS.getId(), "OPENVOTE");
+            bdd.resetNoteFromUS(currentUS.getId());
+            bdd.getAllNoteFromUS(this,currentUS.getId());
         }else if(item.getItemId()==R.id.closeVote){
             bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
         }else if(item.getItemId()==R.id.vote){
