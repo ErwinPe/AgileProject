@@ -15,17 +15,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <SeekBar
-        android:id="@+id/choiceVote"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="282dp"
-        android:layout_height="30dp"
-        android:max="10"
-        android:progress="1"
+    <Spinner
+        android:id="@+id/choiceNote"
+        android:layout_width="234dp"
+        android:layout_height="48dp"
+        android:spinnerMode="dialog"
         app:layout_constraintBottom_toTopOf="@+id/userVote"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.836"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.71000004" />
+        app:layout_constraintVertical_bias="0.501" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choice Note : "
+        app:layout_constraintBottom_toBottomOf="@+id/choiceNote"
+        app:layout_constraintEnd_toStartOf="@+id/choiceNote"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/choiceNote" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

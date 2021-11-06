@@ -3,6 +3,9 @@ package com.eseo.finaspetit.agileproject.main.views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +18,9 @@ import com.eseo.finaspetit.agileproject.main.library.Message;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
 import com.eseo.finaspetit.agileproject.main.library.US;
 import com.google.firebase.Timestamp;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChoiceVoteActivity extends AppCompatActivity {
 
@@ -40,8 +46,39 @@ public class ChoiceVoteActivity extends AppCompatActivity {
         binding.userVote.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(ChoiceVoteActivity.this, ChatUS.class);
                 startActivity(intent);
+            }
+        });
+
+        final Spinner spinnerRegion = binding.choiceNote;
+        List<String> note= new ArrayList<>();
+        note.add("?");
+        note.add("0");
+        note.add("1");
+        note.add("2");
+        note.add("3");
+        note.add("5");
+        note.add("8");
+        note.add("13");
+        note.add("20");
+        note.add("40");
+        note.add("100");
+        note.add("IMPOSSIBLE");
+        note.add("COFFE");
+
+        ArrayAdapter<String> dataAdapterR = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, note);
+        dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerRegion.setAdapter(dataAdapterR);
+
+        spinnerRegion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
     }
