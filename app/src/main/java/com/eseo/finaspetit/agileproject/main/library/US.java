@@ -1,16 +1,14 @@
 package com.eseo.finaspetit.agileproject.main.library;
 
-import com.google.firebase.Timestamp;
-import java.util.ArrayList;
+import androidx.annotation.NonNull;
 
+import com.google.firebase.Timestamp;
 
 public class US {
     String id;
     Timestamp dateCreation;
     String description;
     String nom;
-    //ArrayList<Note> notes;
-    //ArrayList<Message> messages = new ArrayList<>();
     boolean isVoted;
     String etat;
     String idSalon;
@@ -33,34 +31,12 @@ public class US {
         this.id = id;
     }
 
-    public String getIdSalon() {
-        return idSalon;
-    }
-
-    public void setIdSalon(String id) { this.idSalon = idSalon; }
-
-    public Timestamp getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(Timestamp dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getNom() {
         return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
     }
 
     public boolean isVoted() {
@@ -71,6 +47,7 @@ public class US {
         isVoted = voted;
     }
 
+    @NonNull
     @Override
     public String toString(){
         return this.nom+" "+this.dateCreation.toDate().toString()+" "+this.etat+" "+this.description+" "+this.idSalon;

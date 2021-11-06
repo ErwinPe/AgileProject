@@ -1,27 +1,9 @@
 package com.eseo.finaspetit.agileproject.main.library;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.eseo.finaspetit.agileproject.main.library.Constants;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.model.Document;
-
-import java.lang.reflect.Member;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class Salon {
     private String id;
@@ -35,14 +17,6 @@ public class Salon {
 
     public Salon(){
 
-    }
-
-    public ArrayList<Message> getChat() {
-        return chat;
-    }
-
-    public void setChat(ArrayList<Message> chat) {
-        this.chat = chat;
     }
 
     public Timestamp getCreationDate() {
@@ -123,36 +97,7 @@ public class Salon {
         this.creationDate = date;
     }
 
-
-
-    public Salon getDocument(String id){
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        DocumentReference docRef=firestore.collection("salon").document(id);
-
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document != null && document.exists()) {
-                        //Salon sal= new Salon(document.getTimestamp("dateCreation"),document.getString("nom"),document.getString("description"),(ArrayList<Message>) document.get("CHAT"),(ArrayList<String>) document.get("members"),(ArrayList<US>) document.get("US"));
-                        //Salon sal= new Salon(document.getTimestamp("dateCreation"),document.getString("nom"),document.getString("description"),null,null,null);
-                        Salon sal=new Salon(document.getString("nom"),document.getString("description"));
-                        System.out.println("INSTANCIATION DE : "+sal.getNom());
-                    } else {
-                        System.out.println("Aucune donnée");
-                    }
-                } else {
-                    System.out.println("erreur "+task.getException());
-                }
-            }
-        });
-
-
-
-        return null;
-    }
-
+    @NonNull
     public String toString(){
         return this.nom+" "+this.description+" "+this.creationDate+" "+this.chat+" "+this.members+" "+this.US;
     }

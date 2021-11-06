@@ -1,14 +1,16 @@
 package com.eseo.finaspetit.agileproject.main.library;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.Timestamp;
 
 public class Notification {
     private String id;
     private String message;
-    private Timestamp dateCreation;
-    private String receiver;
-    private String title;
-    private String idSalon;
+    private final Timestamp dateCreation;
+    private final String receiver;
+    private final String title;
+    private final String idSalon;
 
     public String getId() { return id; }
 
@@ -16,11 +18,7 @@ public class Notification {
 
     public String getIdSalon() { return idSalon; }
 
-    public void setIdSalon(String idSalon) { this.idSalon = idSalon; }
-
     public String getTitle() { return title; }
-
-    public void setTitle(String title) { this.title = title; }
 
     public String getMessage() {
         return message;
@@ -28,22 +26,6 @@ public class Notification {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public Timestamp getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(Timestamp dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
     }
 
     public Notification(String id,String m, Timestamp dateCreation, String receiver, String title, String idSalon){
@@ -55,8 +37,9 @@ public class Notification {
         this.id=id;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return this.title +" ("+ this.message+")" + this.id;
+        return this.title +" ("+ this.message+")" + this.id + " "+this.dateCreation+ " "+this.receiver;
     }
 }

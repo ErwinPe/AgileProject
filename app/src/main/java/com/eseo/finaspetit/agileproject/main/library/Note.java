@@ -1,5 +1,7 @@
 package com.eseo.finaspetit.agileproject.main.library;
 
+import androidx.annotation.NonNull;
+
 public class Note {
     private int note;
     private String user;
@@ -26,6 +28,7 @@ public class Note {
         this.user = user;
     }
 
+    @NonNull
     public String toString(){
         return this.user+ " : "+this.note;
     }
