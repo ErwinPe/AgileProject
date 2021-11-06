@@ -412,6 +412,12 @@ public class Database {
         });
     }
 
+    public void resetNoteFromUS(String idUS){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        DocumentReference washingtonRef = firestore.collection("us").document(idUS);
+        washingtonRef.update("notes", FieldValue.delete());
+    }
+
     public static boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
