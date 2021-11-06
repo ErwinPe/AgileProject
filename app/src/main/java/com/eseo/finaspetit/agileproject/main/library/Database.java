@@ -16,6 +16,7 @@ import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -332,6 +333,29 @@ public class Database {
         String TAG="getAllNoteFromUS";
         ArrayList<Note> listNotes = new ArrayList<>();
 
+        firestore.collection("us").whereEqualTo(FieldPath.documentId(),idUS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map data= document.getData();
+                        System.out.println("dataaaa: "+data);
+                        ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
+                        if(usHash2 != null){
+                            for(int j=0; j< usHash2.size();j++){
+                                HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
+                                listNotes.add(new Note((String)n.get("note"),(String) n.get("user")));
+                            }
+                        }
+                        Log.w(TAG, "Liste notes: "+ listNotes);
+                    }
+                } else {
+                    System.out.println( "Error getting documents: "+ task.getException());
+                }
+                ((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes);
+            }
+        });
+/*
         firestore.collection("us").document(idUS).addSnapshotListener( new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -356,7 +380,7 @@ public class Database {
                 }
 
             }
-        });
+        });*/
 
     }
 

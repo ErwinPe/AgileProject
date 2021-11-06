@@ -70,7 +70,7 @@ public class ChoiceVoteActivity extends AppCompatActivity {
         note.add("40");
         note.add("100");
         note.add("IMPOSSIBLE");
-        note.add("COFFE");
+        note.add("COFFEE");
 
         ArrayAdapter<String> dataAdapterR = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, note);
         dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
