@@ -247,6 +247,36 @@ public class Database {
 
     }
 
+    public void gestUs(AppCompatActivity act,String idSalon, String idUS) {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        DocumentReference docRef = firestore.collection("salon").document(idSalon);
+        String TAG="ok";
+        ArrayList<Message> listMessage = new ArrayList<>();
+
+
+        firestore.collection("us").document(idUS).addSnapshotListener( new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+
+                if (snapshot.exists()) {
+                    DocumentSnapshot document = snapshot;
+                    HashMap<String, Object> us = (HashMap<String, java.lang.Object>) document.getData();
+                    US newUS =new US(document.getId(),(String)us.get("nom"),(String)us.get("description"),(boolean)us.get("voted"),(Timestamp) us.get("dateCreation"),(String)us.get("etat"),(String)us.get("idSalon"));
+
+                    ((ChatUSViewInterface)act).gestBtnVote(newUS);
+
+                }
+
+            }
+        });
+
+    }
+
 
     public void getAllMessagesFromUS(AppCompatActivity act,String idSalon, String idUS) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();

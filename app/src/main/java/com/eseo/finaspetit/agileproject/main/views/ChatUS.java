@@ -29,6 +29,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     private ActivityChatUsBinding binding;
     private final Database bdd=new Database();
     private US currentUS=null;
+    Salon currentSaloon;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     MenuItem btnCloseVote;
     MenuItem btnOpenVote;
@@ -40,13 +41,15 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         binding = ActivityChatUsBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
         setContentView(root);
-        Salon currentSaloon = ((Constants) ChatUS.this.getApplication()).getCurentSaloon();
+        currentSaloon = ((Constants) ChatUS.this.getApplication()).getCurentSaloon();
         currentUS =((Constants) ChatUS.this.getApplication()).getCurentUS();
         bdd.getAllMessagesFromUS(this,currentSaloon.getId(),currentUS.getId());
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("US : "+currentUS.getNom());
+
+
 
         binding.button4.setOnClickListener(v -> {
             Message mes=new Message(binding.editTextTextPersonName.getText().toString(), Objects.requireNonNull(auth.getCurrentUser()).getEmail(), Timestamp.now());
@@ -67,28 +70,47 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         btnCloseVote = menu.findItem(R.id.closeVote);
         btnOpenVote =  menu.findItem(R.id.openVote);
         btnVote = menu.findItem(R.id.vote);
-        if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
+        bdd.gestUs(this,currentSaloon.getId(),currentUS.getId());
+        /*if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
             btnOpenVote.setVisible(false);
 
         }
         btnCloseVote.setVisible(false);
-        btnVote.setVisible(false);
+        btnVote.setVisible(false);*/
         return true;
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         if(item.getItemId()==R.id.openVote){
-            btnCloseVote.setVisible(true);
-            btnVote.setVisible(true);
-            btnOpenVote.setVisible(false);
+
         }else if(item.getItemId()==R.id.closeVote){
-            btnOpenVote.setVisible(true);
-            btnVote.setVisible(false);
-            btnCloseVote.setVisible(false);
+
         }else if(item.getItemId()==R.id.vote){
             Intent intent = new Intent(this, ChoiceVoteActivity.class);
             startActivity(intent);
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    public void gestBtnVote(US newUs){
+        currentUS.setEtat(newUs.getEtat());
+        if(currentUS.getEtat().equals("CREATED")) {
+            btnCloseVote.setVisible(false);
+            btnVote.setVisible(true);
+            btnOpenVote.setVisible(false);
+        }else if(currentUS.getEtat().equals("OPENVOTE")){
+            btnCloseVote.setVisible(false);
+            btnVote.setVisible(false);
+            btnOpenVote.setVisible(true);
+        }else if(currentUS.getEtat().equals("CLOSEVOTE")) {
+            btnCloseVote.setVisible(true);
+            btnVote.setVisible(false);
+            btnOpenVote.setVisible(false);
+        }else if(currentUS.getEtat().equals("VOTED")) {
+            btnCloseVote.setVisible(false);
+            btnVote.setVisible(false);
+            btnOpenVote.setVisible(false);
+        }
     }
 }
