@@ -80,6 +80,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
 
         }else if(item.getItemId()==R.id.closeVote){
             bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
+            currentUS.setEtat("CLOSEVOTE");
             bdd.getAllNoteFromUS(this, currentUS.getId(), "MANUEL");
 
         }else if(item.getItemId()==R.id.vote){
@@ -97,6 +98,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
 
         currentUS.setEtat(newUs.getEtat());
         if(currentUS.getEtat().equals(getResources().getString(R.string.state_CREATED))) {
+            binding.button4.setEnabled(true);
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
@@ -107,6 +109,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             btnCloseVote.setVisible(true);
             btnOpenVote.setVisible(false);
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_CLOSEVOTE))) {
+            bdd.getAllNoteFromUS(this, currentUS.getId(), "AUTO");
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
@@ -136,17 +139,17 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             }
         }
         btnVote.setVisible(found);
-        int tailleMembers = currentSaloon.getMembers().size();
-        int tailleNote =  lNote.size();
+
         if (etat.equals("MANUEL")){
             System.out.println("icisfsfsdf");
             bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_CLOSEVOTE));
             currentUS.setEtat(getResources().getString(R.string.state_CLOSEVOTE));
             bdd.addNoteResumeToChatUS(currentUS.getId());
-            if (!containMess.equals("")){
+        }
+            if (!containMess.equals("") && etat.equals("MANUEL")){
                 Message mes = new Message(containMess,"System");
                 bdd.addMessageToUSChat(mes,currentUS.getId());
-            }else{
+            }else if (lNote.size()==currentSaloon.getMembers().size() && currentUS.getEtat().equals("CLOSEVOTE")){
                 Note nMax = lNote.get(0);
                 Note nMin = nMax;
                 for (Note n : lNote){
@@ -156,6 +159,9 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
                         nMax=n;
                     }
                 }
+                System.out.println("USER MAX"+nMax.getUser());
+                System.out.println("USER MIN"+nMin.getUser());
+
                 if (nMin.getNote()==nMax.getNote()){
                     bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_VOTED));
                     currentUS.setEtat(getResources().getString(R.string.state_VOTED));
@@ -163,7 +169,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
                     binding.button4.setEnabled(true);
                 }
             }
-        }
+
 
     }
 }
