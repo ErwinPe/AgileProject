@@ -102,7 +102,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             btnCloseVote.setVisible(false);
             binding.button4.setEnabled(true);
             btnVote.setVisible(false);
-            btnOpenVote.setEnabled(false);
+            btnOpenVote.setVisible(false);
             if (((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
                 btnOpenVote.setVisible(true);
             }
