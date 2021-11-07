@@ -106,7 +106,6 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             btnCloseVote.setVisible(true);
             btnOpenVote.setVisible(false);
         }else if(currentUS.getEtat().equals("CLOSEVOTE")) {
-            bdd.getAllNoteFromUS(this, currentUS.getId());
 
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
@@ -124,11 +123,11 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
 
     public void gestBtnVoteByNote(List<Note> lNote){
         boolean found=true;
+        String containMess = "";
         for (Note n : lNote){
             if(n.getUser().equals(auth.getCurrentUser().getEmail())){
                 found=false;
             }
-
         }
         btnVote.setVisible(found);
 
