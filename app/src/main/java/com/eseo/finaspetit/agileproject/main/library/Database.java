@@ -225,6 +225,7 @@ public class Database {
                     Log.w(TAG, "listen:error", e);
                     return;
                 }
+                System.out.println("taille ici: "+snapshots.getDocuments().size());
                 for (DocumentSnapshot dc : snapshots.getDocuments()) {
                     Notification notif=new Notification(dc.getId(),dc.getString("message"),dc.getTimestamp("dateCreation"),dc.getString("receiver"),dc.getString("title"),dc.getString("idSalon"));
                     allNotif.add(notif);
@@ -349,21 +350,57 @@ public class Database {
                 if (task.isSuccessful()) {
                     String contentMessage="Résume des votes \n";
                     for (QueryDocumentSnapshot document : task.getResult()) {
+                        Note noteMin=null;
+                        Note noteMax=null;
                         Map data= document.getData();
+                        String warningMessage="";
                         ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
                         if(usHash2 != null){
                             for(int j=0; j< usHash2.size();j++){
                                 HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
                                 contentMessage=contentMessage.concat((String) n.get("user")+" a voté: "+(String) n.get("note")+"\n");
-                               /* if(((String) n.get("note")).equals("?") || ((String) n.get("note")).equals("Incroyable !") ||((String) n.get("note")).equals("CAFE !")){
-                                    Message mes= new Message(user+"a besoin d'une pause ou plus d'explications",user);
+                                if(((String) n.get("note")).equals("?") || ((String) n.get("note")).equals("Impossible !") ||((String) n.get("note")).equals("CAFE !")){
+                                    warningMessage += user+" a besoin d'une pause ou plus d'explications";
+                                    Message mes= new Message(user+" a besoin d'une pause ou plus d'explications",user);
                                     addMessageToUSChat(mes,idUS);
-                                }*/
+                                }
                             }
+                            Message mes=new Message(contentMessage,"System");
+                            addMessageToUSChat(mes, idUS);
+
+                            if(warningMessage.length()==0){
+                                for(int l=0; l< usHash2.size();l++){
+                                    HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(l);
+                                    if(noteMin == null && noteMax == null){
+                                        noteMin= new Note((String) n .get("note"), (String) n.get("user"));
+                                        noteMax= new Note((String) n .get("note"), (String) n.get("user"));
+                                    }
+                                    System.out.println("note: "+(String)n.get("note"));
+
+                                    if(Integer.parseInt((String)n.get("note")) < Integer.parseInt(noteMin.getNote())){
+                                        noteMin=new Note((String) n .get("note"), (String) n.get("user"));
+                                    }
+                                    if(Integer.parseInt((String)n.get("note")) > Integer.parseInt(noteMax.getNote())){
+                                        noteMax=new Note((String) n.get("note"), (String) n.get("user"));
+                                    }
+
+
+                                }
+                                if(noteMin != null && noteMax != null){
+                                    //System.out.println("Envo notif à "+noteMin.getUser());
+                                    Notification notifMin = new Notification(null,"Tu as note le plus bas", Timestamp.now(), noteMin.getUser(), "Besoin de ton explication",null);
+                                    Notification notifMax = new Notification(null,"Tu as note le plus haut", Timestamp.now(), noteMax.getUser(), "Besoin de ton explication",null);
+                                    createDocument(notifMin, "notification");
+                                    createDocument(notifMax, "notification");
+                                    //System.out.println("Envo notif à "+noteMax.getUser());
+                                }
+                            }else{
+                                System.out.println("rien");
+                            }
+
                         }
                     }
-                    Message mes=new Message(contentMessage,"System");
-                    addMessageToUSChat(mes, idUS);
+
                 } else {
                     System.out.println( "Error getting documents: "+ task.getException());
                 }
