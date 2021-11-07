@@ -70,8 +70,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         btnCloseVote = menu.findItem(R.id.closeVote);
         btnOpenVote =  menu.findItem(R.id.openVote);
         btnVote = menu.findItem(R.id.vote);
-        bdd.gestUs(this,currentSaloon.getId(),currentUS.getId());
-
+        bdd.gestUs(this,currentUS.getId());
         return true;
     }
     @Override
@@ -79,9 +78,11 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         if(item.getItemId()==R.id.openVote){
             bdd.updateEtatUs(currentUS.getId(), "OPENVOTE");
             bdd.resetNoteFromUS(currentUS.getId());
-            bdd.getAllNoteFromUS(this,currentUS.getId());
+
         }else if(item.getItemId()==R.id.closeVote){
             bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
+            bdd.addNoteResumeToChatUS(currentUS.getId());
+
         }else if(item.getItemId()==R.id.vote){
             Intent intent = new Intent(this, ChoiceVoteActivity.class);
             startActivity(intent);
@@ -93,17 +94,20 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
 
     //AJOUTER QUELQUE PART bdd.getResumeNotes()
     public void gestBtnVote(US newUs){
+
+
         currentUS.setEtat(newUs.getEtat());
         if(currentUS.getEtat().equals("CREATED")) {
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
         }else if(currentUS.getEtat().equals("OPENVOTE")){
-            bdd.getAllNoteFromUS(this,currentUS.getId());
+            bdd.getAllNoteFromUS(this, currentUS.getId());
             btnCloseVote.setVisible(true);
             btnOpenVote.setVisible(false);
         }else if(currentUS.getEtat().equals("CLOSEVOTE")) {
-            bdd.addNoteResumeToChatUS(newUs.getId());
+            bdd.getAllNoteFromUS(this, currentUS.getId());
+
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
@@ -116,7 +120,6 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             btnOpenVote.setVisible(false);
             btnCloseVote.setVisible(false);
         }
-
     }
 
     public void gestBtnVoteByNote(List<Note> lNote){
@@ -125,7 +128,10 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             if(n.getUser().equals(auth.getCurrentUser().getEmail())){
                 found=false;
             }
+
         }
         btnVote.setVisible(found);
+
+
     }
 }
