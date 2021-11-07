@@ -269,7 +269,6 @@ public class Database {
                     DocumentSnapshot document = snapshot;
                     HashMap<String, Object> us = (HashMap<String, java.lang.Object>) document.getData();
                     US newUS =new US(document.getId(),(String)us.get("nom"),(String)us.get("description"),(boolean)us.get("voted"),(Timestamp) us.get("dateCreation"),(String)us.get("etat"),(String)us.get("idSalon"));
-
                     ((ChatUSViewInterface)act).gestBtnVote(newUS);
 
                 }
@@ -386,7 +385,7 @@ public class Database {
 /*
         firestore.collection("us").document(idUS).addSnapshotListener( new EventListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@Nullable DocumentSnapshot snapshot,
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
                                 @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e);
