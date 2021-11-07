@@ -57,7 +57,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         });
         binding.button2.setOnClickListener(v -> {
             bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
-            bdd.addNoteResumeToChatUS(currentUS.getId());
+            bdd.addNoteResumeToChatUS(currentUS.getId(),auth.getCurrentUser().getEmail());
         });
     }
 
@@ -85,7 +85,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         }else if(item.getItemId()==R.id.closeVote){
             bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
             //bdd.getAllNoteFromUS(this, currentUS.getId(), "MANUEL");
-            bdd.addNoteResumeToChatUS(currentUS.getId());
+            bdd.addNoteResumeToChatUS(currentUS.getId(), auth.getCurrentUser().getEmail());
         }else if(item.getItemId()==R.id.vote){
             Intent intent = new Intent(this, ChoiceVoteActivity.class);
             startActivity(intent);

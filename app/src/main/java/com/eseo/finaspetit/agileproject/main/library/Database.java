@@ -339,7 +339,7 @@ public class Database {
         addMessageToUSChat(mes, idUS);
     }
 
-    public void addNoteResumeToChatUS(String idUS){
+    public void addNoteResumeToChatUS(String idUS, String user){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference washingtonRef = firestore.collection("us").document(idUS);
 
@@ -355,6 +355,10 @@ public class Database {
                             for(int j=0; j< usHash2.size();j++){
                                 HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
                                 contentMessage=contentMessage.concat((String) n.get("user")+" a voté: "+(String) n.get("note")+"\n");
+                               /* if(((String) n.get("note")).equals("?") || ((String) n.get("note")).equals("Incroyable !") ||((String) n.get("note")).equals("CAFE !")){
+                                    Message mes= new Message(user+"a besoin d'une pause ou plus d'explications",user);
+                                    addMessageToUSChat(mes,idUS);
+                                }*/
                             }
                         }
                     }
@@ -589,8 +593,6 @@ public class Database {
                     if(eq){
                         if(noteCommun.equals("?") || noteCommun.equals("CAFE !")  || noteCommun.equals("Impossible !")){
                             updateEtatUs(idUS,"CREATED");
-                            Message mes= new Message("Tout le monde a besoin d'éclaircir l'US ou de faire une pause","Systeme");
-                            addMessageToUSChat(mes,idUS);
                         }else{
                             updateEtatUs(idUS, "VOTED");
                         }
@@ -599,8 +601,8 @@ public class Database {
                             checkWhoCanTalk(binding,idUS,user);
                         }else{
                             updateEtatUs(idUS,"CREATED");
-                            Message mes= new Message(commentaire,"Systeme");
-                            addMessageToUSChat(mes,idUS);
+                            /*Message mes= new Message(commentaire,"Systeme");
+                            addMessageToUSChat(mes,idUS);*/
                         }
 
                     }
