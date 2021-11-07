@@ -1,8 +1,12 @@
 package com.eseo.finaspetit.agileproject.main.library;
 
 import android.util.Log;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.eseo.finaspetit.agileproject.databinding.ActivityChatUsBinding;
 import com.eseo.finaspetit.agileproject.main.interfaces.ChatUSViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.ChatViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.CreateSaloonViewInterface;
@@ -392,7 +396,7 @@ public class Database {
                     System.out.println( "Error getting documents: "+ task.getException());
                 }
 
-                ((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
+                //((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
 
             }
         });
@@ -475,6 +479,123 @@ public class Database {
             }
         });
     }
+
+    public void checkIfAlreadyVoted(ActivityChatUsBinding binding, String idUS, String user, MenuItem mi){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("us").whereEqualTo(FieldPath.documentId(),idUS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                boolean found=false;
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map data= document.getData();
+                        ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
+                        if(usHash2 != null){
+                            for(int j=0; j< usHash2.size();j++){
+                                HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
+                                if(((String)n.get(("user"))).equals(user)){
+                                    found=true;
+                                }
+
+                            }
+                        }
+                    }
+
+                    mi.setVisible(!found);
+                }
+
+                //((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
+
+            }
+        });
+    }
+
+    public void checkWhoCanTalk(ActivityChatUsBinding binding, String idUS, String user){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("us").whereEqualTo(FieldPath.documentId(),idUS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Note noteMin=null;
+                Note noteMax=null;
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map data= document.getData();
+                        ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
+
+                        if(usHash2 != null){
+                            for(int j=0; j< usHash2.size();j++){
+                                HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
+                                if(noteMin==null && noteMax==null){
+                                    noteMax=new Note((String)n.get("note"),(String)n.get("user"));
+                                    noteMin=new Note((String)n.get("note"),(String)n.get("user"));
+                                }else{
+                                    if(Integer.parseInt((String)n.get("note")) < Integer.parseInt(noteMin.getNote())){
+                                        noteMin= new Note((String)n.get("note"),(String)n.get("user"));
+                                    }
+                                    if(Integer.parseInt((String)n.get("note")) > Integer.parseInt(noteMax.getNote())){
+                                        noteMax= new Note((String)n.get("note"),(String)n.get("user"));
+                                    }
+                                }
+
+
+                            }
+                        }
+                    }
+                    if(user.equals(noteMin.getUser()) || user.equals(noteMax.getUser())){
+                        binding.button4.setEnabled(true);
+                    }
+
+                }
+
+            }
+        });
+    }
+
+    public void checkIfVoted(String idUS, String user, ActivityChatUsBinding binding){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("us").whereEqualTo(FieldPath.documentId(),idUS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                boolean eq=true;
+                boolean firstNoteCheck=false;
+                String noteCommun="";
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map data= document.getData();
+                        ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
+                        if(usHash2 != null){
+                            for(int j=0; j< usHash2.size();j++){
+                                HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
+                                if(!firstNoteCheck){
+                                    noteCommun=(String)n.get("note");
+                                    firstNoteCheck=true;
+                                }else{
+                                    if(!((String)n.get("note")).equals(noteCommun)){
+                                        eq=false;
+                                    }
+                                }
+
+
+
+                            }
+                        }
+                    }
+                    if(eq){
+                        updateEtatUs(idUS, "VOTED");
+                    }else{
+                        checkWhoCanTalk(binding,idUS,user);
+                    }
+
+
+                }
+
+                //((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
+
+            }
+        });
+
+    }
+
 
     public void resetNoteFromUS(String idUS){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();

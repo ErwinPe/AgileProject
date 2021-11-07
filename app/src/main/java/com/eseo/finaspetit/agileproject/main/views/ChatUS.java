@@ -80,8 +80,8 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
 
         }else if(item.getItemId()==R.id.closeVote){
             bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
-            bdd.getAllNoteFromUS(this, currentUS.getId(), "MANUEL");
-
+            //bdd.getAllNoteFromUS(this, currentUS.getId(), "MANUEL");
+            bdd.addNoteResumeToChatUS(currentUS.getId());
         }else if(item.getItemId()==R.id.vote){
             Intent intent = new Intent(this, ChoiceVoteActivity.class);
             startActivity(intent);
@@ -91,91 +91,51 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     }
 
 
-    //AJOUTER QUELQUE PART bdd.getResumeNotes()
     public void gestBtnVote(US newUs){
-
-
         currentUS.setEtat(newUs.getEtat());
         if(currentUS.getEtat().equals(getResources().getString(R.string.state_CREATED))) {
+            System.out.println("created");
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
-            btnOpenVote.setVisible(true);
+            if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
+                btnOpenVote.setVisible(true);
+            }
+
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_OPENVOTE))){
+            System.out.println("openvote");
             binding.button4.setEnabled(false);
-            btnVote.setVisible(true);
-            bdd.getAllNoteFromUS(this, currentUS.getId(), "AUTO");
-            btnCloseVote.setVisible(true);
+            btnVote.setVisible(false);
+            bdd.checkIfAlreadyVoted(binding, currentUS.getId(),auth.getCurrentUser().getEmail(),btnVote);
+
+
+            if (((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
+                btnCloseVote.setVisible(true);
+            }
+
             btnOpenVote.setVisible(false);
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_CLOSEVOTE))) {
+            System.out.println("closevote");
             btnCloseVote.setVisible(false);
-            btnVote.setVisible(false);
-            btnOpenVote.setVisible(true);
+            binding.button4.setEnabled(false);
+            bdd.checkIfVoted(currentUS.getId(), auth.getCurrentUser().getEmail(),binding);
+            //bdd.checkWhoCanTalk(binding,currentUS.getId(),auth.getCurrentUser().getEmail());
+
+
+            //btnVote.setVisible(false);
+            if (((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
+                btnOpenVote.setVisible(true);
+            }
+            //btnOpenVote.setVisible(true);
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_VOTED))) {
+            System.out.println("voted");
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(false);
         }
-        if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
+        /*if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
             btnOpenVote.setVisible(false);
             btnCloseVote.setVisible(false);
-        }
+        }*/
     }
 
-    public void gestBtnVoteByNote(List<Note> lNote, String etat, String etatUS){
-        boolean found=true;
-        String containMess = "";
-        if(etatUS.equals("OPENVOTE")){
-            for (Note n : lNote){
-                if(n.getUser().equals(auth.getCurrentUser().getEmail())){
-                    found=false;
-                }
-
-                if (n.getNote().equals("?")||n.getNote().equals("IMPOSSIBLE")){
-                    containMess += n.getUser()+ " n'a pas compris l'US, ";
-                }else if (n.getNote().equals(getResources().getString(R.string.vote_step_12))){
-                    containMess += n.getUser()+ " a besoin d'une paus CAFE, ";
-                }
-            }
-        }
-
-        System.out.println("etat ici: "+etatUS);
-        if(etatUS.equals("CLOSEVOTE")){
-            System.out.println("CloseVOTED");
-            Note nMax = lNote.get(0);
-            Note nMin = nMax;
-            for (Note n : lNote){
-                if (Integer.parseInt(n.getNote())<Integer.parseInt(nMin.getNote())){
-                    nMin=n;
-                }else if (Integer.parseInt(n.getNote())>Integer.parseInt(nMax.getNote())){
-                    nMax=n;
-                }
-            }
-            System.out.println(nMax);
-            System.out.println(nMin);
-            if (nMin.getNote()==nMax.getNote()){
-                System.out.println("on passe a voted");
-                bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_VOTED));
-                currentUS.setEtat(getResources().getString(R.string.state_VOTED));
-            }else if (auth.getCurrentUser().getEmail().equals(nMin.getUser()) || auth.getCurrentUser().getEmail().equals(nMax.getUser())){
-                System.out.println("pas passé");
-                binding.button4.setEnabled(true);
-            }
-        }
-        btnVote.setVisible(found);
-        int tailleMembers = currentSaloon.getMembers().size();
-        int tailleNote =  lNote.size();
-        if (etat.equals("MANUEL") && etatUS.equals("OPENVOTE")){
-            System.out.println("icisfsfsdf");
-            bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_CLOSEVOTE));
-            currentUS.setEtat(getResources().getString(R.string.state_CLOSEVOTE));
-            bdd.addNoteResumeToChatUS(currentUS.getId());
-            if (!containMess.equals("")){
-                Message mes = new Message(containMess,"System");
-                bdd.addMessageToUSChat(mes,currentUS.getId());
-            }else{
-                System.out.println("ici la");
-            }
-        }
-
-    }
 }
