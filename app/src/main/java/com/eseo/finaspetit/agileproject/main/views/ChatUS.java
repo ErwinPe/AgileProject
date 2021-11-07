@@ -90,6 +90,8 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         return super.onOptionsItemSelected(item);
     }
 
+
+    //AJOUTER QUELQUE PART bdd.getResumeNotes()
     public void gestBtnVote(US newUs){
         currentUS.setEtat(newUs.getEtat());
         if(currentUS.getEtat().equals("CREATED")) {
