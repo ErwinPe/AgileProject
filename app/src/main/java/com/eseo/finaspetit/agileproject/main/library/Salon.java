@@ -107,6 +107,15 @@ public class Salon {
         this.creationDate = date;
     }
 
+    public Salon(String id, String nom, String desc, String scrumMaster,Timestamp date, ArrayList<String> m){
+        this.id=id;
+        this.description=desc;
+        this.nom=nom;
+        this.scrumMaster = scrumMaster;
+        this.creationDate = date;
+        this.members=m;
+    }
+
     @NonNull
     public String toString(){
         return this.nom+" "+this.description+" "+this.creationDate+" "+this.chat+" "+this.members+" "+this.US;
