@@ -101,6 +101,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_OPENVOTE))){
+            btnVote.setVisible(true);
             bdd.getAllNoteFromUS(this, currentUS.getId(), "AUTO");
             btnCloseVote.setVisible(true);
             btnOpenVote.setVisible(false);
@@ -137,17 +138,13 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         int tailleMembers = currentSaloon.getMembers().size();
         int tailleNote =  lNote.size();
         if (tailleNote == tailleMembers ||etat.equals("MANUEL") ){
-            bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
-
-            if (!containMess.equals("") & currentUS.getEtat().equals(getResources().getString(R.string.state_CLOSEVOTE))){
+            bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_CLOSEVOTE));
+            currentUS.setEtat(getResources().getString(R.string.state_CLOSEVOTE));
+            if (!containMess.equals("")){
                 Message mes = new Message(containMess,"System");
                 bdd.addMessageToUSChat(mes,currentUS.getId());
             }
-            if (currentUS.getEtat().equals(getResources().getString(R.string.state_CLOSEVOTE))){
                 bdd.addNoteResumeToChatUS(currentUS.getId());
-            }
-
-
         }
 
     }
