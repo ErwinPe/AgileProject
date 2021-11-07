@@ -39,14 +39,14 @@ public class ChatActivity extends AppCompatActivity implements ChatViewInterface
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("Salon : "+((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getNom());
+        actionBar.setTitle(getResources().getString(R.string.actionBar_chat_activity_title)+" "+((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getNom());
         bdd.getAllMessages(this,idSalon);
         scrollListViewToBottom();
         binding.btnEnvoi.setOnClickListener(v -> {
             Message msg=new Message(Objects.requireNonNull(binding.textInput.getText()).toString(), Objects.requireNonNull(auth.getCurrentUser()).getEmail());
             if(!msg.getMessageText().isEmpty()){
                 bdd.addMessageToGeneralChat(idSalon,msg);
-                binding.textInput.setText("");
+                binding.textInput.setText(R.string.empty_field);
             }
         });
     }
@@ -78,7 +78,7 @@ public class ChatActivity extends AppCompatActivity implements ChatViewInterface
             Intent intent = new Intent(this, InfoSaloonView.class);
             startActivity(intent);
         }else if (item.getItemId()==R.id.dlt_saloon_btn){
-            bdd.deleteDocument(((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getId(),"salon");
+            bdd.deleteDocument(((Constants) ChatActivity.this.getApplication()).getCurentSaloon().getId(),getResources().getString(R.string.database_salon_field));
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }else if (item.getItemId()==R.id.sign_out_saloon){

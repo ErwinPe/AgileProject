@@ -5,6 +5,8 @@ import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityInfoSaloonBinding;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
@@ -24,14 +26,14 @@ public class InfoSaloonView extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("Informations du salon : ");
+        actionBar.setTitle(getResources().getString(R.string.actionBar_Info_Saloon_activity_title));
 
         Salon salon = ((Constants) InfoSaloonView.this.getApplication()).getCurentSaloon();
 
         binding.nameSalon.setText(salon.getNom());
         binding.descSalon.setText(salon.getDescription());
         binding.scrumMSalon.setText(salon.getScrumMaster());
-        String formattedDate = new SimpleDateFormat("dd/MM/yyyy à HH:mm", Locale.FRANCE).format(salon.getCreationDate().toDate());
+        String formattedDate = new SimpleDateFormat(getResources().getString(R.string.pattern_timestamp), Locale.FRANCE).format(salon.getCreationDate().toDate());
         binding.dateCreaSalon.setText(formattedDate);
 
 

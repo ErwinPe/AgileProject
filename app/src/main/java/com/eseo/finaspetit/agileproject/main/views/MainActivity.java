@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
                         @Override
                         public void onActivityResult(ActivityResult result) {
                             if (result.getResultCode() != Activity.RESULT_OK) {
-                                Toast.makeText(MainActivity.this, "Error signing in",
+                                Toast.makeText(MainActivity.this, getResources().getString(R.string.msg_error_sign_in),
                                         Toast.LENGTH_LONG).show();
                                 finish();
                             }

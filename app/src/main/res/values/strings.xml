@@ -1,3 +1,47 @@
 <resources>
     <string name="app_name">AgileProject</string>
+    <string name="actionBar_chat_activity_title">Salon : </string>
+    <string name="actionBar_chat_us_activity_title">US : </string>
+    <string name="actionBar_choice_vote_activity_title">Vote pour l\'US : </string>
+    <string name="actionBar_create_saloon_activity_title">Création d\'un salon :  </string>
+    <string name="actionBar_create_us_activity_title">Création d\'US :  </string>
+    <string name="actionBar_Info_Saloon_activity_title">Informations du salon : </string>
+    <string name="actionBar_Notification_activity_title">Notifications : </string>
+    <string name="actionBar_us_activity_title">Liste des US : </string>
+
+    <string name="state_CREATED">CREATED</string>
+    <string name="state_OPENVOTE">OPENVOTE</string>
+    <string name="state_CLOSEVOTE">CLOSEVOTE</string>
+    <string name="state_VOTED">VOTED</string>
+
+    <string name="empty_field"></string>
+    <string name="pattern_timestamp">dd/MM/yyyy à HH:mm</string>
+    <string name="system_name">Système</string>
+    <string name="msg_vote_success">Vote pris en compte !</string>
+    <string name="first_msg_creation_saloon">Création du salon</string>
+    <string name="msg_notification_invitation_saloon">Invitation au salon</string>
+    <string name="title_notification_invitation_saloon">Invitation Salon</string>
+    <string name="msg_create_saloon_success">Salon créé !</string>
+    <string name="msg_create_us_success">US créée !</string>
+    <string name="msg_error_create_us_empty_field">Aucun champ ne doit être vide ! </string>
+    <string name="msg_error_sign_in">Erreur à la connexion </string>
+    <string name="msg_join_saloon_success">Salon rejoint ! </string>
+
+    <string name="vote_step_0">\?</string>
+    <string name="vote_step_1">0</string>
+    <string name="vote_step_2">1</string>
+    <string name="vote_step_3">2</string>
+    <string name="vote_step_4">3</string>
+    <string name="vote_step_5">5</string>
+    <string name="vote_step_6">8</string>
+    <string name="vote_step_7">13</string>
+    <string name="vote_step_8">20</string>
+    <string name="vote_step_9">40</string>
+    <string name="vote_step_10">100</string>
+    <string name="vote_step_11">Impossible !</string>
+    <string name="vote_step_12">CAFE !</string>
+
+    <string name="database_salon_field">salon</string>
+    <string name="database_notification_field">notification</string>
+    <string name="database_member_field">salon</string>
 </resources>

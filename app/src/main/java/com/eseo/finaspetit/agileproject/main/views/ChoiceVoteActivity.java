@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityChatUsBinding;
 import com.eseo.finaspetit.agileproject.databinding.ActivityVoteBinding;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
@@ -45,7 +46,7 @@ public class ChoiceVoteActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("Vote for the US : "+currentUS.getNom());
+        actionBar.setTitle(getResources().getString(R.string.actionBar_choice_vote_activity_title)+" "+currentUS.getNom());
 
         binding.userVote.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -53,7 +54,7 @@ public class ChoiceVoteActivity extends AppCompatActivity {
                 Note note = new Note(binding.choiceNote.getSelectedItem().toString(), auth.getCurrentUser().getEmail() );
                 bdd.addNoteToUS(note, currentUS.getId(),auth.getCurrentUser().getEmail());
                 Toast.makeText(ChoiceVoteActivity.this,
-                        "Vote pris en compte ! ",
+                        getResources().getString(R.string.msg_vote_success),
                         Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -61,19 +62,19 @@ public class ChoiceVoteActivity extends AppCompatActivity {
 
         final Spinner spinnerRegion = binding.choiceNote;
         List<String> note= new ArrayList<>();
-        note.add("?");
-        note.add("0");
-        note.add("1");
-        note.add("2");
-        note.add("3");
-        note.add("5");
-        note.add("8");
-        note.add("13");
-        note.add("20");
-        note.add("40");
-        note.add("100");
-        note.add("IMPOSSIBLE");
-        note.add("COFFEE");
+        note.add(getResources().getString(R.string.vote_step_0));
+        note.add(getResources().getString(R.string.vote_step_1));
+        note.add(getResources().getString(R.string.vote_step_2));
+        note.add(getResources().getString(R.string.vote_step_3));
+        note.add(getResources().getString(R.string.vote_step_4));
+        note.add(getResources().getString(R.string.vote_step_5));
+        note.add(getResources().getString(R.string.vote_step_6));
+        note.add(getResources().getString(R.string.vote_step_7));
+        note.add(getResources().getString(R.string.vote_step_8));
+        note.add(getResources().getString(R.string.vote_step_9));
+        note.add(getResources().getString(R.string.vote_step_10));
+        note.add(getResources().getString(R.string.vote_step_11));
+        note.add(getResources().getString(R.string.vote_step_12));
 
         ArrayAdapter<String> dataAdapterR = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, note);
         dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

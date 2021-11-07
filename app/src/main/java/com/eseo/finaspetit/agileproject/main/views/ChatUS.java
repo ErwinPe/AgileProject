@@ -48,13 +48,12 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("US : "+currentUS.getNom());
-
+        actionBar.setTitle(getResources().getString(R.string.actionBar_chat_us_activity_title)+" "+currentUS.getNom());
 
         binding.button4.setOnClickListener(v -> {
             Message mes=new Message(binding.editTextTextPersonName.getText().toString(), Objects.requireNonNull(auth.getCurrentUser()).getEmail(), Timestamp.now());
             bdd.addMessageToUSChat(mes,currentUS.getId());
-            binding.editTextTextPersonName.setText("");
+            binding.editTextTextPersonName.setText(R.string.empty_field);
         });
     }
 
@@ -76,11 +75,11 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         if(item.getItemId()==R.id.openVote){
-            bdd.updateEtatUs(currentUS.getId(), "OPENVOTE");
+            bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_OPENVOTE));
             bdd.resetNoteFromUS(currentUS.getId());
 
         }else if(item.getItemId()==R.id.closeVote){
-            bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
+            bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_CLOSEVOTE));
             bdd.addNoteResumeToChatUS(currentUS.getId());
 
         }else if(item.getItemId()==R.id.vote){
@@ -97,20 +96,20 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
 
 
         currentUS.setEtat(newUs.getEtat());
-        if(currentUS.getEtat().equals("CREATED")) {
+        if(currentUS.getEtat().equals(getResources().getString(R.string.state_CREATED))) {
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
-        }else if(currentUS.getEtat().equals("OPENVOTE")){
+        }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_OPENVOTE))){
             bdd.getAllNoteFromUS(this, currentUS.getId());
             btnCloseVote.setVisible(true);
             btnOpenVote.setVisible(false);
-        }else if(currentUS.getEtat().equals("CLOSEVOTE")) {
+        }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_CLOSEVOTE))) {
 
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
-        }else if(currentUS.getEtat().equals("VOTED")) {
+        }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_VOTED))) {
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(false);

@@ -37,13 +37,12 @@ public class USActivity extends AppCompatActivity implements UsViewInterface {
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("Liste des US : ");
+        actionBar.setTitle(getResources().getString(R.string.actionBar_us_activity_title));
         idSalon=((Constants) USActivity.this.getApplication()).getCurentSaloon().getId();
         bdd.getAllUS(this,idSalon);
         binding.listView.setOnItemClickListener((a, v, position, id) -> {
             Object o = binding.listView.getItemAtPosition(position);
             US us = (US) o;
-            System.out.println("ici ugetId: "+us);
             Intent intent = new Intent(USActivity.this, ChatUS.class);
             ((Constants) USActivity.this.getApplication()).setCurentUS(us);
             startActivity(intent);

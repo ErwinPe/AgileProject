@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityNotificationBinding;
 import com.eseo.finaspetit.agileproject.main.components.CustomClassAdaptater;
 import com.eseo.finaspetit.agileproject.main.interfaces.NotificationsViewsInterface;
@@ -29,7 +31,7 @@ public class NotificationView extends AppCompatActivity implements Notifications
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("Notifications : ");
+        actionBar.setTitle(getResources().getString(R.string.actionBar_Notification_activity_title));
 
         binding.listView.setOnItemClickListener((a, v, position, id) -> {
             Object o = binding.listView.getItemAtPosition(position);
@@ -37,16 +39,11 @@ public class NotificationView extends AppCompatActivity implements Notifications
             if(notif.getIdSalon()!= null){
                 ddb.addMembersToSalon(notif.getIdSalon(),auth.getCurrentUser().getEmail());
                 Toast.makeText(NotificationView.this,
-                        "Salon rejoint ! ",
+                        getResources().getString(R.string.msg_join_saloon_success),
                         Toast.LENGTH_SHORT).show();
             }
-            ddb.deleteDocument(notif.getId(),"notification");
+            ddb.deleteDocument(notif.getId(),getResources().getString(R.string.database_notification_field));
 
-        });
-
-        binding.button2.setOnClickListener(v -> {
-            Notification notif=new Notification("0","test",null,"erwinpetit7@gmail.com","test",null);
-            ddb.createDocument(notif,"notification");
         });
     }
 

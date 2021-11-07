@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityCreatesaloonBinding;
 import com.eseo.finaspetit.agileproject.main.interfaces.CreateSaloonViewInterface;
 import com.eseo.finaspetit.agileproject.main.library.Database;
@@ -37,7 +39,7 @@ public class createSaloonView  extends AppCompatActivity implements CreateSaloon
         db.getAllUser(this);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("Création d'un salon : ");
+        actionBar.setTitle(getResources().getString(R.string.actionBar_create_saloon_activity_title)+" ");
 
         binding.buttonCreateSaloon.setOnClickListener(v -> {
             ArrayList<String> listmembers = new ArrayList<>();
@@ -51,21 +53,21 @@ public class createSaloonView  extends AppCompatActivity implements CreateSaloon
             saloon.setScrumMaster(auth.getCurrentUser().getEmail());
             String[] membersStr = binding.SearchMembers.getText().toString().split(", ");
             saloon.setMembers(listmembers);
-            String idSaloon = db.createDocument(saloon, "salon");
-            Message msg=new Message("Création du salon "+binding.textSaloonName.getText().toString() ,"System");
+            String idSaloon = db.createDocument(saloon, getResources().getString(R.string.database_salon_field));
+            Message msg=new Message(getResources().getString(R.string.first_msg_creation_saloon)+" "+binding.textSaloonName.getText().toString() ,getResources().getString(R.string.system_name));
             db.addMessageToGeneralChat(idSaloon,msg);
-            String message = " invitation au salon "+binding.textSaloonName.getText().toString();
+            String message = getResources().getString(R.string.msg_notification_invitation_saloon)+" "+binding.textSaloonName.getText().toString();
             for (String s : membersStr) {
                 if (!s.equals(" ") & !s.equals(auth.getCurrentUser().getEmail())) {
-                    Notification notifCreateSaloon = new Notification(null,message, currentTime, s, "Invitation Salon",idSaloon);
-                    db.createDocument(notifCreateSaloon, "notification");
+                    Notification notifCreateSaloon = new Notification(null,message, currentTime, s, getResources().getString(R.string.title_notification_invitation_saloon),idSaloon);
+                    db.createDocument(notifCreateSaloon, getResources().getString(R.string.database_notification_field));
                 }
             }
-            binding.textSaloonName.setText("");
-            binding.textDescSaloon.setText("");
-            binding.SearchMembers.setText("");
+            binding.textSaloonName.setText(getResources().getString(R.string.empty_field));
+            binding.textDescSaloon.setText(getResources().getString(R.string.empty_field));
+            binding.SearchMembers.setText(getResources().getString(R.string.empty_field));
             Toast.makeText(createSaloonView.this,
-                    "Salon crée ",
+                    getResources().getString(R.string.msg_create_saloon_success),
                     Toast.LENGTH_SHORT).show();
         });
     }

@@ -85,7 +85,6 @@ public class Salon {
 
     public Salon(String nom, String desc){
         this.nom=nom;
-        System.out.println("Nom: "+nom);
         this.description=desc;
     }
 
