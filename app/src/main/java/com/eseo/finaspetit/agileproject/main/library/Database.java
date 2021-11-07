@@ -503,11 +503,7 @@ public class Database {
                         }
                     }
                     mi.setVisible(!found);
-                    if (usHash2!=null && usHash2.size()==currentSalon.getMembers().size()){
-                        mi.setVisible(false);
-                        binding.button2.performClick();
-                        binding.button2.setEnabled(false);
-                    }
+
                 }
 
                 //((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
