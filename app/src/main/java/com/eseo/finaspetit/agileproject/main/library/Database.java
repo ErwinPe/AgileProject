@@ -334,7 +334,7 @@ public class Database {
         addMessageToUSChat(mes, idUS);
     }
 
-    public void addNoteResumeToChatUS(String idUS){
+    public void addNoteResumeToChatUS(String idUS, Timestamp t){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference washingtonRef = firestore.collection("us").document(idUS);
 
@@ -353,7 +353,7 @@ public class Database {
                             }
                         }
                     }
-                    Message mes=new Message(contentMessage,"System");
+                    Message mes=new Message(contentMessage,"System",t);
                     addMessageToUSChat(mes, idUS);
                 } else {
                     System.out.println( "Error getting documents: "+ task.getException());

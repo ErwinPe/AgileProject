@@ -35,7 +35,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     MenuItem btnCloseVote;
     MenuItem btnOpenVote;
     MenuItem btnVote;
-
+    Timestamp t=Timestamp.now();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,10 +141,10 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_CLOSEVOTE));
             currentUS.setEtat(getResources().getString(R.string.state_CLOSEVOTE));
             if (!containMess.equals("")){
-                Message mes = new Message(containMess,"System");
+                Message mes = new Message(containMess,"System",this.t);
                 bdd.addMessageToUSChat(mes,currentUS.getId());
             }
-                bdd.addNoteResumeToChatUS(currentUS.getId());
+                bdd.addNoteResumeToChatUS(currentUS.getId(),this.t);
         }
 
     }
