@@ -159,13 +159,14 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
                         nMax=n;
                     }
                 }
-                System.out.println("USER MAX"+nMax.getUser());
-                System.out.println("USER MIN"+nMin.getUser());
+                System.out.println("USER MAX"+nMax.getUser()+" note "+nMax.getNote());
+                System.out.println("USER MIN"+nMin.getUser()+" note "+nMin.getNote());
 
                 if (nMin.getNote()==nMax.getNote()){
                     bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_VOTED));
                     currentUS.setEtat(getResources().getString(R.string.state_VOTED));
                 }else if (auth.getCurrentUser().getEmail().equals(nMin.getUser()) || auth.getCurrentUser().getEmail().equals(nMax.getUser())){
+                    System.out.println("je suis la ");
                     binding.button4.setEnabled(true);
                 }
             }
