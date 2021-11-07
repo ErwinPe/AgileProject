@@ -121,24 +121,50 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         }
     }
 
-    public void gestBtnVoteByNote(List<Note> lNote, String etat){
+    public void gestBtnVoteByNote(List<Note> lNote, String etat, String etatUS){
         boolean found=true;
         String containMess = "";
-        for (Note n : lNote){
-            if(n.getUser().equals(auth.getCurrentUser().getEmail())){
-                found=false;
-            }
+        if(etatUS.equals("OPENVOTE")){
+            for (Note n : lNote){
+                if(n.getUser().equals(auth.getCurrentUser().getEmail())){
+                    found=false;
+                }
 
-            if (n.getNote().equals("?")||n.getNote().equals("IMPOSSIBLE")){
-                containMess += n.getUser()+ " n'a pas compris l'US, ";
-            }else if (n.getNote().equals(getResources().getString(R.string.vote_step_12))){
-                containMess += n.getUser()+ " a besoin d'une paus CAFE, ";
+                if (n.getNote().equals("?")||n.getNote().equals("IMPOSSIBLE")){
+                    containMess += n.getUser()+ " n'a pas compris l'US, ";
+                }else if (n.getNote().equals(getResources().getString(R.string.vote_step_12))){
+                    containMess += n.getUser()+ " a besoin d'une paus CAFE, ";
+                }
+            }
+        }
+
+        System.out.println("etat ici: "+etatUS);
+        if(etatUS.equals("CLOSEVOTE")){
+            System.out.println("CloseVOTED");
+            Note nMax = lNote.get(0);
+            Note nMin = nMax;
+            for (Note n : lNote){
+                if (Integer.parseInt(n.getNote())<Integer.parseInt(nMin.getNote())){
+                    nMin=n;
+                }else if (Integer.parseInt(n.getNote())>Integer.parseInt(nMax.getNote())){
+                    nMax=n;
+                }
+            }
+            System.out.println(nMax);
+            System.out.println(nMin);
+            if (nMin.getNote()==nMax.getNote()){
+                System.out.println("on passe a voted");
+                bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_VOTED));
+                currentUS.setEtat(getResources().getString(R.string.state_VOTED));
+            }else if (auth.getCurrentUser().getEmail().equals(nMin.getUser()) || auth.getCurrentUser().getEmail().equals(nMax.getUser())){
+                System.out.println("pas passé");
+                binding.button4.setEnabled(true);
             }
         }
         btnVote.setVisible(found);
         int tailleMembers = currentSaloon.getMembers().size();
         int tailleNote =  lNote.size();
-        if (etat.equals("MANUEL")){
+        if (etat.equals("MANUEL") && etatUS.equals("OPENVOTE")){
             System.out.println("icisfsfsdf");
             bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_CLOSEVOTE));
             currentUS.setEtat(getResources().getString(R.string.state_CLOSEVOTE));
@@ -147,21 +173,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
                 Message mes = new Message(containMess,"System");
                 bdd.addMessageToUSChat(mes,currentUS.getId());
             }else{
-                Note nMax = lNote.get(0);
-                Note nMin = nMax;
-                for (Note n : lNote){
-                    if (Integer.parseInt(n.getNote())<Integer.parseInt(nMin.getNote())){
-                        nMin=n;
-                    }else if (Integer.parseInt(n.getNote())>Integer.parseInt(nMax.getNote())){
-                        nMax=n;
-                    }
-                }
-                if (nMin.getNote()==nMax.getNote()){
-                    bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_VOTED));
-                    currentUS.setEtat(getResources().getString(R.string.state_VOTED));
-                }else if (auth.getCurrentUser().getEmail().equals(nMin.getUser()) || auth.getCurrentUser().getEmail().equals(nMax.getUser())){
-                    binding.button4.setEnabled(true);
-                }
+                System.out.println("ici la");
             }
         }
 

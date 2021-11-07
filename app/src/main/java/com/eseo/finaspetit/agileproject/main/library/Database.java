@@ -370,6 +370,7 @@ public class Database {
         DocumentReference docRef = firestore.collection("us").document(idUS);
         String TAG="getAllNoteFromUS";
         ArrayList<Note> listNotes = new ArrayList<>();
+        ArrayList<String> etatUSList = new ArrayList<>();
 
         firestore.collection("us").whereEqualTo(FieldPath.documentId(),idUS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -378,6 +379,7 @@ public class Database {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Map data= document.getData();
                         ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
+                        etatUSList.add((String) data.get("etat"));
                         if(usHash2 != null){
                             for(int j=0; j< usHash2.size();j++){
                                 HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
@@ -390,7 +392,7 @@ public class Database {
                     System.out.println( "Error getting documents: "+ task.getException());
                 }
 
-                ((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat);
+                ((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
 
             }
         });
