@@ -73,13 +73,23 @@ public class Database {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     List<Salon> list = new ArrayList<>();
+
                     for (QueryDocumentSnapshot document : task.getResult()) {
+                        ArrayList<String> members = new ArrayList<>();
+                        HashMap<String, Object> address = (HashMap<String, java.lang.Object>) document.getData();
+                        ArrayList<Object> usHash2 = (ArrayList<Object>) address.get("members");
+                        if(usHash2 !=null){
+                            for(int j=0; j< usHash2.size();j++){
+                                members.add((String)usHash2.get(j));
+                            }
+                        }
 
                         Salon sal=new Salon(document.getId(),
                                 document.getString("nom"),
                                 document.getString("description"),
                                 document.getString("scrumMaster"),
-                                document.getTimestamp("creationDate"));
+                                document.getTimestamp("creationDate"),
+                                members);
                         list.add(sal);
 
                     }
