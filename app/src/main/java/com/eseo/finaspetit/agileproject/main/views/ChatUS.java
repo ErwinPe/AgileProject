@@ -35,7 +35,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     MenuItem btnCloseVote;
     MenuItem btnOpenVote;
     MenuItem btnVote;
-    Timestamp t=Timestamp.now();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +102,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             btnOpenVote.setVisible(true);
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_OPENVOTE))){
             btnVote.setVisible(true);
-            bdd.getAllNoteFromUS(this, currentUS.getId(), "AUTO");
+            //bdd.getAllNoteFromUS(this, currentUS.getId(), "AUTO");
             btnCloseVote.setVisible(true);
             btnOpenVote.setVisible(false);
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_CLOSEVOTE))) {
@@ -138,13 +138,14 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         int tailleMembers = currentSaloon.getMembers().size();
         int tailleNote =  lNote.size();
         if ((tailleNote == tailleMembers ||etat.equals("MANUEL"))&& ((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())){
+            System.out.println("icisfsfsdf");
             bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_CLOSEVOTE));
             currentUS.setEtat(getResources().getString(R.string.state_CLOSEVOTE));
             if (!containMess.equals("")){
-                Message mes = new Message(containMess,"System",this.t);
+                Message mes = new Message(containMess,"System");
                 bdd.addMessageToUSChat(mes,currentUS.getId());
             }
-                bdd.addNoteResumeToChatUS(currentUS.getId(),this.t);
+                bdd.addNoteResumeToChatUS(currentUS.getId());
         }
 
     }
