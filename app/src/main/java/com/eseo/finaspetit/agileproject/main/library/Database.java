@@ -559,6 +559,7 @@ public class Database {
                 boolean eq=true;
                 boolean firstNoteCheck=false;
                 String noteCommun="";
+                String commentaire="";
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Map data= document.getData();
@@ -574,16 +575,32 @@ public class Database {
                                         eq=false;
                                     }
                                 }
-
-
-
+                                if(((String)n.get("note")).equals("?") || ((String)n.get("note")).equals("Impossible !")){
+                                    commentaire = commentaire+ (String)n.get("user")+" a besoin de plus d'explication sur l'US \n";
+                                }else if(((String)n.get("note")).equals("CAFE !")){
+                                    commentaire =commentaire + (String)n.get("user")+" a besoin d'une pause";
+                                }
                             }
                         }
                     }
+
                     if(eq){
-                        updateEtatUs(idUS, "VOTED");
+                        if(noteCommun.equals("?") || noteCommun.equals("CAFE !")  || noteCommun.equals("Impossible !")){
+                            updateEtatUs(idUS,"CREATED");
+                            Message mes= new Message("Tout le monde a besoin d'éclaircir l'US ou de faire une pause","Systeme");
+                            addMessageToUSChat(mes,idUS);
+                        }else{
+                            updateEtatUs(idUS, "VOTED");
+                        }
                     }else{
-                        checkWhoCanTalk(binding,idUS,user);
+                        if(commentaire.length() ==0){
+                            checkWhoCanTalk(binding,idUS,user);
+                        }else{
+                            updateEtatUs(idUS,"CREATED");
+                            Message mes= new Message(commentaire,"Systeme");
+                            addMessageToUSChat(mes,idUS);
+                        }
+
                     }
 
 
