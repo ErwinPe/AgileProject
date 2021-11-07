@@ -143,27 +143,32 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_CLOSEVOTE));
             currentUS.setEtat(getResources().getString(R.string.state_CLOSEVOTE));
             bdd.addNoteResumeToChatUS(currentUS.getId());
-            if (!containMess.equals("")){
-                Message mes = new Message(containMess,"System");
-                bdd.addMessageToUSChat(mes,currentUS.getId());
-            }else{
-                Note nMax = lNote.get(0);
-                Note nMin = nMax;
-                for (Note n : lNote){
-                    if (Integer.parseInt(n.getNote())<Integer.parseInt(nMin.getNote())){
-                        nMin=n;
-                    }else if (Integer.parseInt(n.getNote())>Integer.parseInt(nMax.getNote())){
-                        nMax=n;
-                    }
-                }
-                if (nMin.getNote()==nMax.getNote()){
-                    bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_VOTED));
-                    currentUS.setEtat(getResources().getString(R.string.state_VOTED));
-                }else if (auth.getCurrentUser().getEmail().equals(nMin.getUser()) || auth.getCurrentUser().getEmail().equals(nMax.getUser())){
-                    binding.button4.setEnabled(true);
+        }
+        if (!containMess.equals("") && etat.equals("MANUEL")){
+            Message mes = new Message(containMess,"System");
+            bdd.addMessageToUSChat(mes,currentUS.getId());
+        }else if (lNote.size()==currentSaloon.getMembers().size() && currentUS.getEtat().equals("CLOSEVOTE")){
+            Note nMax = lNote.get(0);
+            Note nMin = nMax;
+            for (Note n : lNote){
+                if (Integer.parseInt(n.getNote())<Integer.parseInt(nMin.getNote())){
+                    nMin=n;
+                }else if (Integer.parseInt(n.getNote())>Integer.parseInt(nMax.getNote())){
+                    nMax=n;
                 }
             }
+            System.out.println("USER MAX"+nMax.getUser()+" note "+nMax.getNote());
+            System.out.println("USER MIN"+nMin.getUser()+" note "+nMin.getNote());
+
+            if (nMin.getNote()==nMax.getNote()){
+                bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_VOTED));
+                currentUS.setEtat(getResources().getString(R.string.state_VOTED));
+            }else if (auth.getCurrentUser().getEmail().equals(nMin.getUser()) || auth.getCurrentUser().getEmail().equals(nMax.getUser())){
+                System.out.println("je suis la ");
+                binding.button4.setEnabled(true);
+            }
         }
+
 
     }
 }
