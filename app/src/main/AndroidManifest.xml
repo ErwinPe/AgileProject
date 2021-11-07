@@ -13,33 +13,42 @@
         android:theme="@style/Theme.AgileProject">
         <activity
             android:name=".main.views.NotificationView"
+            android:screenOrientation="portrait"
             android:parentActivityName=".main.views.MainActivity" />
         <activity
             android:name=".main.views.CreateUsView"
+            android:screenOrientation="portrait"
             android:parentActivityName=".main.views.USActivity" />
         <activity
             android:name=".main.views.USActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".main.views.USActivity" />
         <activity
             android:name=".main.views.ChatUS"
+            android:screenOrientation="portrait"
             android:parentActivityName=".main.views.ChatUS" />
         <activity
             android:name=".main.views.createSaloonView"
+            android:screenOrientation="portrait"
             android:parentActivityName=".main.views.MainActivity"/>
         <activity
             android:name=".main.views.ChatActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             />
         <activity
             android:name=".main.views.InfoSaloonView"
+            android:screenOrientation="portrait"
             android:parentActivityName=".main.views.ChatActivity"
             />
         <activity
+            android:screenOrientation="portrait"
             android:name=".main.views.ChoiceVoteActivity"
             />
 
         <activity
             android:name=".main.views.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
