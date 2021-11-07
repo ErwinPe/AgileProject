@@ -100,11 +100,11 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
-        }else if(currentUS.getEtat().equals("OPENVOTE")){
+        }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_OPENVOTE))){
             bdd.getAllNoteFromUS(this, currentUS.getId(), "AUTO");
             btnCloseVote.setVisible(true);
             btnOpenVote.setVisible(false);
-        }else if(currentUS.getEtat().equals("CLOSEVOTE")) {
+        }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_CLOSEVOTE))) {
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
@@ -129,8 +129,8 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
 
             if (n.getNote().equals("?")||n.getNote().equals("IMPOSSIBLE")){
                 containMess += n.getUser()+ " n'a pas compris l'US, ";
-            }else if (n.getNote().equals("")){
-                containMess += n.getUser()+ " a besoin d'une pausCOFFEEe, ";
+            }else if (n.getNote().equals(getResources().getString(R.string.vote_step_12))){
+                containMess += n.getUser()+ " a besoin d'une paus CAFE, ";
             }
         }
         btnVote.setVisible(found);
@@ -144,6 +144,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
                 Message mes = new Message(containMess,"System");
                 bdd.addMessageToUSChat(mes,currentUS.getId());
             }
+            bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
         }
 
     }
