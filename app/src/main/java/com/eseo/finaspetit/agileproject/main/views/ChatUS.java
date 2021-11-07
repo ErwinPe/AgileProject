@@ -89,6 +89,8 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         return super.onOptionsItemSelected(item);
     }
 
+
+    //AJOUTER QUELQUE PART bdd.getResumeNotes()
     public void gestBtnVote(US newUs){
 
 
@@ -120,13 +122,12 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     }
 
     public void gestBtnVoteByNote(List<Note> lNote){
-        boolean finf = true;
+        boolean found=true;
         for (Note n : lNote){
             if(n.getUser().equals(auth.getCurrentUser().getEmail())){
-                finf = false;
+                found=false;
             }
         }
-        btnVote.setVisible(finf);
-
+        btnVote.setVisible(found);
     }
 }

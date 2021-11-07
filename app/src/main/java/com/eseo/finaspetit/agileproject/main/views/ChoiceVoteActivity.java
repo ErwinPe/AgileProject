@@ -50,7 +50,7 @@ public class ChoiceVoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Note note = new Note(binding.choiceNote.getSelectedItem().toString(), auth.getCurrentUser().getEmail() );
-                bdd.addNoteToUS(note, currentUS.getId());
+                bdd.addNoteToUS(note, currentUS.getId(),auth.getCurrentUser().getEmail());
                 Intent intent = new Intent(ChoiceVoteActivity.this, ChatUS.class);
                 startActivity(intent);
             }
@@ -70,7 +70,7 @@ public class ChoiceVoteActivity extends AppCompatActivity {
         note.add("40");
         note.add("100");
         note.add("IMPOSSIBLE");
-        note.add("COFFE");
+        note.add("COFFEE");
 
         ArrayAdapter<String> dataAdapterR = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, note);
         dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
