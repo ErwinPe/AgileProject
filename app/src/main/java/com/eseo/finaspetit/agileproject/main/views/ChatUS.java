@@ -138,7 +138,8 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         btnVote.setVisible(found);
         int tailleMembers = currentSaloon.getMembers().size();
         int tailleNote =  lNote.size();
-        if (etat.equals("MANUEL")&& ((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())){
+        if (etat.equals("MANUEL")){
+            System.out.println("icisfsfsdf");
             bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_CLOSEVOTE));
             currentUS.setEtat(getResources().getString(R.string.state_CLOSEVOTE));
             bdd.addNoteResumeToChatUS(currentUS.getId());
