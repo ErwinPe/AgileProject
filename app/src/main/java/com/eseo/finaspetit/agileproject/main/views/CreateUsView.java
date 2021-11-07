@@ -34,7 +34,7 @@ public class CreateUsView extends AppCompatActivity {
 
         binding.button3.setOnClickListener(v -> {
             if(binding.editTextDescUS.getText().toString().length() != 0 && binding.editTextNameUS.getText().toString().length() != 0){
-                US usToAdd=new US("",binding.editTextNameUS.getText().toString(),binding.editTextDescUS.getText().toString(),false,Timestamp.now(),"Created",currentSaloon.getId());
+                US usToAdd=new US("",binding.editTextNameUS.getText().toString(),binding.editTextDescUS.getText().toString(),false,Timestamp.now(),"CREATED",currentSaloon.getId());
                 ddb.addUSToSalon(usToAdd);
                 Toast.makeText(CreateUsView.this,
                         "US créée ! ",
