@@ -137,14 +137,17 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         int tailleMembers = currentSaloon.getMembers().size();
         int tailleNote =  lNote.size();
         if (tailleNote == tailleMembers ||etat.equals("MANUEL") ){
-            currentUS.setEtat("CLOSEVOTE");
-           
-            bdd.addNoteResumeToChatUS(currentUS.getId());
-            if (!containMess.equals("")){
+            bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
+
+            if (!containMess.equals("") & currentUS.getEtat().equals(getResources().getString(R.string.state_CLOSEVOTE))){
                 Message mes = new Message(containMess,"System");
                 bdd.addMessageToUSChat(mes,currentUS.getId());
             }
-            bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
+            if (currentUS.getEtat().equals(getResources().getString(R.string.state_CLOSEVOTE))){
+                bdd.addNoteResumeToChatUS(currentUS.getId());
+            }
+
+
         }
 
     }
