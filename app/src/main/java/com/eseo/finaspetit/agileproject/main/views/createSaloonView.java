@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.Toast;
 //import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -63,6 +64,9 @@ public class createSaloonView  extends AppCompatActivity implements CreateSaloon
             binding.textSaloonName.setText("");
             binding.textDescSaloon.setText("");
             binding.SearchMembers.setText("");
+            Toast.makeText(createSaloonView.this,
+                    "Salon crée ",
+                    Toast.LENGTH_SHORT).show();
         });
     }
 

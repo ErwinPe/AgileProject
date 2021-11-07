@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,8 +52,10 @@ public class ChoiceVoteActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Note note = new Note(binding.choiceNote.getSelectedItem().toString(), auth.getCurrentUser().getEmail() );
                 bdd.addNoteToUS(note, currentUS.getId(),auth.getCurrentUser().getEmail());
-                Intent intent = new Intent(ChoiceVoteActivity.this, ChatUS.class);
-                startActivity(intent);
+                Toast.makeText(ChoiceVoteActivity.this,
+                        "Vote pris en compte ! ",
+                        Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 

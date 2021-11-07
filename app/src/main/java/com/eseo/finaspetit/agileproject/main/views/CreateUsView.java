@@ -2,6 +2,8 @@ package com.eseo.finaspetit.agileproject.main.views;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.eseo.finaspetit.agileproject.databinding.ActivityCreateusBinding;
@@ -31,8 +33,19 @@ public class CreateUsView extends AppCompatActivity {
         currentSaloon = ((Constants) CreateUsView.this.getApplication()).getCurentSaloon();
 
         binding.button3.setOnClickListener(v -> {
-            US usToAdd=new US("",binding.editTextNameUS.getText().toString(),binding.editTextDescUS.getText().toString(),false,Timestamp.now(),"Created",currentSaloon.getId());
-            ddb.addUSToSalon(usToAdd);
+            if(binding.editTextDescUS.getText().toString().length() != 0 && binding.editTextNameUS.getText().toString().length() != 0){
+                US usToAdd=new US("",binding.editTextNameUS.getText().toString(),binding.editTextDescUS.getText().toString(),false,Timestamp.now(),"Created",currentSaloon.getId());
+                ddb.addUSToSalon(usToAdd);
+                Toast.makeText(CreateUsView.this,
+                        "US créée ! ",
+                        Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(CreateUsView.this,
+                        "Aucun champ ne doit être vide ! ",
+                        Toast.LENGTH_SHORT).show();
+                
+            }
+
         });
     }
 }
