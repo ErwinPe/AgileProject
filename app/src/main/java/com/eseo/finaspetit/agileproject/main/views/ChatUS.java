@@ -100,8 +100,10 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         if(currentUS.getEtat().equals(getResources().getString(R.string.state_CREATED))) {
             System.out.println("created");
             btnCloseVote.setVisible(false);
+            binding.button4.setEnabled(true);
             btnVote.setVisible(false);
-            if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
+            btnOpenVote.setEnabled(false);
+            if (((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
                 btnOpenVote.setVisible(true);
             }
 
