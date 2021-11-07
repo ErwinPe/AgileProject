@@ -55,6 +55,10 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             bdd.addMessageToUSChat(mes,currentUS.getId());
             binding.editTextTextPersonName.setText(R.string.empty_field);
         });
+        binding.button2.setOnClickListener(v -> {
+            bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
+            bdd.addNoteResumeToChatUS(currentUS.getId());
+        });
     }
 
     @Override
@@ -65,7 +69,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_chat_us,menu);
+        getMenuInflater().inflate(R.menu.menu_chat_us, menu);
         btnCloseVote = menu.findItem(R.id.closeVote);
         btnOpenVote =  menu.findItem(R.id.openVote);
         btnVote = menu.findItem(R.id.vote);
@@ -105,7 +109,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             System.out.println("openvote");
             binding.button4.setEnabled(false);
             btnVote.setVisible(false);
-            bdd.checkIfAlreadyVoted(binding, currentUS.getId(),auth.getCurrentUser().getEmail(),btnVote);
+            bdd.checkIfAlreadyVoted(binding, currentUS.getId(),auth.getCurrentUser().getEmail(),btnVote, currentSaloon);
 
 
             if (((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {

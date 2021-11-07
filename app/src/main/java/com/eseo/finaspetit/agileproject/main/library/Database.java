@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityChatUsBinding;
 import com.eseo.finaspetit.agileproject.main.interfaces.ChatUSViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.ChatViewInterface;
@@ -480,16 +481,17 @@ public class Database {
         });
     }
 
-    public void checkIfAlreadyVoted(ActivityChatUsBinding binding, String idUS, String user, MenuItem mi){
+    public void checkIfAlreadyVoted(ActivityChatUsBinding binding, String idUS, String user, MenuItem mi, Salon currentSalon){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         firestore.collection("us").whereEqualTo(FieldPath.documentId(),idUS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 boolean found=false;
                 if (task.isSuccessful()) {
+                    ArrayList<Object> usHash2 = null;
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Map data= document.getData();
-                        ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
+                        usHash2 = (ArrayList<Object>) data.get("notes");
                         if(usHash2 != null){
                             for(int j=0; j< usHash2.size();j++){
                                 HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
@@ -500,8 +502,12 @@ public class Database {
                             }
                         }
                     }
-
                     mi.setVisible(!found);
+                    if (usHash2!=null && usHash2.size()==currentSalon.getMembers().size()){
+                        mi.setVisible(false);
+                        binding.button2.performClick();
+                        binding.button2.setEnabled(false);
+                    }
                 }
 
                 //((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
