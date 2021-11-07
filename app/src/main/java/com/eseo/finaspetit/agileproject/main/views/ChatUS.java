@@ -81,6 +81,8 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
 
         }else if(item.getItemId()==R.id.closeVote){
             bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
+            bdd.addNoteResumeToChatUS(currentUS.getId());
+
         }else if(item.getItemId()==R.id.vote){
             Intent intent = new Intent(this, ChoiceVoteActivity.class);
             startActivity(intent);
@@ -100,12 +102,12 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
         }else if(currentUS.getEtat().equals("OPENVOTE")){
-            btnOpenVote.setVisible(true);
             bdd.getAllNoteFromUS(this, currentUS.getId());
             btnCloseVote.setVisible(true);
             btnOpenVote.setVisible(false);
         }else if(currentUS.getEtat().equals("CLOSEVOTE")) {
-            bdd.addNoteResumeToChatUS(newUs.getId());
+            bdd.getAllNoteFromUS(this, currentUS.getId());
+
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
@@ -118,7 +120,6 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             btnOpenVote.setVisible(false);
             btnCloseVote.setVisible(false);
         }
-
     }
 
     public void gestBtnVoteByNote(List<Note> lNote){
@@ -127,7 +128,10 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             if(n.getUser().equals(auth.getCurrentUser().getEmail())){
                 found=false;
             }
+
         }
         btnVote.setVisible(found);
+
+
     }
 }
