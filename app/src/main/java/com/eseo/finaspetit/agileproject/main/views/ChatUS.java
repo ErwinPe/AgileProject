@@ -79,8 +79,8 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             bdd.resetNoteFromUS(currentUS.getId());
 
         }else if(item.getItemId()==R.id.closeVote){
-            bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_CLOSEVOTE));
-            bdd.addNoteResumeToChatUS(currentUS.getId());
+            bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
+            bdd.getAllNoteFromUS(this, currentUS.getId(), "MANUEL");
 
         }else if(item.getItemId()==R.id.vote){
             Intent intent = new Intent(this, ChoiceVoteActivity.class);
@@ -100,12 +100,11 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
-        }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_OPENVOTE))){
-            bdd.getAllNoteFromUS(this, currentUS.getId());
+        }else if(currentUS.getEtat().equals("OPENVOTE")){
+            bdd.getAllNoteFromUS(this, currentUS.getId(), "AUTO");
             btnCloseVote.setVisible(true);
             btnOpenVote.setVisible(false);
-        }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_CLOSEVOTE))) {
-
+        }else if(currentUS.getEtat().equals("CLOSEVOTE")) {
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(true);
@@ -120,16 +119,32 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
         }
     }
 
-    public void gestBtnVoteByNote(List<Note> lNote){
+    public void gestBtnVoteByNote(List<Note> lNote, String etat){
         boolean found=true;
         String containMess = "";
         for (Note n : lNote){
             if(n.getUser().equals(auth.getCurrentUser().getEmail())){
                 found=false;
             }
+
+            if (n.getNote().equals("?")||n.getNote().equals("IMPOSSIBLE")){
+                containMess += n.getUser()+ " n'a pas compris l'US, ";
+            }else if (n.getNote().equals("")){
+                containMess += n.getUser()+ " a besoin d'une pausCOFFEEe, ";
+            }
         }
         btnVote.setVisible(found);
-
+        int tailleMembers = currentSaloon.getMembers().size();
+        int tailleNote =  lNote.size();
+        if (tailleNote == tailleMembers ||etat.equals("MANUEL") ){
+            currentUS.setEtat("CLOSEVOTE");
+           
+            bdd.addNoteResumeToChatUS(currentUS.getId());
+            if (!containMess.equals("")){
+                Message mes = new Message(containMess,"System");
+                bdd.addMessageToUSChat(mes,currentUS.getId());
+            }
+        }
 
     }
 }

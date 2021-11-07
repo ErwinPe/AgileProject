@@ -342,14 +342,14 @@ public class Database {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    String contentMessage="Résume des votes \n la";
+                    String contentMessage="Résume des votes \n";
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Map data= document.getData();
                         ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
                         if(usHash2 != null){
                             for(int j=0; j< usHash2.size();j++){
                                 HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
-                                contentMessage=contentMessage.concat((String) n.get("user")+" a voté"+(String) n.get("note")+"\n");
+                                contentMessage=contentMessage.concat((String) n.get("user")+" a voté: "+(String) n.get("note")+"\n");
                             }
                         }
                     }
@@ -365,7 +365,7 @@ public class Database {
 
     }
 
-    public void getAllNoteFromUS(AppCompatActivity act, String idUS) {
+    public void getAllNoteFromUS(AppCompatActivity act, String idUS, String etat) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference docRef = firestore.collection("us").document(idUS);
         String TAG="getAllNoteFromUS";
@@ -389,7 +389,9 @@ public class Database {
                 } else {
                     System.out.println( "Error getting documents: "+ task.getException());
                 }
-                ((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes);
+
+                ((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat);
+
             }
         });
 /*
