@@ -547,8 +547,6 @@ public class Database {
 
                 }
 
-                //((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
-
             }
         });
     }
@@ -579,8 +577,6 @@ public class Database {
                                         noteMax= new Note((String)n.get("note"),(String)n.get("user"));
                                     }
                                 }
-
-
                             }
                         }
                     }
@@ -619,9 +615,9 @@ public class Database {
                                     }
                                 }
                                 if(((String)n.get("note")).equals("?") || ((String)n.get("note")).equals("Impossible !")){
-                                    commentaire = commentaire+ (String)n.get("user")+" a besoin de plus d'explication sur l'US \n";
+                                    commentaire = commentaire+"Un membre du groupe a besoin de plus d'explication sur l'US \n";
                                 }else if(((String)n.get("note")).equals("CAFE !")){
-                                    commentaire =commentaire + (String)n.get("user")+" a besoin d'une pause";
+                                    commentaire =commentaire +"Un membre du groupe a besoin d'une pause\n";
                                 }
                             }
                         }
@@ -638,8 +634,6 @@ public class Database {
                             checkWhoCanTalk(binding,idUS,user);
                         }else{
                             updateEtatUs(idUS,"CREATED");
-                            /*Message mes= new Message(commentaire,"Systeme");
-                            addMessageToUSChat(mes,idUS);*/
                         }
 
                     }
