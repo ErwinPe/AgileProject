@@ -32,7 +32,7 @@
         android:id="@+id/textInput"
         android:layout_width="230dp"
         android:layout_height="59dp"
-        android:hint="hint"
+        android:hint="message"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnEnvoi"
         app:layout_constraintHorizontal_bias="0.38"

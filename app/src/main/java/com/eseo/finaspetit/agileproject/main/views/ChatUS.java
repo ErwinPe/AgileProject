@@ -55,6 +55,10 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             bdd.addMessageToUSChat(mes,currentUS.getId());
             binding.editTextTextPersonName.setText(R.string.empty_field);
         });
+        binding.button2.setOnClickListener(v -> {
+            bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
+            bdd.addNoteResumeToChatUS(currentUS.getId(),auth.getCurrentUser().getEmail());
+        });
     }
 
     @Override
@@ -65,7 +69,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_chat_us,menu);
+        getMenuInflater().inflate(R.menu.menu_chat_us, menu);
         btnCloseVote = menu.findItem(R.id.closeVote);
         btnOpenVote =  menu.findItem(R.id.openVote);
         btnVote = menu.findItem(R.id.vote);
@@ -80,9 +84,8 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
 
         }else if(item.getItemId()==R.id.closeVote){
             bdd.updateEtatUs(currentUS.getId(), "CLOSEVOTE");
-            currentUS.setEtat("CLOSEVOTE");
-            bdd.getAllNoteFromUS(this, currentUS.getId(), "MANUEL");
-
+            //bdd.getAllNoteFromUS(this, currentUS.getId(), "MANUEL");
+            bdd.addNoteResumeToChatUS(currentUS.getId(), auth.getCurrentUser().getEmail());
         }else if(item.getItemId()==R.id.vote){
             Intent intent = new Intent(this, ChoiceVoteActivity.class);
             startActivity(intent);
@@ -92,85 +95,54 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     }
 
 
-    //AJOUTER QUELQUE PART bdd.getResumeNotes()
     public void gestBtnVote(US newUs){
-
-
         currentUS.setEtat(newUs.getEtat());
         if(currentUS.getEtat().equals(getResources().getString(R.string.state_CREATED))) {
-            binding.button4.setEnabled(true);
+            System.out.println("created");
             btnCloseVote.setVisible(false);
+            binding.button4.setEnabled(true);
             btnVote.setVisible(false);
-            btnOpenVote.setVisible(true);
+            btnOpenVote.setVisible(false);
+            if (((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
+                btnOpenVote.setVisible(true);
+            }
+
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_OPENVOTE))){
+            System.out.println("openvote");
             binding.button4.setEnabled(false);
-            btnVote.setVisible(true);
-            bdd.getAllNoteFromUS(this, currentUS.getId(), "AUTO");
-            btnCloseVote.setVisible(true);
+            btnVote.setVisible(false);
+            bdd.checkIfAlreadyVoted(binding, currentUS.getId(),auth.getCurrentUser().getEmail(),btnVote, currentSaloon);
+
+
+            if (((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
+                btnCloseVote.setVisible(true);
+            }
+
             btnOpenVote.setVisible(false);
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_CLOSEVOTE))) {
-            bdd.getAllNoteFromUS(this, currentUS.getId(), "AUTO");
+            System.out.println("closevote");
             btnCloseVote.setVisible(false);
-            btnVote.setVisible(false);
-            btnOpenVote.setVisible(true);
+            binding.button4.setEnabled(false);
+            btnOpenVote.setVisible(false);
+            bdd.checkIfVoted(currentUS.getId(), auth.getCurrentUser().getEmail(),binding);
+            //bdd.checkWhoCanTalk(binding,currentUS.getId(),auth.getCurrentUser().getEmail());
+
+
+            //btnVote.setVisible(false);
+            if (((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
+                btnOpenVote.setVisible(true);
+            }
+            //btnOpenVote.setVisible(true);
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_VOTED))) {
+            System.out.println("voted");
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(false);
         }
-        if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
+        /*if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
             btnOpenVote.setVisible(false);
             btnCloseVote.setVisible(false);
-        }
+        }*/
     }
 
-    public void gestBtnVoteByNote(List<Note> lNote, String etat){
-        boolean found=true;
-        String containMess = "";
-        for (Note n : lNote){
-            if(n.getUser().equals(auth.getCurrentUser().getEmail())){
-                found=false;
-            }
-
-            if (n.getNote().equals("?")||n.getNote().equals("IMPOSSIBLE")){
-                containMess += n.getUser()+ " n'a pas compris l'US, ";
-            }else if (n.getNote().equals(getResources().getString(R.string.vote_step_12))){
-                containMess += n.getUser()+ " a besoin d'une paus CAFE, ";
-            }
-        }
-        btnVote.setVisible(found);
-
-        if (etat.equals("MANUEL")){
-            System.out.println("icisfsfsdf");
-            bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_CLOSEVOTE));
-            currentUS.setEtat(getResources().getString(R.string.state_CLOSEVOTE));
-            bdd.addNoteResumeToChatUS(currentUS.getId());
-        }
-            if (!containMess.equals("") && etat.equals("MANUEL")){
-                Message mes = new Message(containMess,"System");
-                bdd.addMessageToUSChat(mes,currentUS.getId());
-            }else if (lNote.size()==currentSaloon.getMembers().size() && currentUS.getEtat().equals("CLOSEVOTE")){
-                Note nMax = lNote.get(0);
-                Note nMin = nMax;
-                for (Note n : lNote){
-                    if (Integer.parseInt(n.getNote())<Integer.parseInt(nMin.getNote())){
-                        nMin=n;
-                    }else if (Integer.parseInt(n.getNote())>Integer.parseInt(nMax.getNote())){
-                        nMax=n;
-                    }
-                }
-                System.out.println("USER MAX"+nMax.getUser()+" note "+nMax.getNote());
-                System.out.println("USER MIN"+nMin.getUser()+" note "+nMin.getNote());
-
-                if (nMin.getNote()==nMax.getNote()){
-                    bdd.updateEtatUs(currentUS.getId(), getResources().getString(R.string.state_VOTED));
-                    currentUS.setEtat(getResources().getString(R.string.state_VOTED));
-                }else if (auth.getCurrentUser().getEmail().equals(nMin.getUser()) || auth.getCurrentUser().getEmail().equals(nMax.getUser())){
-                    System.out.println("je suis la ");
-                    binding.button4.setEnabled(true);
-                }
-            }
-
-
-    }
 }

@@ -33,8 +33,8 @@ public class NotificationView extends AppCompatActivity implements Notifications
         assert actionBar != null;
         actionBar.setTitle(getResources().getString(R.string.actionBar_Notification_activity_title));
 
-        binding.listView.setOnItemClickListener((a, v, position, id) -> {
-            Object o = binding.listView.getItemAtPosition(position);
+        binding.listViewMnotif.setOnItemClickListener((a, v, position, id) -> {
+            Object o = binding.listViewMnotif.getItemAtPosition(position);
             Notification notif = (Notification) o;
             if(notif.getIdSalon()!= null){
                 ddb.addMembersToSalon(notif.getIdSalon(),auth.getCurrentUser().getEmail());
@@ -51,6 +51,6 @@ public class NotificationView extends AppCompatActivity implements Notifications
     @Override
     public void handleNotification(List<Notification> list) {
         CustomClassAdaptater adapt=new CustomClassAdaptater(this,list);
-        binding.listView.setAdapter(adapt);
+        binding.listViewMnotif.setAdapter(adapt);
     }
 }

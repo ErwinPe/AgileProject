@@ -9,5 +9,4 @@ import java.util.List;
 public interface ChatUSViewInterface {
     void handleMessageUS(List<Message> list);
     void gestBtnVote(US newUs);
-    void gestBtnVoteByNote(List<Note> lNote, String etat);
 }

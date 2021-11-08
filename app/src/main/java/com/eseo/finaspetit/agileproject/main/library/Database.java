@@ -1,8 +1,13 @@
 package com.eseo.finaspetit.agileproject.main.library;
 
 import android.util.Log;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.eseo.finaspetit.agileproject.R;
+import com.eseo.finaspetit.agileproject.databinding.ActivityChatUsBinding;
 import com.eseo.finaspetit.agileproject.main.interfaces.ChatUSViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.ChatViewInterface;
 import com.eseo.finaspetit.agileproject.main.interfaces.CreateSaloonViewInterface;
@@ -220,6 +225,7 @@ public class Database {
                     Log.w(TAG, "listen:error", e);
                     return;
                 }
+                
                 for (DocumentSnapshot dc : snapshots.getDocuments()) {
                     Notification notif=new Notification(dc.getId(),dc.getString("message"),dc.getTimestamp("dateCreation"),dc.getString("receiver"),dc.getString("title"),dc.getString("idSalon"));
                     allNotif.add(notif);
@@ -334,7 +340,7 @@ public class Database {
         addMessageToUSChat(mes, idUS);
     }
 
-    public void addNoteResumeToChatUS(String idUS){
+    public void addNoteResumeToChatUS(String idUS, String user){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference washingtonRef = firestore.collection("us").document(idUS);
 
@@ -344,17 +350,57 @@ public class Database {
                 if (task.isSuccessful()) {
                     String contentMessage="Résume des votes \n";
                     for (QueryDocumentSnapshot document : task.getResult()) {
+                        Note noteMin=null;
+                        Note noteMax=null;
                         Map data= document.getData();
+                        String warningMessage="";
                         ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
                         if(usHash2 != null){
                             for(int j=0; j< usHash2.size();j++){
                                 HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
                                 contentMessage=contentMessage.concat((String) n.get("user")+" a voté: "+(String) n.get("note")+"\n");
+                                if(((String) n.get("note")).equals("?") || ((String) n.get("note")).equals("Impossible !") ||((String) n.get("note")).equals("CAFE !")){
+                                    warningMessage += user+" a besoin d'une pause ou plus d'explications";
+                                    Message mes= new Message(user+" a besoin d'une pause ou plus d'explications",user);
+                                    addMessageToUSChat(mes,idUS);
+                                }
                             }
+                            Message mes=new Message(contentMessage,"System");
+                            addMessageToUSChat(mes, idUS);
+
+                            if(warningMessage.length()==0){
+                                for(int l=0; l< usHash2.size();l++){
+                                    HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(l);
+                                    if(noteMin == null && noteMax == null){
+                                        noteMin= new Note((String) n .get("note"), (String) n.get("user"));
+                                        noteMax= new Note((String) n .get("note"), (String) n.get("user"));
+                                    }
+                                    System.out.println("note: "+(String)n.get("note"));
+
+                                    if(Integer.parseInt((String)n.get("note")) < Integer.parseInt(noteMin.getNote())){
+                                        noteMin=new Note((String) n .get("note"), (String) n.get("user"));
+                                    }
+                                    if(Integer.parseInt((String)n.get("note")) > Integer.parseInt(noteMax.getNote())){
+                                        noteMax=new Note((String) n.get("note"), (String) n.get("user"));
+                                    }
+
+
+                                }
+                                if(noteMin != null && noteMax != null){
+                                    //System.out.println("Envo notif à "+noteMin.getUser());
+                                    Notification notifMin = new Notification(null,"Tu as note le plus bas", Timestamp.now(), noteMin.getUser(), "Besoin de ton explication",null);
+                                    Notification notifMax = new Notification(null,"Tu as note le plus haut", Timestamp.now(), noteMax.getUser(), "Besoin de ton explication",null);
+                                    createDocument(notifMin, "notification");
+                                    createDocument(notifMax, "notification");
+                                    //System.out.println("Envo notif à "+noteMax.getUser());
+                                }
+                            }else{
+                                System.out.println("rien");
+                            }
+
                         }
                     }
-                    Message mes=new Message(contentMessage,"System");
-                    addMessageToUSChat(mes, idUS);
+
                 } else {
                     System.out.println( "Error getting documents: "+ task.getException());
                 }
@@ -370,6 +416,7 @@ public class Database {
         DocumentReference docRef = firestore.collection("us").document(idUS);
         String TAG="getAllNoteFromUS";
         ArrayList<Note> listNotes = new ArrayList<>();
+        ArrayList<String> etatUSList = new ArrayList<>();
 
         firestore.collection("us").whereEqualTo(FieldPath.documentId(),idUS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -378,6 +425,7 @@ public class Database {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Map data= document.getData();
                         ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
+                        etatUSList.add((String) data.get("etat"));
                         if(usHash2 != null){
                             for(int j=0; j< usHash2.size();j++){
                                 HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
@@ -390,7 +438,7 @@ public class Database {
                     System.out.println( "Error getting documents: "+ task.getException());
                 }
 
-                ((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat);
+                //((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
 
             }
         });
@@ -473,6 +521,139 @@ public class Database {
             }
         });
     }
+
+    public void checkIfAlreadyVoted(ActivityChatUsBinding binding, String idUS, String user, MenuItem mi, Salon currentSalon){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("us").whereEqualTo(FieldPath.documentId(),idUS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                boolean found=false;
+                if (task.isSuccessful()) {
+                    ArrayList<Object> usHash2 = null;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map data= document.getData();
+                        usHash2 = (ArrayList<Object>) data.get("notes");
+                        if(usHash2 != null){
+                            for(int j=0; j< usHash2.size();j++){
+                                HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
+                                if(((String)n.get(("user"))).equals(user)){
+                                    found=true;
+                                }
+
+                            }
+                        }
+                    }
+                    mi.setVisible(!found);
+
+                }
+
+                //((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
+
+            }
+        });
+    }
+
+    public void checkWhoCanTalk(ActivityChatUsBinding binding, String idUS, String user){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("us").whereEqualTo(FieldPath.documentId(),idUS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Note noteMin=null;
+                Note noteMax=null;
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map data= document.getData();
+                        ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
+
+                        if(usHash2 != null){
+                            for(int j=0; j< usHash2.size();j++){
+                                HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
+                                if(noteMin==null && noteMax==null){
+                                    noteMax=new Note((String)n.get("note"),(String)n.get("user"));
+                                    noteMin=new Note((String)n.get("note"),(String)n.get("user"));
+                                }else{
+                                    if(Integer.parseInt((String)n.get("note")) < Integer.parseInt(noteMin.getNote())){
+                                        noteMin= new Note((String)n.get("note"),(String)n.get("user"));
+                                    }
+                                    if(Integer.parseInt((String)n.get("note")) > Integer.parseInt(noteMax.getNote())){
+                                        noteMax= new Note((String)n.get("note"),(String)n.get("user"));
+                                    }
+                                }
+
+
+                            }
+                        }
+                    }
+                    if(user.equals(noteMin.getUser()) || user.equals(noteMax.getUser())){
+                        binding.button4.setEnabled(true);
+                    }
+
+                }
+
+            }
+        });
+    }
+
+    public void checkIfVoted(String idUS, String user, ActivityChatUsBinding binding){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("us").whereEqualTo(FieldPath.documentId(),idUS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                boolean eq=true;
+                boolean firstNoteCheck=false;
+                String noteCommun="";
+                String commentaire="";
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Map data= document.getData();
+                        ArrayList<Object> usHash2 = (ArrayList<Object>) data.get("notes");
+                        if(usHash2 != null){
+                            for(int j=0; j< usHash2.size();j++){
+                                HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
+                                if(!firstNoteCheck){
+                                    noteCommun=(String)n.get("note");
+                                    firstNoteCheck=true;
+                                }else{
+                                    if(!((String)n.get("note")).equals(noteCommun)){
+                                        eq=false;
+                                    }
+                                }
+                                if(((String)n.get("note")).equals("?") || ((String)n.get("note")).equals("Impossible !")){
+                                    commentaire = commentaire+ (String)n.get("user")+" a besoin de plus d'explication sur l'US \n";
+                                }else if(((String)n.get("note")).equals("CAFE !")){
+                                    commentaire =commentaire + (String)n.get("user")+" a besoin d'une pause";
+                                }
+                            }
+                        }
+                    }
+
+                    if(eq){
+                        if(noteCommun.equals("?") || noteCommun.equals("CAFE !")  || noteCommun.equals("Impossible !")){
+                            updateEtatUs(idUS,"CREATED");
+                        }else{
+                            updateEtatUs(idUS, "VOTED");
+                        }
+                    }else{
+                        if(commentaire.length() ==0){
+                            checkWhoCanTalk(binding,idUS,user);
+                        }else{
+                            updateEtatUs(idUS,"CREATED");
+                            /*Message mes= new Message(commentaire,"Systeme");
+                            addMessageToUSChat(mes,idUS);*/
+                        }
+
+                    }
+
+
+                }
+
+                //((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
+
+            }
+        });
+
+    }
+
 
     public void resetNoteFromUS(String idUS){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();

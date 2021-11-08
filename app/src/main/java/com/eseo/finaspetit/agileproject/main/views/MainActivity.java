@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements ReadAllMessagesIn
                     .setLogo(R.mipmap.ic_launcher)
                     .setAvailableProviders(providers).build();
             signinLauncher.launch(signInIntent);
-            //ddb.addEmailInDatabaseIfUserInexistant(auth.getCurrentUser().getEmail());
 
         }else{
 
