@@ -139,10 +139,10 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             btnVote.setVisible(false);
             btnOpenVote.setVisible(false);
         }
-        /*if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
+        if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
             btnOpenVote.setVisible(false);
             btnCloseVote.setVisible(false);
-        }*/
+        }
     }
 
 }
