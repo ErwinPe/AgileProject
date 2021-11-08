@@ -225,7 +225,7 @@ public class Database {
                     Log.w(TAG, "listen:error", e);
                     return;
                 }
-                System.out.println("taille ici: "+snapshots.getDocuments().size());
+                
                 for (DocumentSnapshot dc : snapshots.getDocuments()) {
                     Notification notif=new Notification(dc.getId(),dc.getString("message"),dc.getTimestamp("dateCreation"),dc.getString("receiver"),dc.getString("title"),dc.getString("idSalon"));
                     allNotif.add(notif);
