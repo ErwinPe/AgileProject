@@ -1,6 +1,7 @@
 package com.eseo.finaspetit.agileproject.main.components;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,19 @@ public class CustomClassAdaptaterUS extends BaseAdapter {
             holder = (CustomClassAdaptaterUS.ViewHolder) convertView.getTag();
         }
         US us= this.listData.get(position);
-        holder.txtUser.setText(us.getNom());
+        String text = us.getNom() +" "+us.getEtat();
+        holder.txtUser.setText(text);
         holder.txtMsg.setText(us.getDescription());
+        if (us.getEtat().equals("CREATED")){
+            holder.txtUser.setTextColor(Color.RED);
+        }if (us.getEtat().equals("OPENVOTE")){
+            holder.txtUser.setTextColor(Color.parseColor("#ff7f00"));
+        }if (us.getEtat().equals("CLOSEVOTE")){
+            holder.txtUser.setTextColor(Color.YELLOW);
+        }if (us.getEtat().equals("VOTED")){
+            holder.txtUser.setTextColor(Color.GREEN);
+        }
+
         return convertView;
     }
 
