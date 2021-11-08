@@ -123,6 +123,7 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             System.out.println("closevote");
             btnCloseVote.setVisible(false);
             binding.button4.setEnabled(false);
+            btnOpenVote.setVisible(false);
             bdd.checkIfVoted(currentUS.getId(), auth.getCurrentUser().getEmail(),binding);
             //bdd.checkWhoCanTalk(binding,currentUS.getId(),auth.getCurrentUser().getEmail());
 

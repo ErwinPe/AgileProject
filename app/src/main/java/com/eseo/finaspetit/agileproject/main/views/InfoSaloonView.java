@@ -10,6 +10,8 @@ import com.eseo.finaspetit.agileproject.R;
 import com.eseo.finaspetit.agileproject.databinding.ActivityInfoSaloonBinding;
 import com.eseo.finaspetit.agileproject.main.library.Constants;
 import com.eseo.finaspetit.agileproject.main.library.Salon;
+
+import java.lang.reflect.Member;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -34,8 +36,12 @@ public class InfoSaloonView extends AppCompatActivity {
         binding.descSalon.setText(salon.getDescription());
         binding.scrumMSalon.setText(salon.getScrumMaster());
         String formattedDate = new SimpleDateFormat(getResources().getString(R.string.pattern_timestamp), Locale.FRANCE).format(salon.getCreationDate().toDate());
-        binding.dateCreaSalon.setText(formattedDate);
-
+        binding.dateSalon.setText(formattedDate);
+        String listMembre = "";
+        for (String m : salon.getMembers()){
+            listMembre += m +", ";
+        }
+        binding.memberSalon.setText(listMembre);
 
     }
 }
