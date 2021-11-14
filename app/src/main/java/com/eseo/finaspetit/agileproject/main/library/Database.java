@@ -340,7 +340,7 @@ public class Database {
         addMessageToUSChat(mes, idUS);
     }
 
-    public void addNoteResumeToChatUS(String idUS, String user){
+    public void addNoteResumeToChatUS(String idUS, String user, String nomsalon,String nomUS){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         DocumentReference washingtonRef = firestore.collection("us").document(idUS);
 
@@ -388,8 +388,8 @@ public class Database {
                                 }
                                 if(noteMin != null && noteMax != null){
                                     //System.out.println("Envo notif à "+noteMin.getUser());
-                                    Notification notifMin = new Notification(null,"Tu as note le plus bas dans l'US "+idUS, Timestamp.now(), noteMin.getUser(), "Besoin de ton explication",null);
-                                    Notification notifMax = new Notification(null,"Tu as note le plus haut dans l'US "+idUS, Timestamp.now(), noteMax.getUser(), "Besoin de ton explication",null);
+                                    Notification notifMin = new Notification(null,"Tu as note le plus bas dans le salon"+nomsalon+" pour l'US "+nomUS, Timestamp.now(), noteMin.getUser(), "Besoin de ton explication",null);
+                                    Notification notifMax = new Notification(null,"Tu as note le plus haut dans le salon"+nomsalon+" pour l'US "+nomUS, Timestamp.now(), noteMax.getUser(), "Besoin de ton explication",null);
                                     createDocument(notifMin, "notification");
                                     createDocument(notifMax, "notification");
                                 }
