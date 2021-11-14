@@ -360,8 +360,8 @@ public class Database {
                                 HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
                                 contentMessage=contentMessage.concat((String) n.get("user")+" a voté: "+(String) n.get("note")+"\n");
                                 if(((String) n.get("note")).equals("?") || ((String) n.get("note")).equals("Impossible !") ||((String) n.get("note")).equals("CAFE !")){
-                                    warningMessage += user+" a besoin d'une pause ou plus d'explications";
-                                    Message mes= new Message(user+" a besoin d'une pause ou plus d'explications",user);
+                                    warningMessage += "Un membre du groupe a besoin d'une pause ou plus d'explications";
+                                    Message mes= new Message(warningMessage,"System");
                                     addMessageToUSChat(mes,idUS);
                                 }
                             }
@@ -388,11 +388,10 @@ public class Database {
                                 }
                                 if(noteMin != null && noteMax != null){
                                     //System.out.println("Envo notif à "+noteMin.getUser());
-                                    Notification notifMin = new Notification(null,"Tu as note le plus bas", Timestamp.now(), noteMin.getUser(), "Besoin de ton explication",null);
-                                    Notification notifMax = new Notification(null,"Tu as note le plus haut", Timestamp.now(), noteMax.getUser(), "Besoin de ton explication",null);
+                                    Notification notifMin = new Notification(null,"Tu as note le plus bas dans l'US "+idUS, Timestamp.now(), noteMin.getUser(), "Besoin de ton explication",null);
+                                    Notification notifMax = new Notification(null,"Tu as note le plus haut dans l'US "+idUS, Timestamp.now(), noteMax.getUser(), "Besoin de ton explication",null);
                                     createDocument(notifMin, "notification");
                                     createDocument(notifMax, "notification");
-                                    //System.out.println("Envo notif à "+noteMax.getUser());
                                 }
                             }else{
                                 System.out.println("rien");
@@ -624,12 +623,14 @@ public class Database {
                     }
 
                     if(eq){
-                        if(noteCommun.equals("?") || noteCommun.equals("CAFE !")  || noteCommun.equals("Impossible !")){
+                        System.out.println("equals "+noteCommun);
+                        if(noteCommun.equals("?") || noteCommun.equals("CAFE !")  || noteCommun.equals("Impossible !") || noteCommun.equals("")){
                             updateEtatUs(idUS,"CREATED");
                         }else{
                             updateEtatUs(idUS, "VOTED");
                         }
                     }else{
+                        System.out.println("not equals");
                         if(commentaire.length() ==0){
                             checkWhoCanTalk(binding,idUS,user);
                         }else{
