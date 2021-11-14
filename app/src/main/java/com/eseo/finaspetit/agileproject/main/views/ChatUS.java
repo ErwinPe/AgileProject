@@ -98,7 +98,6 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
     public void gestBtnVote(US newUs){
         currentUS.setEtat(newUs.getEtat());
         if(currentUS.getEtat().equals(getResources().getString(R.string.state_CREATED))) {
-            System.out.println("created");
             btnCloseVote.setVisible(false);
             binding.button4.setEnabled(true);
             btnVote.setVisible(false);
@@ -108,7 +107,6 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             }
 
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_OPENVOTE))){
-            System.out.println("openvote");
             binding.button4.setEnabled(false);
             btnVote.setVisible(false);
             bdd.checkIfAlreadyVoted(binding, currentUS.getId(),auth.getCurrentUser().getEmail(),btnVote, currentSaloon);
@@ -120,7 +118,6 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
 
             btnOpenVote.setVisible(false);
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_CLOSEVOTE))) {
-            System.out.println("closevote");
             btnCloseVote.setVisible(false);
             binding.button4.setEnabled(false);
             btnOpenVote.setVisible(false);
@@ -134,10 +131,10 @@ public class ChatUS extends AppCompatActivity implements ChatUSViewInterface {
             }
             //btnOpenVote.setVisible(true);
         }else if(currentUS.getEtat().equals(getResources().getString(R.string.state_VOTED))) {
-            System.out.println("voted");
             btnCloseVote.setVisible(false);
             btnVote.setVisible(false);
             btnOpenVote.setVisible(false);
+            binding.button4.setEnabled(false);
         }
         if (!((Constants) ChatUS.this.getApplication()).getCurentSaloon().getScrumMaster().equals(Objects.requireNonNull(auth.getCurrentUser()).getEmail())) {
             btnOpenVote.setVisible(false);
