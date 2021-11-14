@@ -53,22 +53,28 @@ public class createSaloonView  extends AppCompatActivity implements CreateSaloon
             saloon.setScrumMaster(auth.getCurrentUser().getEmail());
             String[] membersStr = binding.SearchMembers.getText().toString().split(", ");
             saloon.setMembers(listmembers);
-            String idSaloon = db.createDocument(saloon, getResources().getString(R.string.database_salon_field));
-            Message msg=new Message(getResources().getString(R.string.first_msg_creation_saloon)+" "+binding.textSaloonName.getText().toString() ,getResources().getString(R.string.system_name));
-            db.addMessageToGeneralChat(idSaloon,msg);
-            String message = getResources().getString(R.string.msg_notification_invitation_saloon)+" "+binding.textSaloonName.getText().toString();
-            for (String s : membersStr) {
-                if (!s.equals(" ") & !s.equals(auth.getCurrentUser().getEmail())) {
-                    Notification notifCreateSaloon = new Notification(null,message, currentTime, s, getResources().getString(R.string.title_notification_invitation_saloon),idSaloon);
-                    db.createDocument(notifCreateSaloon, getResources().getString(R.string.database_notification_field));
+            if(!saloon.getNom().equals("") || !saloon.getDescription().equals("")) {
+                String idSaloon = db.createDocument(saloon, getResources().getString(R.string.database_salon_field));
+                Message msg = new Message(getResources().getString(R.string.first_msg_creation_saloon) + " " + binding.textSaloonName.getText().toString(), getResources().getString(R.string.system_name));
+                db.addMessageToGeneralChat(idSaloon, msg);
+                String message = getResources().getString(R.string.msg_notification_invitation_saloon) + " " + binding.textSaloonName.getText().toString();
+                for (String s : membersStr) {
+                    if (!s.equals(" ") & !s.equals(auth.getCurrentUser().getEmail())) {
+                        Notification notifCreateSaloon = new Notification(null, message, currentTime, s, getResources().getString(R.string.title_notification_invitation_saloon), idSaloon);
+                        db.createDocument(notifCreateSaloon, getResources().getString(R.string.database_notification_field));
+                    }
                 }
+                binding.textSaloonName.setText(getResources().getString(R.string.empty_field));
+                binding.textDescSaloon.setText(getResources().getString(R.string.empty_field));
+                binding.SearchMembers.setText(getResources().getString(R.string.empty_field));
+                Toast.makeText(createSaloonView.this,
+                        getResources().getString(R.string.msg_create_saloon_success),
+                        Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(createSaloonView.this,
+                        getResources().getString(R.string.msg_error_create_us_empty_field),
+                        Toast.LENGTH_SHORT).show();
             }
-            binding.textSaloonName.setText(getResources().getString(R.string.empty_field));
-            binding.textDescSaloon.setText(getResources().getString(R.string.empty_field));
-            binding.SearchMembers.setText(getResources().getString(R.string.empty_field));
-            Toast.makeText(createSaloonView.this,
-                    getResources().getString(R.string.msg_create_saloon_success),
-                    Toast.LENGTH_SHORT).show();
         });
     }
 
