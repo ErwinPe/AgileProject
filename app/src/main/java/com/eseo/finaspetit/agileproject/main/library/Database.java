@@ -99,8 +99,6 @@ public class Database {
 
                     }
                     ((ReadAllMessagesInterface)act).handleResultAllSalon(list);
-                } else {
-                    System.out.println("error : "+task.getException());
                 }
             }
         });
@@ -157,8 +155,6 @@ public class Database {
                         ((NotificationsViewsInterface)act).handleNotification(list);
                     }
 
-                } else {
-                    System.out.println("error : "+task.getException());
                 }
             }
         });
@@ -181,8 +177,6 @@ public class Database {
                         obj.put("email",email);
                         createDocument(obj,"members");
                     }
-                } else {
-                    System.out.println("error : "+task.getException());
                 }
             }
         });
@@ -202,8 +196,6 @@ public class Database {
                         listmembers.add(email);
                     }
                     ((CreateSaloonViewInterface)act).handleGetAllUser(listmembers);
-                } else {
-                    System.out.println("error : "+task.getException());
                 }
             }
         });
@@ -257,8 +249,6 @@ public class Database {
                             US usToAdd=new US(document.getId(),(String)data.get("nom"),(String)data.get("description"),(boolean) data.get("voted"),(Timestamp)data.get("dateCreation"),(String)data.get("etat"),idSalon);
                             usList.add(usToAdd);
                         }
-                    } else {
-                        System.out.println( "Error getting documents: "+ task.getException());
                     }
                     ((UsViewInterface)act).handleUS(usList);
                 }
@@ -375,7 +365,6 @@ public class Database {
                                         noteMin= new Note((String) n .get("note"), (String) n.get("user"));
                                         noteMax= new Note((String) n .get("note"), (String) n.get("user"));
                                     }
-                                    System.out.println("note: "+(String)n.get("note"));
 
                                     if(Integer.parseInt((String)n.get("note")) < Integer.parseInt(noteMin.getNote())){
                                         noteMin=new Note((String) n .get("note"), (String) n.get("user"));
@@ -387,21 +376,15 @@ public class Database {
 
                                 }
                                 if(noteMin != null && noteMax != null){
-                                    //System.out.println("Envo notif à "+noteMin.getUser());
                                     Notification notifMin = new Notification(null,"Tu as note le plus bas dans le salon"+nomsalon+" pour l'US "+nomUS, Timestamp.now(), noteMin.getUser(), "Besoin de ton explication",null);
                                     Notification notifMax = new Notification(null,"Tu as note le plus haut dans le salon"+nomsalon+" pour l'US "+nomUS, Timestamp.now(), noteMax.getUser(), "Besoin de ton explication",null);
                                     createDocument(notifMin, "notification");
                                     createDocument(notifMax, "notification");
                                 }
-                            }else{
-                                System.out.println("rien");
                             }
-
                         }
                     }
 
-                } else {
-                    System.out.println( "Error getting documents: "+ task.getException());
                 }
             }
         });
@@ -434,39 +417,11 @@ public class Database {
                         Log.w(TAG, "Liste notes: "+ listNotes);
                     }
                 } else {
-                    System.out.println( "Error getting documents: "+ task.getException());
                 }
-
-                //((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
 
             }
         });
-/*
-        firestore.collection("us").document(idUS).addSnapshotListener( new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
-                DocumentSnapshot document = snapshot;
-                if (snapshot.exists()) {
-                    HashMap<String, Object> address = (HashMap<String, java.lang.Object>) document.getData();
-                    ArrayList<Object> usHash2 = (ArrayList<Object>) address.get("notes");
-                    if(usHash2 !=null){
-                        for(int j=0; j< usHash2.size();j++){
-                            HashMap<String,Object> n= (HashMap<String, Object>) usHash2.get(j);
-                            listNotes.add(new Note((String)n.get("note"),(String) n.get("user")));
-                        }
-                    }
-                    Log.w(TAG, "Liste notes: "+ listNotes);
 
-                    ((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes);
-                }
-
-            }
-        });*/
 
     }
 
@@ -512,8 +467,7 @@ public class Database {
 
                     }
                     Log.w(TAG, "Liste notes: "+ listNotes);
-                    //reste a appeler la fonction de ton interface qui gère la liste des notes
-                    //((ChatUSViewInterface)act).handleMessageUS(listMessage);
+                    
 
                 }
 
@@ -623,14 +577,12 @@ public class Database {
                     }
 
                     if(eq){
-                        System.out.println("equals "+noteCommun);
                         if(noteCommun.equals("?") || noteCommun.equals("CAFE !")  || noteCommun.equals("Impossible !") || noteCommun.equals("")){
                             updateEtatUs(idUS,"CREATED");
                         }else{
                             updateEtatUs(idUS, "VOTED");
                         }
                     }else{
-                        System.out.println("not equals");
                         if(commentaire.length() ==0){
                             checkWhoCanTalk(binding,idUS,user);
                         }else{
@@ -642,7 +594,6 @@ public class Database {
 
                 }
 
-                //((ChatUSViewInterface)act).gestBtnVoteByNote(listNotes, etat,etatUSList.get(0));
 
             }
         });
